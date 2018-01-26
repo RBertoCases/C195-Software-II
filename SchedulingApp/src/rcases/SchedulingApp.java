@@ -6,6 +6,7 @@
 package rcases;
 
 import java.io.IOException;
+import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,6 +22,8 @@ public class SchedulingApp extends Application {
     
     private Stage primaryStage;
     private AnchorPane loginScreen;
+    Locale locale = Locale.getDefault();
+
     
     @Override
     public void start(Stage primaryStage) {
@@ -39,6 +42,10 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             LoginController controller = loader.getController();
+            System.out.println(locale);
+            Locale localeFr = new Locale("fr");
+            Locale.setDefault(localeFr);               // change the default
+            System.out.println(Locale.getDefault()); // fr
             
             // Show the scene containing the root layout.
             Scene scene = new Scene(loginScreen);
