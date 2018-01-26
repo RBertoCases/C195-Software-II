@@ -6,9 +6,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.sql.*;
+import java.util.Locale;
+import javafx.application.Platform;
 
 public class LoginController {
-
+    
+            
     @FXML
     private TextField usernameField;
 
@@ -22,9 +25,9 @@ public class LoginController {
     void handleSignInAction(ActionEvent event) {
     //template code to be altered to JavaFX
         if(usernameField.getText().length()==0)  // Checking for empty field
-            errorMessage.setText("Empty fields detected ! Please fill up all fields");
+            errorMessage.setText("Username or Password is empty. Please fill up both fields");
         else if(passwordField.getText().length()==0)  // Checking for empty field
-            errorMessage.setText("Empty fields detected ! Please fill up all fields");
+            errorMessage.setText("Username or Password is empty. Please fill up both fields");
         else{
             String user = usernameField.getText();   // Collecting the input
             String pass = passwordField.getText(); // Collecting the input
@@ -58,7 +61,7 @@ public class LoginController {
     
     @FXML
     void handleCancelAction(ActionEvent event) {
-        System.exit(0);
+        Platform.exit();
     }
 
 }
