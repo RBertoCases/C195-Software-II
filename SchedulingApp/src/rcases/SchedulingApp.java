@@ -42,10 +42,7 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             LoginController controller = loader.getController();
-            System.out.println(locale);
-            Locale localeFr = new Locale("fr");
-            Locale.setDefault(localeFr);               // change the default
-            System.out.println(Locale.getDefault()); // fr
+            controller.setLogin();            
             
             // Show the scene containing the root layout.
             Scene scene = new Scene(loginScreen);
@@ -62,6 +59,8 @@ public class SchedulingApp extends Application {
     }
     
     public static void main(String[] args) {
+        //Locale.setDefault(new Locale("fr", "FR"));
+        System.out.println(Locale.getDefault()); 
         launch(args);
     }
     

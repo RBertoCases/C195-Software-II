@@ -7,19 +7,37 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.sql.*;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 
 public class LoginController {
     
             
     @FXML
+    private Label errorMessage;
+
+    @FXML
     private TextField usernameField;
 
     @FXML
     private PasswordField passwordField;
-    
+
     @FXML
-    private Label errorMessage;
+    private Text usernameText;
+
+    @FXML
+    private Text passwordText;
+
+    @FXML
+    private Text titleText;
+
+    @FXML
+    private Button signinText;
+
+    @FXML
+    private Button cancelText;
     
     @FXML
     void handleSignInAction(ActionEvent event) {
@@ -63,5 +81,14 @@ public class LoginController {
     void handleCancelAction(ActionEvent event) {
         Platform.exit();
     }
+    
+    public void setLogin() {
+        ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
+        titleText.setText(rb.getString("title"));
+        usernameText.setText(rb.getString("username"));
+        passwordText.setText(rb.getString("password"));
+        signinText.setText(rb.getString("signin"));
+        cancelText.setText(rb.getString("cancel"));
+}
 
 }
