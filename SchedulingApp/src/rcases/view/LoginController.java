@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import rcases.SchedulingApp;
 
 public class LoginController {
     
@@ -39,6 +40,16 @@ public class LoginController {
     @FXML
     private Button cancelText;
     
+    // Reference to the main application.
+    private SchedulingApp mainApp;
+
+    /**
+     * The constructor.
+     * The constructor is called before the initialize() method.
+     */
+    public LoginController() {
+    }
+    
     @FXML
     void handleSignInAction(ActionEvent event) {
     //template code to be altered to JavaFX
@@ -51,7 +62,8 @@ public class LoginController {
             String pass = passwordField.getText(); // Collecting the input
             
             if(validate_login(user,pass))
-                errorMessage.setText("Correct Login Credentials");        
+                errorMessage.setText("Correct Login Credentials");
+                //SchedulingApp.initRootLayout();
             else
                 errorMessage.setText("Incorrect Login Credentials");
             }
