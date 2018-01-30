@@ -63,7 +63,7 @@ public class LoginController {
             
             if(validate_login(user,pass))
                 errorMessage.setText("Correct Login Credentials");
-                //SchedulingApp.initRootLayout();
+                //initRootLayout();
             else
                 errorMessage.setText("Incorrect Login Credentials");
             }
