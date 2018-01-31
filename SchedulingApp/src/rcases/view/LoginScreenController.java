@@ -13,7 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import rcases.SchedulingApp;
 
-public class LoginController {
+public class LoginScreenController {
     
             
     @FXML
@@ -47,12 +47,11 @@ public class LoginController {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public LoginController() {
+    public LoginScreenController() {
     }
     
     @FXML
     void handleSignInAction(ActionEvent event) {
-    //template code to be altered to JavaFX
         if(usernameField.getText().length()==0)  // Checking for empty field
             errorMessage.setText("Username or Password is empty. Please fill up both fields");
         else if(passwordField.getText().length()==0)  // Checking for empty field
@@ -63,7 +62,6 @@ public class LoginController {
             
             if(validate_login(user,pass))
                 errorMessage.setText("Correct Login Credentials");
-                //initRootLayout();
             else
                 errorMessage.setText("Incorrect Login Credentials");
             }
@@ -79,7 +77,7 @@ public class LoginController {
             pst.setString(2, password);
             ResultSet rs = pst.executeQuery();                        
             if(rs.next())            
-                return true;    
+                return true;
             else
                 return false;            
         }
