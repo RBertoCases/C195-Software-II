@@ -13,8 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import rcases.view.LoginController;
-import rcases.view.PersonOverviewController;
+import rcases.view.LoginScreenController;
+import rcases.view.CustomerScreenController;
 
 /**
  *
@@ -23,8 +23,9 @@ import rcases.view.PersonOverviewController;
 public class SchedulingApp extends Application {
     
     private Stage primaryStage;
-    private BorderPane rootLayout;
+    private BorderPane menu;
     private AnchorPane loginScreen;
+    private AnchorPane customerScreen;
     Locale locale = Locale.getDefault();
 
     
@@ -32,26 +33,23 @@ public class SchedulingApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
-        initRootLayout();
-        
+        showMenu();
+        showCustomerScreen();
         //showLoginScreen();
-        
-        
-        showPersonOverview();
     }
     
     /**
      * Initializes the root layout.
      */
-    public void initRootLayout() {
+    public void showMenu() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/Menu.fxml"));
+            menu = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
+            Scene scene = new Scene(menu);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -63,11 +61,11 @@ public class SchedulingApp extends Application {
         try {
             // Load Login Screen.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/Login.fxml"));
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/LoginScreen.fxml"));
             loginScreen = (AnchorPane) loader.load();
             
             // Give the controller access to the main app.
-            LoginController controller = loader.getController();
+            LoginScreenController controller = loader.getController();
             controller.setLogin();            
             
             // Show the scene containing the root layout.
@@ -81,18 +79,18 @@ public class SchedulingApp extends Application {
     }
     
     
-    public void showPersonOverview() {
+    public void showCustomerScreen() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/PersonOverview.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/CustomerScreen.fxml"));
+            AnchorPane customerScreen = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
+            menu.setCenter(customerScreen);
 
             // Give the controller access to the main app.
-            PersonOverviewController controller = loader.getController();
+            CustomerScreenController controller = loader.getController();
             //controller.setMainApp(this);
 
         } catch (IOException e) {
