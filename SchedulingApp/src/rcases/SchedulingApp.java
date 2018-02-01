@@ -33,9 +33,9 @@ public class SchedulingApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
-        showMenu();
-        showCustomerScreen();
-        //showLoginScreen();
+        //showMenu();
+        //showCustomerScreen();
+        showLoginScreen();
     }
     
     /**
@@ -66,7 +66,7 @@ public class SchedulingApp extends Application {
             
             // Give the controller access to the main app.
             LoginScreenController controller = loader.getController();
-            controller.setLogin();            
+            controller.setLogin(this);            
             
             // Show the scene containing the root layout.
             Scene scene = new Scene(loginScreen);
