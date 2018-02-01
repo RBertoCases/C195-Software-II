@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import rcases.SchedulingApp;
 
 public class LoginScreenController {
@@ -61,9 +62,11 @@ public class LoginScreenController {
             String pass = passwordField.getText(); // Collecting the input
             
             if(validate_login(user,pass))
-                errorMessage.setText("Correct Login Credentials");
-            else
-                errorMessage.setText("Incorrect Login Credentials");
+                //errorMessage.setText("Correct Login Credentials");
+                mainApp.showMenu();
+                mainApp.showCustomerScreen();
+            //else
+                //errorMessage.setText("Incorrect Login Credentials");
             }
         
     }
@@ -92,7 +95,8 @@ public class LoginScreenController {
         Platform.exit();
     }
     
-    public void setLogin() {
+    public void setLogin(SchedulingApp mainApp) {
+	this.mainApp = mainApp;
         ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
         titleText.setText(rb.getString("title"));
         usernameText.setText(rb.getString("username"));

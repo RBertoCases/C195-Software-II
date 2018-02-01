@@ -14,12 +14,14 @@ public class User {
     private String username;
     private String password;
     private int active;
+    private String createBy;
 
-    public User(int userID, String username, String password, int active) {
+    public User(int userID, String username, String password, int active, String createBy) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.active = active;
+        this.createBy = createBy;
     }
 
     public int getUserID() {
@@ -52,6 +54,14 @@ public class User {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
     
     
