@@ -91,7 +91,7 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             CustomerScreenController controller = loader.getController();
-            //controller.setMainApp(this);
+            controller.setCustomerScreen(this);
 
         } catch (IOException e) {
             e.printStackTrace();
