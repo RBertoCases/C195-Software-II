@@ -1,7 +1,12 @@
 package rcases.view;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,25 +24,21 @@ public class CustomerScreenController {
     private TableColumn<?, ?> lastNameColumn;
 
     @FXML
-    private TextField countryField;
-
-    @FXML
-    private TextField phoneField;
-
-    @FXML
-    private TextField firstNameField;
-
-    @FXML
     private TextField lastNameField;
 
     @FXML
     private TextField streetField;
 
     @FXML
-    private TextField cityField;
+    private ChoiceBox cityChoiceBox;
 
     @FXML
     private TextField postalCodeField;
+
+    @FXML
+    private TextField phoneField;
+    
+    private SchedulingApp mainApp;
 
     @FXML
     void handleDeleteCustomer(ActionEvent event) {
@@ -52,6 +53,12 @@ public class CustomerScreenController {
     @FXML
     void handleNewCustomer(ActionEvent event) {
 
+    }
+    
+    public void setCustomerScreen(SchedulingApp mainApp) {
+	this.mainApp = mainApp;
+        cityChoiceBox.getItems().addAll("-Please Select-","Phoenix","New York","London");
+        cityChoiceBox.setValue("-Please Select-");
     }
 
 }
