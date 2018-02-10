@@ -1,11 +1,17 @@
 package rcases.view;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import rcases.SchedulingApp;
 
 
 public class MenuController {
+    
+    private SchedulingApp mainApp;
+    
+    public MenuController() {
+    }
 
     @FXML
     void handleMenuAppointments(ActionEvent event) {
@@ -14,7 +20,7 @@ public class MenuController {
 
     @FXML
     void handleMenuCustomers(ActionEvent event) {
-
+        mainApp.showCustomerScreen();
     }
 
     @FXML
@@ -29,7 +35,7 @@ public class MenuController {
 
     @FXML
     void handleMenuReport3(ActionEvent event) {
-
+        Platform.exit();
     }
 
 }
