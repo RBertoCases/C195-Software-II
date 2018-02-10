@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import rcases.SchedulingApp;
 
 public class LoginScreenController {
