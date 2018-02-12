@@ -63,7 +63,8 @@ public class LoginScreenController {
             if(validate_login(user,pass))
                 //errorMessage.setText("Correct Login Credentials");
                 mainApp.showMenu();
-                mainApp.showCustomerScreen();
+                //mainApp.showCustomerScreen();
+                mainApp.showAppointmentScreen();
             //else
                 //errorMessage.setText("Incorrect Login Credentials");
             }
@@ -92,6 +93,7 @@ public class LoginScreenController {
     @FXML
     void handleCancelAction(ActionEvent event) {
         Platform.exit();
+        System.exit(0);
     }
     
     public void setLogin(SchedulingApp mainApp) {
