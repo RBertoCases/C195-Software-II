@@ -15,6 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import rcases.view.LoginScreenController;
 import rcases.view.CustomerScreenController;
+import rcases.view.AppointmentScreenController;
+import rcases.view.MenuController;
 
 /**
  *
@@ -26,6 +28,7 @@ public class SchedulingApp extends Application {
     private BorderPane menu;
     private AnchorPane loginScreen;
     private AnchorPane customerScreen;
+    private AnchorPane appointmentScreen;
     Locale locale = Locale.getDefault();
 
     
@@ -33,8 +36,6 @@ public class SchedulingApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
-        //showMenu();
-        //showCustomerScreen();
         showLoginScreen();
     }
     
@@ -51,6 +52,10 @@ public class SchedulingApp extends Application {
             // Show the scene containing the root layout.
             Scene scene = new Scene(menu);
             primaryStage.setScene(scene);
+            // Give the controller access to the main app.
+            MenuController controller = loader.getController();
+            controller.setMenu(this);
+            
             primaryStage.show();
         } catch (IOException e) {
             e.getCause().printStackTrace();
@@ -106,6 +111,25 @@ public class SchedulingApp extends Application {
         //Locale.setDefault(new Locale("fr", "FR"));
         //System.out.println(Locale.getDefault()); 
         launch(args);
+    }
+
+    public void showAppointmentScreen() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/AppointmentScreen.fxml"));
+            AnchorPane appointmentScreen = (AnchorPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            menu.setCenter(appointmentScreen);
+
+            // Give the controller access to the main app.
+            AppointmentScreenController controller = loader.getController();
+            controller.setAppointmentScreen(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 }

@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+
 <AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rcases.view.CustomerScreenController">
    <children>
       <SplitPane dividerPositions="0.48327759197324416" layoutX="212.0" layoutY="70.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -58,10 +59,10 @@
                         <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
-                  <ButtonBar buttonMinWidth="45.0" layoutX="90.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="194.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <ButtonBar buttonMinWidth="45.0" layoutX="90.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="235.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <buttons>
-                        <Button mnemonicParsing="false" onAction="#handleNewCustomer" text="New..." />
-                        <Button mnemonicParsing="false" onAction="#handleEditCustomer" text="Edit...." />
+                        <Button mnemonicParsing="false" onAction="#handleNewCustomer" text="New" />
+                        <Button mnemonicParsing="false" onAction="#handleEditCustomer" text="Edit" />
                         <Button minWidth="57.0" mnemonicParsing="false" onAction="#handleDeleteCustomer" prefHeight="25.0" text="Delete" />
                      </buttons>
                   </ButtonBar>

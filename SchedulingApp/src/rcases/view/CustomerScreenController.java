@@ -1,9 +1,5 @@
 package rcases.view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -39,6 +35,9 @@ public class CustomerScreenController {
     private TextField phoneField;
     
     private SchedulingApp mainApp;
+    
+    public CustomerScreenController() {
+    }
 
     @FXML
     void handleDeleteCustomer(ActionEvent event) {

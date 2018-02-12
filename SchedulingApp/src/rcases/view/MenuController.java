@@ -10,12 +10,16 @@ public class MenuController {
     
     private SchedulingApp mainApp;
     
+    public void setMenu(SchedulingApp mainApp) {
+	this.mainApp = mainApp;
+    }
+    
     public MenuController() {
     }
 
     @FXML
     void handleMenuAppointments(ActionEvent event) {
-
+        mainApp.showAppointmentScreen();
     }
 
     @FXML

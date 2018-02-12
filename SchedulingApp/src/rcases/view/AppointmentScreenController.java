@@ -5,23 +5,19 @@
  */
 package rcases.view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import rcases.SchedulingApp;
 
 /**
  * FXML Controller class
  *
  * @author rcases
  */
-public class AppointmentScreenController implements Initializable {
+public class AppointmentScreenController {
+    
+    private SchedulingApp mainApp;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    public void setAppointmentScreen(SchedulingApp mainApp) {
+	this.mainApp = mainApp;
+    }
     
 }
