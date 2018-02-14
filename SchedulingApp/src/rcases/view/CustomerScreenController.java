@@ -20,19 +20,25 @@ public class CustomerScreenController {
     private TableColumn<?, ?> lastNameColumn;
 
     @FXML
-    private TextField lastNameField;
+    private TextField nameField;
 
     @FXML
-    private TextField streetField;
+    private TextField addressField;
 
     @FXML
     private ChoiceBox cityChoiceBox;
+
+    @FXML
+    private TextField address2Field;
 
     @FXML
     private TextField postalCodeField;
 
     @FXML
     private TextField phoneField;
+
+    @FXML
+    private TextField countryField;
     
     private SchedulingApp mainApp;
     
@@ -56,7 +62,7 @@ public class CustomerScreenController {
     
     public void setCustomerScreen(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
-        cityChoiceBox.getItems().addAll("-Please Select-","Phoenix","New York","London");
+        cityChoiceBox.getItems().addAll("Phoenix","New York","London");
         cityChoiceBox.setValue("-Please Select-");
     }
 
