@@ -13,15 +13,11 @@ public class User {
     private int userID;
     private String username;
     private String password;
-    private int active;
-    private String createBy;
 
-    public User(int userID, String username, String password, int active, String createBy) {
+    public User(int userID, String username, String password) {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.active = active;
-        this.createBy = createBy;
     }
 
     public int getUserID() {
@@ -46,23 +42,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-    
+    }   
     
 }
