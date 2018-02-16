@@ -5,36 +5,63 @@
  */
 package rcases.model;
 
-import java.time.LocalDateTime;
-
 /**
  *
  * @author rcases
  */
 public class Appointment {
     
-    private int appointmentID;
+    private Integer appointmentId;
+    private int customerId;
     private String title;
     private String description;
+    private String location;
     private String contact;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private String url;
+    private String start;
+    private String end;
+    private String createDate;
+    private String createdBy;
+    private String lastUpdate;
+    private String lastUpdateBy;
 
-    public Appointment(int appointmentID, String title, String description, String contact, LocalDateTime start, LocalDateTime end) {
-        this.appointmentID = appointmentID;
+    public Appointment() {
+    }
+
+    public Appointment(Integer appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public Appointment(Integer appointmentId, int customerId, String title, String description, String location, String contact, String url, String start, String end, String createDate, String createdBy, String lastUpdate, String lastUpdateBy) {
+        this.appointmentId = appointmentId;
+        this.customerId = customerId;
         this.title = title;
         this.description = description;
+        this.location = location;
         this.contact = contact;
+        this.url = url;
         this.start = start;
         this.end = end;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdateBy = lastUpdateBy;
     }
 
-    public int getAppointmentID() {
-        return appointmentID;
+    public Integer getAppointmentId() {
+        return appointmentId;
     }
 
-    public void setAppointmentID(int appointmentID) {
-        this.appointmentID = appointmentID;
+    public void setAppointmentId(Integer appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public String getTitle() {
@@ -53,6 +80,14 @@ public class Appointment {
         this.description = description;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getContact() {
         return contact;
     }
@@ -61,19 +96,64 @@ public class Appointment {
         this.contact = contact;
     }
 
-    public LocalDateTime getStart() {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(String end) {
         this.end = end;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    @Override
+    public String toString() {
+        return "rcases.model.Appointment[ appointmentId=" + appointmentId + " ]";
     }
 }
