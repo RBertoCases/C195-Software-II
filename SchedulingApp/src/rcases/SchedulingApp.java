@@ -13,10 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import rcases.view.LoginScreenController;
-import rcases.view.CustomerScreenController;
-import rcases.view.AppointmentScreenController;
-import rcases.view.MenuController;
+import controller.LoginScreenController;
+import controller.CustomerScreenController;
+import controller.AppointmentScreenController;
+import controller.MenuController;
 
 /**
  *

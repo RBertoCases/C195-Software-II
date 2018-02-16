@@ -1,4 +1,4 @@
-package rcases.view;
+package controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
