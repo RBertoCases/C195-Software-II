@@ -7,7 +7,7 @@ package rcases.model;
 
 /**
  *
- * @author rober
+ * @author rcases
  */
 public class User {
     private int userID;
@@ -18,6 +18,10 @@ public class User {
         this.userID = userID;
         this.username = username;
         this.password = password;
+    }
+
+    public User() {
+        
     }
 
     public int getUserID() {
