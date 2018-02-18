@@ -38,7 +38,9 @@ public class SchedulingApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
-        showLoginScreen();
+        //showLoginScreen();
+        showMenu();
+        showCustomerScreen();
     }
     
     /**

@@ -1,15 +1,12 @@
 package rcases.view;
 
-import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,7 +16,7 @@ import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Customer;
 
-public class CustomerScreenController implements Initializable {
+public class CustomerScreenController {
 
     @FXML
     private TableView<Customer> customerTable;
@@ -77,12 +74,7 @@ public class CustomerScreenController implements Initializable {
     public void setCustomerScreen(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
         cityChoiceBox.getItems().addAll("Phoenix","New York","London");
-        
-    }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
          
         customerTable.getItems().setAll(parseCustomerList()); /* takes the list from the parseCustomerList() 
@@ -91,54 +83,74 @@ public class CustomerScreenController implements Initializable {
         customerTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)->showCustomerDetails(newValue));
         
-    }    
+    }
+         
     
     @FXML /* port information over to the form */
     private void showCustomerDetails(Customer selectedCustomer) {
      
-        phoneField.setText(selectedCustomer.getCustomerId());
+        customerIdField.setText(selectedCustomer.getCustomerId());
         nameField.setText(selectedCustomer.getCustomerName());
         addressField.setText(selectedCustomer.getAddress());
-        postalCodeField.setText(selectedCustomer.getZip());
+        address2Field.setText(selectedCustomer.getAddress2());
+        cityChoiceBox.setValue(selectedCustomer.getCity());
+        countryField.setText(selectedCustomer.getCountry());
+        postalCodeField.setText(selectedCustomer.getPostalCode());
+        phoneField.setText(selectedCustomer.getPhone());
 
     }
     
     private List<Customer> parseCustomerList() {
       
-        String tId;
-        String tName;
+        String tCustomerId;
+        String tCustomerName;
         String tAddress;
-        String tZip;
-        ArrayList<Customer> custList = new ArrayList();
+        String tAddress2;
+        String tCity;
+        String tCountry;
+        String tPostalCode;
+        String tPhone = "8675309";
+        ArrayList<Customer> customerList = new ArrayList();
         try(
             
             
-        PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT customer.customerId, customer.customerName, "
-                + "address.address, address.postalCode FROM customer, address WHERE customer.addressId = address.addressId;");
+        PreparedStatement statement = DBConnection.getConn().prepareStatement(
+        "SELECT customer.customerId, customer.customerName, address.address, address.address2, address.postalCode, city.city, country.country, address.phone " +
+        "FROM customer, address, city, country " +
+        "WHERE customer.addressId = address.addressId AND address.cityId = city.cityId AND city.countryId = country.countryId");
             ResultSet rs = statement.executeQuery();){
            
             
             while (rs.next()) {
-                tId = rs.getString("customer.customerId");
+                tCustomerId = rs.getString("customer.customerId");
 
-                tName = rs.getString("customer.customerName");
+                tCustomerName = rs.getString("customer.customerName");
 
                 tAddress = rs.getString("address.address");
                 
-                tZip = rs.getString("address.postalCode");
+                tAddress2 = rs.getString("address.address2");
+                
+                tCity = rs.getString("city.city");
+                
+                tCountry = rs.getString("country.country");
+                
+                tPostalCode = rs.getString("address.postalCode");
+                
+                tPhone = rs.getString("address.phone");
 
-                custList.add(new Customer(tId, tName, tAddress, tZip));
+                customerList.add(new Customer(tCustomerId, tCustomerName, tAddress, tAddress2, tCity, tCountry, tPostalCode, tPhone));
 
             }
           
         } catch (SQLException sqe) {
             System.out.println("Check your SQL");
+            sqe.printStackTrace();
         } catch (Exception e) {
             System.out.println("Something besides the SQL went wrong.");
         }
 
          
-        return custList;
+        return customerList;
 
     }
 
