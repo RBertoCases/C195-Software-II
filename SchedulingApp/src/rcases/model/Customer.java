@@ -13,26 +13,27 @@ public class Customer {
     
     private String customerId;
     private String customerName;
-    private int active;
     private String address;
-    private String zip;
+    private String address2;
+    private String city;
+    private String country;
+    private String postalCode;
+    private String phone;
+    
     
     public Customer(){
         
     }
-
-    public Customer(String customerId, String customerName, String address, String zip) {
+    
+    public Customer(String customerId, String customerName, String address, String address2, String city, String country, String postalCode, String phone) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.address = address;
-        this.zip = zip;
-       
-    }
-    
-    public Customer(String customerId, String customerName, int active) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.active = active;
+        this.address2 = address2;
+        this.city = city;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.phone = phone;
     }
 
     public String getCustomerId() {
@@ -50,21 +51,41 @@ public class Customer {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
     
     public String getAddress() {
         return address;
     }
 
-    public String getZip() {
-        return zip;
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
     
 }
