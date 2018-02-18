@@ -6,6 +6,7 @@
 package rcases;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import controller.LoginScreenController;
-import controller.CustomerScreenController;
-import controller.AppointmentScreenController;
-import controller.MenuController;
+import rcases.view.LoginScreenController;
+import rcases.view.CustomerScreenController;
+import rcases.view.AppointmentScreenController;
+import rcases.view.MenuController;
 
 /**
  *
@@ -30,6 +31,7 @@ public class SchedulingApp extends Application {
     private AnchorPane customerScreen;
     private AnchorPane appointmentScreen;
     Locale locale = Locale.getDefault();
+    private static Connection connection;
 
     
     @Override
@@ -67,7 +69,7 @@ public class SchedulingApp extends Application {
             // Load Login Screen.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SchedulingApp.class.getResource("/rcases/view/LoginScreen.fxml"));
-            loginScreen = (AnchorPane) loader.load();
+            AnchorPane loginScreen = (AnchorPane) loader.load();
             
             // Give the controller access to the main app.
             LoginScreenController controller = loader.getController();
@@ -110,7 +112,11 @@ public class SchedulingApp extends Application {
     public static void main(String[] args) {
         //Locale.setDefault(new Locale("fr", "FR"));
         //System.out.println(Locale.getDefault()); 
+        DBConnection.init();
+        connection = DBConnection.getConn();
+        
         launch(args);
+        DBConnection.closeConn();
     }
 
     public void showAppointmentScreen() {

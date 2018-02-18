@@ -11,21 +11,35 @@ package rcases.model;
  */
 public class Customer {
     
-    private int customerId;
+    private String customerId;
     private String customerName;
     private int active;
+    private String address;
+    private String zip;
+    
+    public Customer(){
+        
+    }
 
-    public Customer(int customerId, String customerName, int active) {
+    public Customer(String customerId, String customerName, String address, String zip) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.zip = zip;
+       
+    }
+    
+    public Customer(String customerId, String customerName, int active) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.active = active;
     }
 
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
@@ -45,5 +59,12 @@ public class Customer {
         this.active = active;
     }
     
+    public String getAddress() {
+        return address;
+    }
+
+    public String getZip() {
+        return zip;
+    }
     
 }
