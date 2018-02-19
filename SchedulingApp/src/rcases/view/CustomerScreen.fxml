@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rcases.view.CustomerScreenController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rcases.view.CustomerScreenController">
    <children>
       <SplitPane dividerPositions="0.43478260869565216" layoutX="212.0" layoutY="70.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -30,7 +30,7 @@
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="335.0">
                <children>
                   <Label layoutX="21.0" layoutY="6.0" text="Customer Details" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                   <GridPane layoutX="43.0" layoutY="59.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="30.0">
@@ -56,15 +56,15 @@
                         <Label text="Phone No." GridPane.rowIndex="7" />
                         <TextField fx:id="nameField" layoutX="183.0" layoutY="163.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="addressField" layoutX="183.0" layoutY="13.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <ChoiceBox fx:id="cityChoiceBox" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="address2Field" layoutX="183.0" layoutY="73.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <TextField fx:id="postalCodeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         <TextField fx:id="phoneField" layoutX="93.0" layoutY="43.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <Label layoutX="10.0" layoutY="107.0" text="Country" GridPane.rowIndex="5" />
                         <Label layoutX="10.0" layoutY="107.0" text="Address Line 2" GridPane.rowIndex="3" />
-                        <TextField fx:id="countryField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="countryField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Label layoutX="10.0" layoutY="47.0" text="Customer ID" />
-                        <TextField fx:id="customerIdField" layoutX="108.0" layoutY="43.0" GridPane.columnIndex="1" />
+                        <TextField fx:id="customerIdField" editable="false" layoutX="108.0" layoutY="43.0" GridPane.columnIndex="1" />
+                        <ChoiceBox fx:id="cityChoiceBox" prefHeight="25.0" prefWidth="227.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                   <ButtonBar buttonMinWidth="45.0" layoutX="90.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="235.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
@@ -72,6 +72,12 @@
                         <Button mnemonicParsing="false" onAction="#handleNewCustomer" text="New" />
                         <Button mnemonicParsing="false" onAction="#handleEditCustomer" text="Edit" />
                         <Button minWidth="57.0" mnemonicParsing="false" onAction="#handleDeleteCustomer" prefHeight="25.0" text="Delete" />
+                     </buttons>
+                  </ButtonBar>
+                  <ButtonBar fx:id="saveCancelButtonBar" buttonMinWidth="45.0" disable="true" layoutX="104.0" layoutY="270.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="226.0">
+                     <buttons>
+                        <Button minWidth="57.0" mnemonicParsing="false" onAction="#handleSaveCustomer" prefHeight="25.0" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#handleCancelCustomer" text="Cancel" />
                      </buttons>
                   </ButtonBar>
                </children>

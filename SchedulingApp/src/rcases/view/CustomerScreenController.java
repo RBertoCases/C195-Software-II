@@ -3,10 +3,12 @@ package rcases.view;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Customer;
+import rcases.model.City;
 
 public class CustomerScreenController {
 
@@ -51,33 +54,49 @@ public class CustomerScreenController {
     @FXML
     private TextField countryField;
     
+    @FXML
+    private ButtonBar saveCancelButtonBar;
+    
     private SchedulingApp mainApp;
     
     public CustomerScreenController() {
+    }
+    
+    @FXML
+    void handleNewCustomer(ActionEvent event) {
+        saveCancelButtonBar.setDisable(false);
+    }
+    
+    @FXML
+    void handleEditCustomer(ActionEvent event) {
+        saveCancelButtonBar.setDisable(false);
     }
 
     @FXML
     void handleDeleteCustomer(ActionEvent event) {
 
     }
-
+   
     @FXML
-    void handleEditCustomer(ActionEvent event) {
+    void handleSaveCustomer(ActionEvent event) {
 
     }
-
+    
     @FXML
-    void handleNewCustomer(ActionEvent event) {
-
+    void handleCancelCustomer(ActionEvent event) {
+        saveCancelButtonBar.setDisable(true);
     }
     
     public void setCustomerScreen(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
-        cityChoiceBox.getItems().addAll("Phoenix","New York","London");
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-         
-        customerTable.getItems().setAll(parseCustomerList()); /* takes the list from the parseCustomerList() 
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        
+        cityChoiceBox.getItems().addAll(populateCityChoiceBox());
+        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, 
+                oldValue, newValue)->showCountry((String) newValue));
+        customerTable.getItems().setAll(populateCustomerList()); /* takes the list from the parseCustomerList() 
         method, and addes the rows to the TableView */
          
         customerTable.getSelectionModel().selectedItemProperty().addListener(
@@ -93,14 +112,14 @@ public class CustomerScreenController {
         nameField.setText(selectedCustomer.getCustomerName());
         addressField.setText(selectedCustomer.getAddress());
         address2Field.setText(selectedCustomer.getAddress2());
-        cityChoiceBox.setValue(selectedCustomer.getCity());
+        cityChoiceBox.setValue(selectedCustomer.getCity());   //setValue(selectedCustomer.getCity());
         countryField.setText(selectedCustomer.getCountry());
         postalCodeField.setText(selectedCustomer.getPostalCode());
         phoneField.setText(selectedCustomer.getPhone());
 
     }
     
-    private List<Customer> parseCustomerList() {
+    private List<Customer> populateCustomerList() {
       
         String tCustomerId;
         String tCustomerName;
@@ -109,8 +128,9 @@ public class CustomerScreenController {
         String tCity;
         String tCountry;
         String tPostalCode;
-        String tPhone = "8675309";
-        ArrayList<Customer> customerList = new ArrayList();
+        String tPhone;
+        
+        ObservableList<Customer> customerList = FXCollections.observableArrayList();
         try(
             
             
@@ -138,7 +158,7 @@ public class CustomerScreenController {
                 
                 tPhone = rs.getString("address.phone");
 
-                customerList.add(new Customer(tCustomerId, tCustomerName, tAddress, tAddress2, tCity, tCountry, tPostalCode, tPhone));
+                customerList.add(new Customer(tCustomerId, tCustomerName, tAddress, tAddress2, tCity.toString(), tCountry, tPostalCode, tPhone));
 
             }
           
@@ -152,6 +172,45 @@ public class CustomerScreenController {
          
         return customerList;
 
+    }
+
+    private List<String> populateCityChoiceBox() {
+        String tCity;
+        ObservableList<String> cityList = FXCollections.observableArrayList();
+        try(
+            
+            
+        PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT city FROM city LIMIT 100;");
+            ResultSet rs = statement.executeQuery();){
+           
+            
+            while (rs.next()) {
+                tCity = rs.getString("city.city");
+
+                cityList.add(tCity);      //.add(new City(tCity));
+
+            }
+          
+        } catch (SQLException sqe) {
+            System.out.println("Check your SQL");
+            sqe.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something besides the SQL went wrong.");
+        }
+
+        System.out.println(cityList); 
+        return cityList;
+    }
+    
+    //cityList.toString();
+
+    private void showCountry(String citySelection) {
+     
+        if (citySelection.equals("London")) {
+            countryField.setText("England");
+        } else {
+            countryField.setText("United States");
+        }
     }
 
 }

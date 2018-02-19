@@ -10,20 +10,24 @@ package rcases.model;
  * @author rober
  */
 public class City {
-    private int cityID;
+    private int cityId;
     private String city;
+    
+    public City(String city){
+        this.city = city;
+    }
 
     public City(int cityID, String city) {
-        this.cityID = cityID;
+        this.cityId = cityID;
         this.city = city;
     }
 
     public int getCityID() {
-        return cityID;
+        return cityId;
     }
 
     public void setCityID(int cityID) {
-        this.cityID = cityID;
+        this.cityId = cityID;
     }
 
     public String getCity() {
@@ -32,6 +36,11 @@ public class City {
 
     public void setCity(String city) {
         this.city = city;
+    }
+    
+    @Override
+    public String toString() {
+        return city;
     }
     
 }
