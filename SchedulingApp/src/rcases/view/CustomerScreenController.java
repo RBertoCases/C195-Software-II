@@ -103,13 +103,13 @@ public class CustomerScreenController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         
         cityChoiceBox.getItems().addAll(populateCityChoiceBox());
-        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            showCountry(newValue.toString());
         cityChoiceBox.valueProperty().set("Please Select:");
-});
-        customerTable.getItems().setAll(populateCustomerList()); /* takes the list from the parseCustomerList() 
-        method, and addes the rows to the TableView */
-         
+        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showCountry(newValue.toString());});
+        
+        
+        customerTable.getItems().setAll(populateCustomerList()); /* takes the list from the populateCustomerList() 
+        method, and addes the rows to the TableView */         
         customerTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)->showCustomerDetails(newValue));
         
