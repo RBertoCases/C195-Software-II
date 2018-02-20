@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.sql.*;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;

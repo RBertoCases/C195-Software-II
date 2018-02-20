@@ -65,11 +65,16 @@ public class CustomerScreenController {
     @FXML
     void handleNewCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(false);
+        customerTable.setDisable(true);
+        clearCustomerDetails();
+        
+        
     }
     
     @FXML
     void handleEditCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(false);
+        customerTable.setDisable(true);
     }
 
     @FXML
@@ -79,12 +84,16 @@ public class CustomerScreenController {
    
     @FXML
     void handleSaveCustomer(ActionEvent event) {
+        saveCancelButtonBar.setDisable(true);
+        customerTable.setDisable(false);
 
     }
     
     @FXML
     void handleCancelCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(true);
+        customerTable.setDisable(false);
+        clearCustomerDetails();
     }
     
     public void setCustomerScreen(SchedulingApp mainApp) {
@@ -94,8 +103,10 @@ public class CustomerScreenController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         
         cityChoiceBox.getItems().addAll(populateCityChoiceBox());
-        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, 
-                oldValue, newValue)->showCountry((String) newValue));
+        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            showCountry(newValue.toString());
+        cityChoiceBox.valueProperty().set("Please Select:");
+});
         customerTable.getItems().setAll(populateCustomerList()); /* takes the list from the parseCustomerList() 
         method, and addes the rows to the TableView */
          
@@ -112,10 +123,24 @@ public class CustomerScreenController {
         nameField.setText(selectedCustomer.getCustomerName());
         addressField.setText(selectedCustomer.getAddress());
         address2Field.setText(selectedCustomer.getAddress2());
-        cityChoiceBox.setValue(selectedCustomer.getCity());   //setValue(selectedCustomer.getCity());
+        cityChoiceBox.setValue(selectedCustomer.getCity());
         countryField.setText(selectedCustomer.getCountry());
         postalCodeField.setText(selectedCustomer.getPostalCode());
         phoneField.setText(selectedCustomer.getPhone());
+
+    }
+    
+    @FXML /* port information over to the form */
+    private void clearCustomerDetails() {
+     
+        customerIdField.clear();
+        nameField.clear();
+        addressField.clear();
+        address2Field.clear();
+        cityChoiceBox.valueProperty().set("Please Select:");
+        countryField.clear();
+        postalCodeField.clear();
+        phoneField.clear();
 
     }
     
@@ -175,8 +200,11 @@ public class CustomerScreenController {
     }
 
     private List<String> populateCityChoiceBox() {
+        String defaultCity = "Please Select:";
         String tCity;
         ObservableList<String> cityList = FXCollections.observableArrayList();
+        cityList.add(defaultCity);
+        
         try(
             
             
@@ -202,13 +230,12 @@ public class CustomerScreenController {
         return cityList;
     }
     
-    //cityList.toString();
-
+    
+    @FXML
     private void showCountry(String citySelection) {
-     
         if (citySelection.equals("London")) {
             countryField.setText("England");
-        } else {
+        } else if (citySelection.equals("Phoenix") || citySelection.equals("New York")) {
             countryField.setText("United States");
         }
     }
