@@ -1,8 +1,10 @@
 package rcases.view;
 
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,6 +88,8 @@ public class CustomerScreenController {
     void handleSaveCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(true);
         customerTable.setDisable(false);
+        saveCustomer();
+        customerTable.getItems().setAll(populateCustomerList());
 
     }
     
@@ -238,6 +242,56 @@ public class CustomerScreenController {
         } else if (citySelection.equals("Phoenix") || citySelection.equals("New York")) {
             countryField.setText("United States");
         }
+    }
+
+    private void saveCustomer() {
+
+            try {
+
+                PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                ps.setString(1, addressField.getText());
+                ps.setString(2, address2Field.getText());
+                ps.setInt(3, 1);
+                ps.setString(4, postalCodeField.getText());
+                ps.setString(5, phoneField.getText());
+                ps.setString(6, LocalDateTime.now().toString());
+                ps.setString(7, "test");
+                ps.setString(8, LocalDateTime.now().toString());
+                ps.setString(9, "test");
+                int res = ps.executeUpdate();
+                if (res == 1) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY!");
+                } else {
+                    System.out.println("BOO!");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            
+            try {
+
+                PreparedStatement psc = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+                        + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy)"
+                        + "VALUES (?, LAST_INSERT_ID(), ?, ?, ?, ?, ?)");
+
+                psc.setString(1, nameField.getText());
+                //psc.setInt(2, LAST_INSERT_ID());
+                psc.setInt(3, 1);
+                psc.setString(4, LocalDateTime.now().toString());
+                psc.setString(5, "test");
+                psc.setString(6, LocalDateTime.now().toString());
+                psc.setString(7, "test");
+                int res = psc.executeUpdate();
+                if (res == 1) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY! Customer");
+                } else {
+                    System.out.println("BOO! Customer");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
     }
 
 }
