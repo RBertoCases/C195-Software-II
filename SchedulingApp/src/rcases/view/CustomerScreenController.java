@@ -58,6 +58,9 @@ public class CustomerScreenController {
     private TextField countryField;
     
     @FXML
+    private ButtonBar newEditDeleteButtonBar;
+    
+    @FXML
     private ButtonBar saveCancelButtonBar;
     
     private SchedulingApp mainApp;
@@ -70,6 +73,8 @@ public class CustomerScreenController {
         saveCancelButtonBar.setDisable(false);
         customerTable.setDisable(true);
         clearCustomerDetails();
+        customerIdField.setText("Auto-Generated ID");
+        newEditDeleteButtonBar.setDisable(true);
         
         
     }
@@ -78,6 +83,7 @@ public class CustomerScreenController {
     void handleEditCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(false);
         customerTable.setDisable(true);
+        newEditDeleteButtonBar.setDisable(true);
     }
 
     @FXML
@@ -90,7 +96,7 @@ public class CustomerScreenController {
         saveCancelButtonBar.setDisable(true);
         customerTable.setDisable(false);
         saveCustomer();
-        customerTable.getItems().setAll(populateCustomerList());
+        mainApp.showCustomerScreen();
 
     }
     
@@ -99,6 +105,7 @@ public class CustomerScreenController {
         saveCancelButtonBar.setDisable(true);
         customerTable.setDisable(false);
         clearCustomerDetails();
+        newEditDeleteButtonBar.setDisable(false);
     }
     
     public void setCustomerScreen(SchedulingApp mainApp) {
@@ -261,36 +268,41 @@ public class CustomerScreenController {
                 ps.setString(7, "test");
                 ps.setString(8, LocalDateTime.now().toString());
                 ps.setString(9, "test");
+                boolean res = ps.execute();
+                if (res) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY! Customer");
+                } else {
+                    System.out.println("BOO! Customer");
+                }
+                int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
-                if(rs != null && rs.next()){
-                System.out.println("Generated AddressId: "+rs.getInt(1));
-            }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+                
+                if(rs.next()){
+                newAddressId = rs.getInt(1);
+                System.out.println("Generated AddressId: "+ newAddressId);
+                }
             
-            /*try {
             
-            PreparedStatement psc = DBConnection.getConn().prepareStatement("INSERT INTO customer "
-            + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy)"
-            + "VALUES (?, LAST_INSERT_ID(), ?, ?, ?, ?, ?)");
+                PreparedStatement psc = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+                + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)");
             
-            psc.setString(1, nameField.getText());
-            //psc.setInt(2, LAST_INSERT_ID());
-            psc.setInt(3, 1);
-            psc.setString(4, LocalDateTime.now().toString());
-            psc.setString(5, "test");
-            psc.setString(6, LocalDateTime.now().toString());
-            psc.setString(7, "test");
-            int res = psc.executeUpdate();
-            if (res == 1) {//one row was affected; namely the one that was inserted!
-            System.out.println("YAY! Customer");
-            } else {
-            System.out.println("BOO! Customer");
-            }
+                psc.setString(1, nameField.getText());
+                psc.setInt(2, newAddressId);
+                psc.setInt(3, 1);
+                psc.setString(4, LocalDateTime.now().toString());
+                psc.setString(5, "test");
+                psc.setString(6, LocalDateTime.now().toString());
+                psc.setString(7, "test");
+                int result = psc.executeUpdate();
+                if (result == 1) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY! Customer");
+                } else {
+                    System.out.println("BOO! Customer");
+                }
             } catch (SQLException ex) {
             ex.printStackTrace();
-            }*/
+            }
     }
 
 }
