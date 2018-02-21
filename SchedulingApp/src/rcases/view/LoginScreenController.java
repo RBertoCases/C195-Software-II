@@ -73,7 +73,7 @@ public class LoginScreenController {
         }
     }
         
-    private User validateLogin(String username,String password) {
+    protected User validateLogin(String username,String password) {
         User selectedUser = new User();
         
         try{           

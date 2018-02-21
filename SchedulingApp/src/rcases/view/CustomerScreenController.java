@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
+import rcases.model.City;
 import rcases.model.Customer;
 
 public class CustomerScreenController {
@@ -71,10 +72,11 @@ public class CustomerScreenController {
     
     @FXML
     void handleNewCustomer(ActionEvent event) {
+        enableCustomerFields();
         saveCancelButtonBar.setDisable(false);
         customerTable.setDisable(true);
         clearCustomerDetails();
-        customerIdField.setText("Auto-Generated ID");
+        customerIdField.setText("Auto-Generated");
         newEditDeleteButtonBar.setDisable(true);
         
         
@@ -82,6 +84,7 @@ public class CustomerScreenController {
     
     @FXML
     void handleEditCustomer(ActionEvent event) {
+        enableCustomerFields();
         saveCancelButtonBar.setDisable(false);
         customerTable.setDisable(true);
         newEditDeleteButtonBar.setDisable(true);
@@ -127,6 +130,7 @@ public class CustomerScreenController {
         
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        disableCustomerFields();
         
         cityChoiceBox.getItems().addAll(populateCityChoiceBox());
         cityChoiceBox.valueProperty().set("Please Select:");
@@ -156,7 +160,25 @@ public class CustomerScreenController {
 
     }
     
-    //private void disableCustomerFields ()
+    private void disableCustomerFields() {
+        
+        nameField.setEditable(false);
+        addressField.setEditable(false);
+        address2Field.setEditable(false);
+        //cityChoiceBox.setDisable(true);
+        postalCodeField.setEditable(false);
+        phoneField.setEditable(false);
+    }
+    
+    private void enableCustomerFields() {
+        
+        nameField.setEditable(true);
+        addressField.setEditable(true);
+        address2Field.setEditable(true);
+        //cityChoiceBox.setDisable(false);
+        postalCodeField.setEditable(true);
+        phoneField.setEditable(true);
+    }
     
     @FXML /* port information over to the form */
     private void clearCustomerDetails() {
@@ -165,7 +187,7 @@ public class CustomerScreenController {
         nameField.clear();
         addressField.clear();
         address2Field.clear();
-        cityChoiceBox.valueProperty().set("Please Select:");
+        cityChoiceBox.setValue("Please Select:");
         countryField.clear();
         postalCodeField.clear();
         phoneField.clear();
@@ -228,23 +250,25 @@ public class CustomerScreenController {
     }
 
     private List<String> populateCityChoiceBox() {
-        String defaultCity = "Please Select:";
-        String tCity;
+        
+        Integer tCityId;
+        String tCityName;
+        
+        City tCity = new City();
         ObservableList<String> cityList = FXCollections.observableArrayList();
-        cityList.add(defaultCity);
+        cityList.add(new City(0, "Please Select:").toString());
         
         try(
             
             
-        PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT city FROM city LIMIT 100;");
+        PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT cityId, city FROM city LIMIT 100;");
             ResultSet rs = statement.executeQuery();){
            
             
             while (rs.next()) {
-                tCity = rs.getString("city.city");
-
-                cityList.add(tCity);      //.add(new City(tCity));
-
+               tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
+               tCityName = rs.getString("city.city");
+               cityList.add(new City(tCityId,tCityName).toString());
             }
           
         } catch (SQLException sqe) {
