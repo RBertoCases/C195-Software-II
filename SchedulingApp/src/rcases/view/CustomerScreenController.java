@@ -1,17 +1,19 @@
 package rcases.view;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,7 +22,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Customer;
-import rcases.model.City;
 
 public class CustomerScreenController {
 
@@ -88,6 +89,19 @@ public class CustomerScreenController {
 
     @FXML
     void handleDeleteCustomer(ActionEvent event) {
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+        if (customer != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Are you sure you want to delete " + customer.getCustomerName() + "?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                deleteCustomer(customer);
+                mainApp.showCustomerScreen();
+            } else {
+                alert.close();
+            }
+        }
 
     }
    
@@ -141,6 +155,8 @@ public class CustomerScreenController {
         phoneField.setText(selectedCustomer.getPhone());
 
     }
+    
+    //private void disableCustomerFields ()
     
     @FXML /* port information over to the form */
     private void clearCustomerDetails() {
@@ -269,11 +285,6 @@ public class CustomerScreenController {
                 ps.setString(8, LocalDateTime.now().toString());
                 ps.setString(9, "test");
                 boolean res = ps.execute();
-                if (res) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Customer");
-                } else {
-                    System.out.println("BOO! Customer");
-                }
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
                 
@@ -305,4 +316,15 @@ public class CustomerScreenController {
             }
     }
 
+    private void deleteCustomer(Customer customer) {
+        
+        try{           
+            PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE customer.*, address.* from customer, address WHERE customer.customerId = ? AND customer.addressId = address.addressId");
+            pst.setString(1, customer.getCustomerId()); 
+            pst.executeUpdate();   
+                
+        } catch(SQLException e){
+            e.printStackTrace();
+        }       
+    }
 }
