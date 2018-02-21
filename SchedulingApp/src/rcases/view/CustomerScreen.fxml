@@ -67,7 +67,7 @@
                         <ChoiceBox fx:id="cityChoiceBox" prefHeight="25.0" prefWidth="227.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
-                  <ButtonBar buttonMinWidth="45.0" layoutX="90.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="235.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <ButtonBar fx:id="newEditDeleteButtonBar" buttonMinWidth="45.0" layoutX="90.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="235.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <buttons>
                         <Button mnemonicParsing="false" onAction="#handleNewCustomer" text="New" />
                         <Button mnemonicParsing="false" onAction="#handleEditCustomer" text="Edit" />
