@@ -14,16 +14,12 @@ import java.util.Date;
  */
 public class Address {
     
-    private int addressId;
+    private Integer addressId;
     private String address;
     private String address2;
     private int cityId;
     private String postalCode;
     private String phone;
-    private Date createDate;
-    private String createdBy;
-    private Date lastUpdate;
-    private String lastUpdateBy;
 
     public Address() {
     }
@@ -32,17 +28,13 @@ public class Address {
         this.addressId = addressId;
     }
 
-    public Address(Integer addressId, String address, String address2, int cityId, String postalCode, String phone, Date createDate, String createdBy, Date lastUpdate, String lastUpdateBy) {
+    public Address(Integer addressId, String address, String address2, int cityId, String postalCode, String phone) {
         this.addressId = addressId;
         this.address = address;
         this.address2 = address2;
         this.cityId = cityId;
         this.postalCode = postalCode;
         this.phone = phone;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdateBy = lastUpdateBy;
     }
 
     public Integer getAddressId() {
@@ -93,40 +85,28 @@ public class Address {
         this.phone = phone;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (addressId != null ? addressId.hashCode() : 0);
+        return hash;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getLastUpdateBy() {
-        return lastUpdateBy;
-    }
-
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy;
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Address)) {
+            return false;
+        }
+        Address other = (Address) object;
+        if ((this.addressId == null && other.addressId != null) || (this.addressId != null && !this.addressId.equals(other.addressId))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "rcases.model.Address[ addressId=" + addressId + " ]";
+        return "model.Address[ addressId=" + addressId + " ]";
     }
 }
