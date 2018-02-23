@@ -15,6 +15,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -45,7 +46,7 @@ public class CustomerScreenController {
     private TextField addressField;
 
     @FXML
-    private ChoiceBox cityChoiceBox;
+    private ComboBox cityComboBox;
 
     @FXML
     private TextField address2Field;
@@ -132,9 +133,9 @@ public class CustomerScreenController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         disableCustomerFields();
         
-        cityChoiceBox.getItems().addAll(populateCityChoiceBox());
-        cityChoiceBox.valueProperty().set("Please Select:");
-        cityChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        cityComboBox.getItems().setAll(populateCityList());
+        cityComboBox.setPromptText("Please Select:");
+        cityComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             showCountry(newValue.toString());});
         
         
@@ -153,7 +154,7 @@ public class CustomerScreenController {
         nameField.setText(selectedCustomer.getCustomerName());
         addressField.setText(selectedCustomer.getAddress());
         address2Field.setText(selectedCustomer.getAddress2());
-        cityChoiceBox.setValue(selectedCustomer.getCity());
+        cityComboBox.setValue(selectedCustomer.getCity());
         countryField.setText(selectedCustomer.getCountry());
         postalCodeField.setText(selectedCustomer.getPostalCode());
         phoneField.setText(selectedCustomer.getPhone());
@@ -165,7 +166,6 @@ public class CustomerScreenController {
         nameField.setEditable(false);
         addressField.setEditable(false);
         address2Field.setEditable(false);
-        //cityChoiceBox.setDisable(true);
         postalCodeField.setEditable(false);
         phoneField.setEditable(false);
     }
@@ -175,7 +175,6 @@ public class CustomerScreenController {
         nameField.setEditable(true);
         addressField.setEditable(true);
         address2Field.setEditable(true);
-        //cityChoiceBox.setDisable(false);
         postalCodeField.setEditable(true);
         phoneField.setEditable(true);
     }
@@ -187,7 +186,8 @@ public class CustomerScreenController {
         nameField.clear();
         addressField.clear();
         address2Field.clear();
-        cityChoiceBox.setValue("Please Select:");
+        cityComboBox.setValue(null);
+        cityComboBox.setPromptText("Please Select:");
         countryField.clear();
         postalCodeField.clear();
         phoneField.clear();
@@ -249,37 +249,35 @@ public class CustomerScreenController {
 
     }
 
-    private List<String> populateCityChoiceBox() {
-        
-        Integer tCityId;
-        String tCityName;
-        
-        City tCity = new City();
-        ObservableList<String> cityList = FXCollections.observableArrayList();
-        cityList.add(new City(0, "Please Select:").toString());
-        
-        try(
-            
-            
-        PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT cityId, city FROM city LIMIT 100;");
-            ResultSet rs = statement.executeQuery();){
-           
-            
-            while (rs.next()) {
-               tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
-               tCityName = rs.getString("city.city");
-               cityList.add(new City(tCityId,tCityName).toString());
-            }
-          
-        } catch (SQLException sqe) {
-            System.out.println("Check your SQL");
-            sqe.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Something besides the SQL went wrong.");
-        }
+    private List<City> populateCityList() {
+    
+    int tCityId;
+    String tCityName;
+    
+    City tCity = new City();
+    ObservableList<City> cityList = FXCollections.observableArrayList();
+    
+    try(
 
-        System.out.println(cityList); 
-        return cityList;
+    PreparedStatement statement = DBConnection.getConn().prepareStatement("SELECT cityId, city FROM city LIMIT 100;");
+    ResultSet rs = statement.executeQuery();){
+    
+    while (rs.next()) {
+        tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
+        tCityName = rs.getString("city.city");
+        cityList.add(new City(tCityId,tCityName));
+    }
+    
+    
+    } catch (SQLException sqe) {
+    System.out.println("Check your SQL");
+    sqe.printStackTrace();
+    } catch (Exception e) {
+    System.out.println("Something besides the SQL went wrong.");
+    }
+    
+    System.out.println(cityList);
+    return cityList;
     }
     
     
@@ -311,10 +309,10 @@ public class CustomerScreenController {
                 boolean res = ps.execute();
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
-                
+                System.out.println(cityComboBox.hashCode());
                 if(rs.next()){
-                newAddressId = rs.getInt(1);
-                System.out.println("Generated AddressId: "+ newAddressId);
+                    newAddressId = rs.getInt(1);
+                    System.out.println("Generated AddressId: "+ newAddressId);
                 }
             
             
@@ -351,4 +349,5 @@ public class CustomerScreenController {
             e.printStackTrace();
         }       
     }
+    
 }
