@@ -41,6 +41,7 @@ public class SchedulingApp extends Application {
         //showLoginScreen();
         showMenu();
         showCustomerScreen();
+        
     }
     
     /**
