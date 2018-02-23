@@ -66,12 +66,14 @@ public class CustomerScreenController {
     private ButtonBar saveCancelButtonBar;
     
     private SchedulingApp mainApp;
+    private boolean editClicked = false;
     
     public CustomerScreenController() {
     }
     
     @FXML
     void handleNewCustomer(ActionEvent event) {
+        editClicked = false;
         enableCustomerFields();
         saveCancelButtonBar.setDisable(false);
         customerTable.setDisable(true);
@@ -84,10 +86,24 @@ public class CustomerScreenController {
     
     @FXML
     void handleEditCustomer(ActionEvent event) {
-        enableCustomerFields();
-        saveCancelButtonBar.setDisable(false);
-        customerTable.setDisable(true);
-        newEditDeleteButtonBar.setDisable(true);
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedCustomer != null) {
+            editClicked = true;
+            System.out.println(editClicked);
+            enableCustomerFields();
+            saveCancelButtonBar.setDisable(false);
+            customerTable.setDisable(true);
+            newEditDeleteButtonBar.setDisable(true);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Customer selected");
+            alert.setContentText("Please select a Customer in the Table");
+            alert.showAndWait();
+        }
+        
+        
     }
 
     @FXML
@@ -112,7 +128,13 @@ public class CustomerScreenController {
     void handleSaveCustomer(ActionEvent event) {
         saveCancelButtonBar.setDisable(true);
         customerTable.setDisable(false);
-        saveCustomer();
+        if (editClicked == true) {
+            updateCustomer();
+            System.out.println(editClicked);
+        } else if (editClicked == false){
+            System.out.println(editClicked);
+            saveCustomer();
+        }
         mainApp.showCustomerScreen();
 
     }
@@ -123,6 +145,7 @@ public class CustomerScreenController {
         customerTable.setDisable(false);
         clearCustomerDetails();
         newEditDeleteButtonBar.setDisable(false);
+        editClicked = false;
     }
     
     public void setCustomerScreen(SchedulingApp mainApp) {
@@ -350,5 +373,9 @@ public class CustomerScreenController {
         } catch(SQLException e){
             e.printStackTrace();
         }       
+    }
+
+    private void updateCustomer() {
+        System.out.println("Not Supported yet");
     }
 }
