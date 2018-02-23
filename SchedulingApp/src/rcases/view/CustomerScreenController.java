@@ -377,7 +377,50 @@ public class CustomerScreenController {
 
 
     private void updateCustomer() {
-        System.out.println("Not Supported yet");
+        try {
+
+                PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+
+                ps.setString(1, addressField.getText());
+                ps.setString(2, address2Field.getText());
+                ps.setInt(3, 1);
+                ps.setString(4, postalCodeField.getText());
+                ps.setString(5, phoneField.getText());
+                ps.setString(6, LocalDateTime.now().toString());
+                ps.setString(7, "test");
+                ps.setString(8, LocalDateTime.now().toString());
+                ps.setString(9, "test");
+                boolean res = ps.execute();
+                int newAddressId = -1;
+                ResultSet rs = ps.getGeneratedKeys();
+                System.out.println(cityComboBox.hashCode());
+                if(rs.next()){
+                    newAddressId = rs.getInt(1);
+                    System.out.println("Generated AddressId: "+ newAddressId);
+                }
+            
+            
+                PreparedStatement psc = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+                + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            
+                psc.setString(1, nameField.getText());
+                psc.setInt(2, newAddressId);
+                psc.setInt(3, 1);
+                psc.setString(4, LocalDateTime.now().toString());
+                psc.setString(5, "test");
+                psc.setString(6, LocalDateTime.now().toString());
+                psc.setString(7, "test");
+                int result = psc.executeUpdate();
+                if (result == 1) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY! Customer");
+                } else {
+                    System.out.println("BOO! Customer");
+                }
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
     }
 
 }
