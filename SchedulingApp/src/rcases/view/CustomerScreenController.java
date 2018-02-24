@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.City;
@@ -47,7 +48,7 @@ public class CustomerScreenController {
     private TextField addressField;
 
     @FXML
-    private ComboBox cityComboBox;
+    private ComboBox<City> cityComboBox;
 
     @FXML
     private TextField address2Field;
@@ -157,12 +158,27 @@ public class CustomerScreenController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         disableCustomerFields();
         
-        cityComboBox.getItems().setAll(populateCityList());
-        cityComboBox.setPromptText("Please Select:");
-        cityComboBox.getSelectionModel().selectedItemProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-            showCountry(newValue.toString());
+        populateCityList();
+        
+        cityComboBox.setConverter(new StringConverter<City>() {
+
+        @Override
+        public String toString(City object) {
+        return object.getCity();
+        }
+
+        @Override
+        public City fromString(String string) {
+        return cityComboBox.getItems().stream().filter(ap -> 
+            ap.getCity().equals(string)).findFirst().orElse(null);
+        }
         });
         
+        cityComboBox.valueProperty().addListener((obs, oldval, newval) -> {
+        if(newval != null)
+        System.out.println("Selected City: " + newval.getCity() 
+            + ". ID: " + newval.getCityId());
+        });
         
         customerTable.getItems().setAll(populateCustomerList()); /* takes the list from the populateCustomerList() 
         method, and addes the rows to the TableView */         
@@ -211,15 +227,15 @@ public class CustomerScreenController {
         nameField.clear();
         addressField.clear();
         address2Field.clear();
-        cityComboBox.setValue("Please Select:");
-        cityComboBox.setPromptText("Please Select:"); //do I need this?
+        //cityComboBox.setValue("Please Select:");
+        //cityComboBox.setPromptText("Please Select:"); //do I need this?
         countryField.clear();
         postalCodeField.clear();
         phoneField.clear();
 
     }
     
-    private List<Customer> populateCustomerList() {
+    protected List<Customer> populateCustomerList() {
       
         String tCustomerId;
         String tCustomerName;
@@ -274,13 +290,10 @@ public class CustomerScreenController {
 
     }
 
-    private List<City> populateCityList() {
+    protected void populateCityList() {
     
-    int tCityId;
-    String tCityName;
     
-    City tCity = new City();
-    ObservableList<City> cityList = FXCollections.observableArrayList();
+    ObservableList<City> cities = FXCollections.observableArrayList();
     
     try(
 
@@ -288,9 +301,9 @@ public class CustomerScreenController {
     ResultSet rs = statement.executeQuery();){
     
     while (rs.next()) {
-        tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
-        tCityName = rs.getString("city.city");
-        cityList.add(new City(tCityId,tCityName));
+        //tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
+        //tCityName = rs.getString("city.city");
+        cities.add(new City(rs.getInt("city.cityId"),rs.getString("city.city")));
     }
     
     
@@ -301,8 +314,9 @@ public class CustomerScreenController {
     System.out.println("Something besides the SQL went wrong.");
     }
     
-    System.out.println(cityList);
-    return cityList;
+    System.out.println(cities);
+    cityComboBox.setItems(cities);
+    
     }
     
     
@@ -324,7 +338,7 @@ public class CustomerScreenController {
 
                 ps.setString(1, addressField.getText());
                 ps.setString(2, address2Field.getText());
-                ps.setInt(3, 1);
+                ps.setString(3, "1");
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
                 ps.setString(6, LocalDateTime.now().toString());
@@ -334,7 +348,7 @@ public class CustomerScreenController {
                 boolean res = ps.execute();
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
-                System.out.println(cityComboBox.hashCode());
+                //System.out.println(cityComboBox.getCityId);
                 if(rs.next()){
                     newAddressId = rs.getInt(1);
                     System.out.println("Generated AddressId: "+ newAddressId);
