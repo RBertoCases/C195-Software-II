@@ -15,7 +15,7 @@ public class Customer {
     private String customerName;
     private String address;
     private String address2;
-    private String city;
+    private City city;
     private String country;
     private String postalCode;
     private String phone;
@@ -25,7 +25,7 @@ public class Customer {
         
     }
     
-    public Customer(String customerId, String customerName, String address, String address2, String city, String country, String postalCode, String phone) {
+    public Customer(String customerId, String customerName, String address, String address2, City city, String country, String postalCode, String phone) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.address = address;
@@ -64,11 +64,11 @@ public class Customer {
         return address2;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
