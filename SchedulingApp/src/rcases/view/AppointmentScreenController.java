@@ -5,6 +5,7 @@
  */
 package rcases.view;
 
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
@@ -32,7 +33,7 @@ public class AppointmentScreenController {
     @FXML
     private TableColumn<Appointment, ?> endApptColumn;
     
-     @FXML
+    @FXML
     private TableColumn<Appointment, ?> titleApptColumn;
 
     @FXML
@@ -52,12 +53,13 @@ public class AppointmentScreenController {
     
     @FXML
     private ToggleGroup apptToggleGroup;
-    
+        
     public void setAppointmentScreen(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
         apptToggleGroup = new ToggleGroup();
         this.weekRadioButton.setToggleGroup(apptToggleGroup);
         this.monthRadioButton.setToggleGroup(apptToggleGroup);
+        
     }
 
     @FXML
@@ -71,8 +73,8 @@ public class AppointmentScreenController {
     }
 
     @FXML
-    void handleNewAppt(ActionEvent event) {
-
+    void handleNewAppt(ActionEvent event) throws IOException{
+        boolean okClicked = mainApp.showNewApptScreen();
     }
     
     

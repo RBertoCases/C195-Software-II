@@ -31,6 +31,6 @@
          </padding>
       </ButtonBar>
       <RadioButton fx:id="weekRadioButton" layoutX="32.0" layoutY="23.0" mnemonicParsing="false" text="Appointments by Week" />
-      <RadioButton fx:id="monthrRadioButton" layoutX="32.0" layoutY="43.0" mnemonicParsing="false" text="Appointments by Month" />
+      <RadioButton fx:id="monthRadioButton" layoutX="32.0" layoutY="43.0" mnemonicParsing="false" text="Appointments by Month" />
    </children>
 </AnchorPane>

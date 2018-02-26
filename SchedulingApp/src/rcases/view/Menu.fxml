@@ -17,8 +17,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Reports">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleMenuReport1" text="Report 1" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReport2" text="Report 2" />
+              <MenuItem mnemonicParsing="false" onAction="#handleScheduleReport" text="Schedule" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAppointmentTypesByMonth" text="Appointment Types By Month" />
                   <MenuItem mnemonicParsing="false" onAction="#handleMenuReport3" text="Report 3" />
             </items>
           </Menu>
