@@ -13,11 +13,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import rcases.model.Appointment;
 import rcases.view.LoginScreenController;
 import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
 import rcases.view.MenuController;
+import rcases.view.NewApptScreenController;
 
 /**
  *
@@ -41,6 +44,7 @@ public class SchedulingApp extends Application {
         //showLoginScreen();
         showMenu();
         showCustomerScreen();
+        //showAppointmentScreen();
         
     }
     
@@ -139,6 +143,73 @@ public class SchedulingApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public boolean showNewApptScreen() {
+    try {
+        // Load the fxml file and create a new stage for the popup dialog.
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/newApptScreen.fxml"));
+        AnchorPane newApptScreen = (AnchorPane) loader.load();
+
+        // Create the dialog Stage.
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("New Appointment");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(newApptScreen);
+        dialogStage.setScene(scene);
+
+        // Set the person into the controller.
+        NewApptScreenController controller = loader.getController();
+        controller.setDialogStage(dialogStage);
+
+        // Show the dialog and wait until the user closes it
+        dialogStage.showAndWait();
+
+        return controller.isOkClicked();
+        } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+        }
+    }
+    
+    public boolean showEditApptScreen(Appointment appointment) {
+    try {
+        // Load the fxml file and create a new stage for the popup dialog.
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/EditApptScreen.fxml"));
+        AnchorPane partScreen = (AnchorPane) loader.load();
+
+        // Create the dialog Stage.
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Edit Appointment");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(partScreen);
+        dialogStage.setScene(scene);
+
+        // Set the person into the controller.
+        NewApptScreenController controller = loader.getController();
+        controller.setDialogStage(dialogStage);
+        controller.setAppointment(appointment);
+
+        // Show the dialog and wait until the user closes it
+        dialogStage.showAndWait();
+
+        return controller.isOkClicked();
+        } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+        }
+    }
+
+    public void showScheduleReportScreen() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void showAppointmentTypesByMonthScreen() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

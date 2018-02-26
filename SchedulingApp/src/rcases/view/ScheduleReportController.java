@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author rcases
  */
-public class Report1ScreenController implements Initializable {
+public class ScheduleReportController implements Initializable {
 
     /**
      * Initializes the controller class.

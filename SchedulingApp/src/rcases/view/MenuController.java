@@ -28,15 +28,15 @@ public class MenuController {
     }
 
     @FXML
-    void handleMenuReport1(ActionEvent event) {
-
+    void handleScheduleReport(ActionEvent event) {
+    mainApp.showScheduleReportScreen();
     }
-
+    
     @FXML
-    void handleMenuReport2(ActionEvent event) {
-
+    void handleAppointmentTypesByMonth(ActionEvent event) {
+    mainApp.showAppointmentTypesByMonthScreen();
     }
-
+    
     @FXML
     void handleMenuReport3(ActionEvent event) {
         Platform.exit();
