@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Appointment {
     
-    private Integer appointmentId;
+    private int appointmentId;
     private int customerId;
     private String title;
     private String description;
@@ -28,7 +28,7 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    public Appointment(Integer appointmentId, int customerId, String title, String description, String contact, Date start, Date end) {
+    public Appointment(int appointmentId, int customerId, String title, String description, String contact, Date start, Date end) {
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.title = title;
@@ -42,7 +42,7 @@ public class Appointment {
         return appointmentId;
     }
 
-    public void setAppointmentId(Integer appointmentId) {
+    public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
     }
 
@@ -94,26 +94,6 @@ public class Appointment {
         this.end = end;
     }
     
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (appointmentId != null ? appointmentId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Appointment)) {
-            return false;
-        }
-        Appointment other = (Appointment) object;
-        if ((this.appointmentId == null && other.appointmentId != null) || (this.appointmentId != null && !this.appointmentId.equals(other.appointmentId))) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
         return "model.Appointment[ appointmentId=" + appointmentId + " ]";
