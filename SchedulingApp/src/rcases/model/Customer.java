@@ -35,6 +35,11 @@ public class Customer {
         this.postalCode = postalCode;
         this.phone = phone;
     }
+    
+    public Customer (String customerId, String customerName){
+        this.customerId = customerId;
+        this.customerName = customerName;
+    }
 
     public String getCustomerId() {
         return customerId;

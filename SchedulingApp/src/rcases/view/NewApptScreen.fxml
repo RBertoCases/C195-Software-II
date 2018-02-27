@@ -80,9 +80,9 @@
       </GridPane>
       <Button fx:id="apptSaveButton" layoutX="385.0" layoutY="264.0" mnemonicParsing="false" onAction="#handleNewSave" text="Save" />
       <Button fx:id="apptCancelButton" cancelButton="true" layoutX="439.0" layoutY="264.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-      <TableView fx:id="costomerSelectTableView" layoutX="22.0" layoutY="92.0" prefHeight="139.0" prefWidth="150.0">
+      <TableView fx:id="customerSelectTableView" layoutX="22.0" layoutY="92.0" prefHeight="139.0" prefWidth="150.0">
         <columns>
-          <TableColumn fx:id="customerNameColumn" prefWidth="150.0" text="Customer Name" />
+          <TableColumn fx:id="customerNameApptColumn" prefWidth="150.0" text="Customer Name" />
         </columns>
       </TableView>
       <TextField fx:id="customerSearchField" layoutX="23.0" layoutY="67.0" promptText="Search" />
