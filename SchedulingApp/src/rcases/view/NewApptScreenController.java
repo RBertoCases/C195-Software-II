@@ -13,14 +13,19 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import rcases.DBConnection;
@@ -34,37 +39,37 @@ import rcases.model.Appointment;
 public class NewApptScreenController implements Initializable {
 
     @FXML
-    private Label editApptLabel;
-
-    @FXML
-    private Label companyMachineLabel;
+    private Label apptLabel;
 
     @FXML
     private TextField titleField;
 
     @FXML
-    private TextField typeField;
+    private ComboBox<?> startComboBox;
 
     @FXML
-    private TextField customerField;
-
-    @FXML
-    private TextField consultantField;
-
-    @FXML
-    private TextField startField;
-
-    @FXML
-    private TextField endField;
+    private ComboBox<?> endComboBox;
 
     @FXML
     private DatePicker datePicker;
+
+    @FXML
+    private ComboBox<String> typeComboBox;
 
     @FXML
     private Button apptSaveButton;
 
     @FXML
     private Button apptCancelButton;
+
+    @FXML
+    private TableView<?> costomerSelectTableView;
+
+    @FXML
+    private TableColumn<?, ?> customerNameColumn;
+
+    @FXML
+    private TextField customerSearchField;
 
 
     private Stage dialogStage;
@@ -75,7 +80,7 @@ public class NewApptScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }
     
     /**
@@ -108,6 +113,8 @@ public class NewApptScreenController implements Initializable {
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
+        populateTypeList();
+        
     }
 
     public void setAppointment(Appointment appointment) {
@@ -123,7 +130,7 @@ public class NewApptScreenController implements Initializable {
             
                 pst.setString(1, "11");
                 pst.setString(2, titleField.getText());
-                pst.setString(3, typeField.getText());
+                pst.setString(3, typeComboBox.getValue());
                 pst.setString(4, "");
                 pst.setString(5, "");
                 pst.setString(6, "");
@@ -145,6 +152,12 @@ public class NewApptScreenController implements Initializable {
         
         //INSERT INTO U04Esb.appointment (customerId, title, description, location, contact, url, `start`, `end`, createDate, createdBy, lastUpdate, lastUpdateBy) 
 	//VALUES (14, 'test14', 'test', ' ', '', ' ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'test', DEFAULT, 'test')
+    }
+
+    private void populateTypeList() {
+        ObservableList<String> typeList = FXCollections.observableArrayList();
+        typeList.addAll("Consultation", "New Account", "Follow Up", "Close Account");
+        typeComboBox.setItems(typeList);
     }
     
 }
