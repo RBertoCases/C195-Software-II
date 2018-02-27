@@ -7,6 +7,10 @@ package rcases;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -121,7 +125,10 @@ public class SchedulingApp extends Application {
         //System.out.println(Locale.getDefault()); 
         DBConnection.init();
         connection = DBConnection.getConn();
-        
+        System.out.println(LocalDate.now());
+        System.out.println(LocalTime.now());
+        System.out.println(LocalDateTime.now());
+        System.out.println(ZonedDateTime.now());
         launch(args);
         DBConnection.closeConn();
     }
