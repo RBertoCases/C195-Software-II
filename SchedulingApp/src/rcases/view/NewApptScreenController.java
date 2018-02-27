@@ -90,6 +90,7 @@ public class NewApptScreenController implements Initializable {
     @FXML
     private void handleNewSave(ActionEvent event) {
         saveAppt();
+        dialogStage.close();
     }
 
     @FXML
@@ -120,9 +121,9 @@ public class NewApptScreenController implements Initializable {
                 + "(customerId, title, description, location, contact, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy)"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
-                pst.setString(1, "14");
-                pst.setString(2, "test title");
-                pst.setString(3, "test desc");
+                pst.setString(1, "11");
+                pst.setString(2, titleField.getText());
+                pst.setString(3, typeField.getText());
                 pst.setString(4, "");
                 pst.setString(5, "");
                 pst.setString(6, "");
@@ -134,9 +135,9 @@ public class NewApptScreenController implements Initializable {
                 pst.setString(12, "test");
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Customer");
+                    System.out.println("YAY! New Appointment Save");
                 } else {
-                    System.out.println("BOO! Customer");
+                    System.out.println("BOO! New Appointment Save");
                 }
             } catch (SQLException ex) {
             ex.printStackTrace();
