@@ -111,20 +111,27 @@ public class CustomerScreenController {
 
     @FXML
     void handleDeleteCustomer(ActionEvent event) {
-        Customer customer = customerTable.getSelectionModel().getSelectedItem();
-        if (customer != null) {
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedCustomer != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
-            alert.setHeaderText("Are you sure you want to delete " + customer.getCustomerName() + "?");
+            alert.setHeaderText("Are you sure you want to delete " + selectedCustomer.getCustomerName() + "?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                deleteCustomer(customer);
+                deleteCustomer(selectedCustomer);
                 mainApp.showCustomerScreen();
             } else {
                 alert.close();
             }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Customer selected for Deletion");
+            alert.setContentText("Please select a Customer in the Table to delete");
+            alert.showAndWait();
         }
-
+        
     }
    
     @FXML
