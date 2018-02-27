@@ -43,8 +43,8 @@ public class SchedulingApp extends Application {
         this.primaryStage.setTitle("Scheduling Application - RCases");
         //showLoginScreen();
         showMenu();
-        showCustomerScreen();
-        //showAppointmentScreen();
+        //showCustomerScreen();
+        showAppointmentScreen();
         
     }
     
@@ -149,7 +149,7 @@ public class SchedulingApp extends Application {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/newApptScreen.fxml"));
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/NewApptScreen.fxml"));
         AnchorPane newApptScreen = (AnchorPane) loader.load();
 
         // Create the dialog Stage.
