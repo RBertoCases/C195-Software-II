@@ -10,7 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -49,12 +54,15 @@ public class NewApptScreenController implements Initializable {
 
     @FXML
     private TextField titleField;
+    
+    @FXML
+    private TextField customerField;
 
     @FXML
-    private ComboBox<?> startComboBox;
+    private ComboBox<String> startComboBox;
 
     @FXML
-    private ComboBox<?> endComboBox;
+    private ComboBox<String> endComboBox;
 
     @FXML
     private DatePicker datePicker;
@@ -80,8 +88,12 @@ public class NewApptScreenController implements Initializable {
 
     private Stage dialogStage;
     private boolean okClicked = false;
+    private ZoneId zone = ZoneId.systemDefault();
     
-    private ObservableList<Customer> masterData = FXCollections.observableArrayList();    
+    private ObservableList<Customer> masterData = FXCollections.observableArrayList();
+    private ObservableList<String> startTimes = FXCollections.observableArrayList();
+    private ObservableList<String> endTimes = FXCollections.observableArrayList();
+    private DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);    
     
     /**
      * Initializes the controller class.
@@ -136,11 +148,13 @@ public class NewApptScreenController implements Initializable {
                     return true;
                 }
 
-                // Compare first name and last name of every person with filter text.
+                // Compare  name of every customer with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
-                // Does not match.
 
-                return customer.getCustomerName().toLowerCase().contains(lowerCaseFilter); 
+                if (customer.getCustomerName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+                return false; // Does not match.
             });
         });
 
@@ -152,6 +166,25 @@ public class NewApptScreenController implements Initializable {
 
         // 5. Add sorted (and filtered) data to the table.
         customerSelectTableView.setItems(sortedData);
+        customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue)->customerField.setText(newValue.getCustomerName()));
+        
+        
+	LocalTime time = LocalTime.NOON;
+	do {
+		startTimes.add(time.format(shortTime));
+		endTimes.add(time.format(shortTime));
+		time = time.plusMinutes(15);
+	} while(!time.equals(LocalTime.MIDNIGHT));
+		startTimes.remove(startTimes.size() - 1);
+		endTimes.remove(0);
+        
+        datePicker.setValue(LocalDate.now());
+
+        startComboBox.setItems(startTimes);
+	endComboBox.setItems(endTimes);
+	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(shortTime));
+	endComboBox.getSelectionModel().select(LocalTime.of(9, 0).format(shortTime));
         
     }
 
@@ -166,7 +199,7 @@ public class NewApptScreenController implements Initializable {
                 + "(customerId, title, description, location, contact, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy)"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
-                pst.setString(1, customerSelectTableView.getSelectionModel().getSelectedItem().getCustomerId());
+                pst.setString(1, customerField.getText());
                 pst.setString(2, titleField.getText());
                 pst.setString(3, typeComboBox.getValue());
                 pst.setString(4, "");
