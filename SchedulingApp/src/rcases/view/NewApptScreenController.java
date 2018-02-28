@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -79,6 +81,7 @@ public class NewApptScreenController implements Initializable {
     private Stage dialogStage;
     private boolean okClicked = false;
     
+    private ObservableList<Customer> masterData = FXCollections.observableArrayList();    
     
     /**
      * Initializes the controller class.
@@ -120,7 +123,35 @@ public class NewApptScreenController implements Initializable {
         this.dialogStage = dialogStage;
         populateTypeList();
         customerNameApptColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        customerSelectTableView.getItems().setAll(populateCustomerList());
+        masterData = populateCustomerList();
+        
+        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Customer> filteredData = new FilteredList<>(masterData, p -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        customerSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(customer -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                // Does not match.
+
+                return customer.getCustomerName().toLowerCase().contains(lowerCaseFilter); 
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList. 
+        SortedList<Customer> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(customerSelectTableView.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        customerSelectTableView.setItems(sortedData);
         
     }
 
@@ -167,7 +198,7 @@ public class NewApptScreenController implements Initializable {
         typeComboBox.setItems(typeList);
     }
     
-    protected List<Customer> populateCustomerList() {
+    protected ObservableList<Customer> populateCustomerList() {
       
         String tCustomerId;
         String tCustomerName;
