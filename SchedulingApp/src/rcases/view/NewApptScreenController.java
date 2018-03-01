@@ -9,7 +9,6 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +17,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -41,7 +39,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import rcases.DBConnection;
 import rcases.model.Appointment;
-import rcases.model.City;
 import rcases.model.Customer;
 
 /**
@@ -195,25 +192,25 @@ public class NewApptScreenController implements Initializable {
     }
 
     private void saveAppt() {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm"); 
-	String txtStartTime = "2017-03-29 12:00";
-	LocalDateTime ldtStart = LocalDateTime.parse(txtStartTime, df);
-                
-        ZonedDateTime zdtStart = ldtStart.atZone(zid);
-        //System.out.println("Local Time: " + zdtStart);
-	ZonedDateTime utcStart = zdtStart.withZoneSameInstant(ZoneId.of("UTC"));
-	//System.out.println("Zoned time: " + utcStart);
-	ldtStart = utcStart.toLocalDateTime();
-	System.out.println("Zoned time with zone stripped:" + ldtStart);
-	//Create Timestamp values from Instants to update database
-	Timestamp startsqlts = Timestamp.valueOf(ldtStart); //this value can be inserted into database
-	//System.out.println("Timestamp to be inserted: " +startsqlts);
+  
+        LocalDate localDate = datePicker.getValue();
+	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), shortTime);
+	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), shortTime);
+        
+        LocalDateTime startDT = LocalDateTime.of(localDate, startTime);
+        LocalDateTime endDT = LocalDateTime.of(localDate, endTime);
+
+        ZonedDateTime startUTC = startDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));            
+	
+	Timestamp startsqlts = Timestamp.valueOf(startUTC.toLocalDateTime()); //this value can be inserted into database
+        Timestamp endsqlts = Timestamp.valueOf(endUTC.toLocalDateTime()); //this value can be inserted into database        
         
         try {
 
                 PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO appointment "
                 + "(customerId, title, description, location, contact, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
             
                 pst.setString(1, customerSelectTableView.getSelectionModel().getSelectedItem().getCustomerId());
                 pst.setString(2, titleField.getText());
@@ -221,12 +218,12 @@ public class NewApptScreenController implements Initializable {
                 pst.setString(4, "");
                 pst.setString(5, "");
                 pst.setString(6, "");
-                pst.setString(7, startsqlts.toString());
-                pst.setString(8, LocalDateTime.now().toString());
-                pst.setString(9, LocalDateTime.now().toString());
+                pst.setTimestamp(7, startsqlts);
+                pst.setTimestamp(8, endsqlts);
+                //pst.setTimestamp(9, TIMESTAMP);
+                pst.setString(9, "test");
+                //pst.setString(11, LocalDateTime.now().toString());
                 pst.setString(10, "test");
-                pst.setString(11, LocalDateTime.now().toString());
-                pst.setString(12, "test");
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! New Appointment Save");

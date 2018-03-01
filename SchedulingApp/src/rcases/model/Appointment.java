@@ -5,6 +5,7 @@
  */
 package rcases.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -14,44 +15,44 @@ import java.util.Date;
 public class Appointment {
     
     private int appointmentId;
-    private int customerId;
+    private Customer customer;
     private String title;
     private String description;
-    private String contact;
-    private Date start;
-    private Date end;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private String user;
     
     public Appointment() {
     }
 
-    public Appointment(Integer appointmentId) {
+    public Appointment(int appointmentId) {
         this.appointmentId = appointmentId;
     }
 
-    public Appointment(int appointmentId, int customerId, String title, String description, String contact, Date start, Date end) {
+    public Appointment(int appointmentId, Customer customer, String title, String description, LocalDateTime start, LocalDateTime end) {
         this.appointmentId = appointmentId;
-        this.customerId = customerId;
+        this.customer = customer;
         this.title = title;
         this.description = description;
-        this.contact = contact;
         this.start = start;
         this.end = end;
     }
+    
+    public Appointment(LocalDateTime start, LocalDateTime end, String title, String description, Customer customer, String user) {
+        this.start = start;
+        this.end = end;
+        this.title = title;
+        this.description = description;
+        this.customer = customer;
+        this.user = user;        
+    }
 
-    public Integer getAppointmentId() {
+    public int getAppointmentId() {
         return appointmentId;
     }
 
     public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public String getTitle() {
@@ -70,32 +71,40 @@ public class Appointment {
         this.description = description;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public Date getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
     
-    @Override
+    /*@Override
     public String toString() {
-        return "model.Appointment[ appointmentId=" + appointmentId + " ]";
+    return "model.Appointment[ appointmentId=" + appointmentId + " ]";
+    }*/
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }
