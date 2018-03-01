@@ -10,10 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
@@ -88,7 +90,7 @@ public class NewApptScreenController implements Initializable {
 
     private Stage dialogStage;
     private boolean okClicked = false;
-    private ZoneId zone = ZoneId.systemDefault();
+    private ZoneId zid = ZoneId.systemDefault();
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
     private ObservableList<String> startTimes = FXCollections.observableArrayList();
@@ -170,12 +172,12 @@ public class NewApptScreenController implements Initializable {
             (observable, oldValue, newValue)->customerField.setText(newValue.getCustomerName()));
         
         
-	LocalTime time = LocalTime.NOON;
+	LocalTime time = LocalTime.of(8, 0);
 	do {
 		startTimes.add(time.format(shortTime));
 		endTimes.add(time.format(shortTime));
 		time = time.plusMinutes(15);
-	} while(!time.equals(LocalTime.MIDNIGHT));
+	} while(!time.equals(LocalTime.of(17, 15)));
 		startTimes.remove(startTimes.size() - 1);
 		endTimes.remove(0);
         
@@ -184,7 +186,7 @@ public class NewApptScreenController implements Initializable {
         startComboBox.setItems(startTimes);
 	endComboBox.setItems(endTimes);
 	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(shortTime));
-	endComboBox.getSelectionModel().select(LocalTime.of(9, 0).format(shortTime));
+	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(shortTime));
         
     }
 
@@ -193,19 +195,33 @@ public class NewApptScreenController implements Initializable {
     }
 
     private void saveAppt() {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm"); 
+	String txtStartTime = "2017-03-29 12:00";
+	LocalDateTime ldtStart = LocalDateTime.parse(txtStartTime, df);
+                
+        ZonedDateTime zdtStart = ldtStart.atZone(zid);
+        //System.out.println("Local Time: " + zdtStart);
+	ZonedDateTime utcStart = zdtStart.withZoneSameInstant(ZoneId.of("UTC"));
+	//System.out.println("Zoned time: " + utcStart);
+	ldtStart = utcStart.toLocalDateTime();
+	System.out.println("Zoned time with zone stripped:" + ldtStart);
+	//Create Timestamp values from Instants to update database
+	Timestamp startsqlts = Timestamp.valueOf(ldtStart); //this value can be inserted into database
+	//System.out.println("Timestamp to be inserted: " +startsqlts);
+        
         try {
 
                 PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO appointment "
                 + "(customerId, title, description, location, contact, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy)"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
-                pst.setString(1, customerField.getText());
+                pst.setString(1, customerSelectTableView.getSelectionModel().getSelectedItem().getCustomerId());
                 pst.setString(2, titleField.getText());
                 pst.setString(3, typeComboBox.getValue());
                 pst.setString(4, "");
                 pst.setString(5, "");
                 pst.setString(6, "");
-                pst.setString(7, LocalDateTime.now().toString());
+                pst.setString(7, startsqlts.toString());
                 pst.setString(8, LocalDateTime.now().toString());
                 pst.setString(9, LocalDateTime.now().toString());
                 pst.setString(10, "test");
