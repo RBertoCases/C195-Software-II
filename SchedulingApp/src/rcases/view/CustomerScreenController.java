@@ -4,11 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -348,17 +345,17 @@ public class CustomerScreenController {
             try {
 
                 PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+                        + "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)",Statement.RETURN_GENERATED_KEYS);
 
                 ps.setString(1, addressField.getText());
                 ps.setString(2, address2Field.getText());
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                ps.setString(6, LocalDateTime.now().toString());
+                //ps.setString(6, LocalDateTime.now().toString());
+                ps.setString(6, "test");
+                //ps.setString(8, LocalDateTime.now().toString());
                 ps.setString(7, "test");
-                ps.setString(8, LocalDateTime.now().toString());
-                ps.setString(9, "test");
                 boolean res = ps.execute();
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
@@ -371,15 +368,15 @@ public class CustomerScreenController {
             
                 PreparedStatement psc = DBConnection.getConn().prepareStatement("INSERT INTO customer "
                 + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
             
                 psc.setString(1, nameField.getText());
                 psc.setInt(2, newAddressId);
                 psc.setInt(3, 1);
-                psc.setString(4, LocalDateTime.now().toString());
+                //psc.setString(4, LocalDateTime.now().toString());
+                psc.setString(4, "test");
+                //psc.setString(6, LocalDateTime.now().toString());
                 psc.setString(5, "test");
-                psc.setString(6, LocalDateTime.now().toString());
-                psc.setString(7, "test");
                 int result = psc.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! Customer");
@@ -408,7 +405,7 @@ public class CustomerScreenController {
         try {
 
                 PreparedStatement ps = DBConnection.getConn().prepareStatement("UPDATE address, customer, city, country "
-                        + "SET address = ?, address2 = ?, address.cityId = ?, postalCode = ?, phone = ?, address.lastUpdate = ?, address.lastUpdateBy = ? "
+                        + "SET address = ?, address2 = ?, address.cityId = ?, postalCode = ?, phone = ?, address.lastUpdate = CURRENT_TIMESTAMP, address.lastUpdateBy = ? "
                         + "WHERE customer.customerId = ? AND customer.addressId = address.addressId AND address.cityId = city.cityId AND city.countryId = country.countryId");
 
                 ps.setString(1, addressField.getText());
@@ -416,9 +413,9 @@ public class CustomerScreenController {
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                ps.setString(6, LocalDateTime.now().toString());
-                ps.setString(7, "test");
-                ps.setString(8, customerIdField.getText());
+                //ps.setString(6, LocalDateTime.now().toString());
+                ps.setString(6, "test");
+                ps.setString(7, customerIdField.getText());
                 
                 int result = ps.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
@@ -430,13 +427,13 @@ public class CustomerScreenController {
             
             
                 PreparedStatement psc = DBConnection.getConn().prepareStatement("UPDATE customer, address, city "
-                + "SET customerName = ?, customer.lastUpdate = ?, customer.lastUpdateBy = ? "
+                + "SET customerName = ?, customer.lastUpdate = CURRENT_TIMESTAMP, customer.lastUpdateBy = ? "
                 + "WHERE customer.customerId = ? AND customer.addressId = address.addressId AND address.cityId = city.cityId");
             
                 psc.setString(1, nameField.getText());
-                psc.setString(2, LocalDateTime.now().toString());
-                psc.setString(3, "test");
-                psc.setString(4, customerIdField.getText());
+                //psc.setString(2, LocalDateTime.now().toString());
+                psc.setString(2, "test");
+                psc.setString(3, customerIdField.getText());
                 int results = psc.executeUpdate();
                 if (results == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! Customer Update");
