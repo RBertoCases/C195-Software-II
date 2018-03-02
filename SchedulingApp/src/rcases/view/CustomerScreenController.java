@@ -353,9 +353,9 @@ public class CustomerScreenController {
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
                 //ps.setString(6, LocalDateTime.now().toString());
-                ps.setString(6, "test");
+                ps.setString(6, "rcases");
                 //ps.setString(8, LocalDateTime.now().toString());
-                ps.setString(7, "test");
+                ps.setString(7, "rcases");
                 boolean res = ps.execute();
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
@@ -374,9 +374,9 @@ public class CustomerScreenController {
                 psc.setInt(2, newAddressId);
                 psc.setInt(3, 1);
                 //psc.setString(4, LocalDateTime.now().toString());
-                psc.setString(4, "test");
+                psc.setString(4, "rcases");
                 //psc.setString(6, LocalDateTime.now().toString());
-                psc.setString(5, "test");
+                psc.setString(5, "rcases");
                 int result = psc.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! Customer");
@@ -414,7 +414,7 @@ public class CustomerScreenController {
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
                 //ps.setString(6, LocalDateTime.now().toString());
-                ps.setString(6, "test");
+                ps.setString(6, "rcases");
                 ps.setString(7, customerIdField.getText());
                 
                 int result = ps.executeUpdate();
@@ -432,7 +432,7 @@ public class CustomerScreenController {
             
                 psc.setString(1, nameField.getText());
                 //psc.setString(2, LocalDateTime.now().toString());
-                psc.setString(2, "test");
+                psc.setString(2, "rcases");
                 psc.setString(3, customerIdField.getText());
                 int results = psc.executeUpdate();
                 if (results == 1) {//one row was affected; namely the one that was inserted!
