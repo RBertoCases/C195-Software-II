@@ -6,6 +6,7 @@
 package rcases.model;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -18,8 +19,8 @@ public class Appointment {
     private Customer customer;
     private String title;
     private String description;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private String start;
+    private String end;
     private String user;
     
     public Appointment() {
@@ -29,7 +30,7 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    public Appointment(int appointmentId, Customer customer, String title, String description, LocalDateTime start, LocalDateTime end) {
+    public Appointment(int appointmentId, Customer customer, String title, String description, String start, String end) {
         this.appointmentId = appointmentId;
         this.customer = customer;
         this.title = title;
@@ -38,7 +39,7 @@ public class Appointment {
         this.end = end;
     }
     
-    public Appointment(LocalDateTime start, LocalDateTime end, String title, String description, Customer customer, String user) {
+    public Appointment(String start, String end, String title, String description, Customer customer, String user) {
         this.start = start;
         this.end = end;
         this.title = title;
@@ -71,19 +72,19 @@ public class Appointment {
         this.description = description;
     }
 
-    public LocalDateTime getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(String end) {
         this.end = end;
     }
     

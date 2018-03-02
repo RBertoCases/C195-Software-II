@@ -30,7 +30,7 @@
             <Insets right="6.0" />
          </padding>
       </ButtonBar>
-      <RadioButton fx:id="weekRadioButton" layoutX="32.0" layoutY="23.0" mnemonicParsing="false" text="Appointments by Week" />
-      <RadioButton fx:id="monthRadioButton" layoutX="32.0" layoutY="43.0" mnemonicParsing="false" text="Appointments by Month" />
+      <RadioButton fx:id="weekRadioButton" layoutX="32.0" layoutY="23.0" mnemonicParsing="false" onAction="#handleApptWeek" text="Appointments for Upcoming Week" />
+      <RadioButton fx:id="monthRadioButton" layoutX="32.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleApptMonth" text="Appointments for Upcoming Month" />
    </children>
 </AnchorPane>

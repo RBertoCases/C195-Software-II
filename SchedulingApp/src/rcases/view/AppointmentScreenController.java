@@ -9,10 +9,18 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
@@ -38,7 +46,7 @@ public class AppointmentScreenController {
     private TableView<Appointment> ApptTableView;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> startApptColumn;
+    private TableColumn<Appointment, ZonedDateTime> startApptColumn;
 
     @FXML
     private TableColumn<Appointment, LocalDateTime> endApptColumn;
@@ -63,6 +71,10 @@ public class AppointmentScreenController {
     
     @FXML
     private ToggleGroup apptToggleGroup;
+    
+    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    private ZoneId newzid = ZoneId.systemDefault();
+    ObservableList<Appointment> apptList;
         
     public void setAppointmentScreen(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
@@ -77,8 +89,43 @@ public class AppointmentScreenController {
         customerApptColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         consultantApptColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
         
-        ApptTableView.getItems().setAll(populateAppointmentList());
+       apptList = FXCollections.observableArrayList();
+       ApptTableView.getItems().setAll(populateAppointmentList());
         
+        
+    }
+    
+    @FXML
+    void handleApptMonth(ActionEvent event) {
+        
+        LocalDate now = LocalDate.now();
+        System.out.println(now);
+        LocalDate nowPlus7 = now.plusMonths(1);
+        FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
+        filteredData.setPredicate(row -> {
+
+            LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
+
+            return rowDate.equals(now) && rowDate.isBefore(nowPlus7);
+        });
+        ApptTableView.setItems(filteredData);
+
+    }
+
+    @FXML
+    void handleApptWeek(ActionEvent event) {
+        
+        LocalDate now = LocalDate.now();
+        System.out.println(now);
+        LocalDate nowPlus7 = now.plusDays(7);
+        FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
+        filteredData.setPredicate(row -> {
+
+            LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
+
+            return rowDate.equals(now) && rowDate.isBefore(nowPlus7);
+        });
+        ApptTableView.setItems(filteredData);
     }
 
     @FXML
@@ -98,14 +145,12 @@ public class AppointmentScreenController {
     
     protected List<Appointment> populateAppointmentList() {
       
-        LocalDateTime tStart;
-        LocalDateTime tEnd;
         String tTitle;
         String tType;
         Customer tCustomer;        
         String tUser;        
         
-        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+        //ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         try(
             
             
@@ -118,9 +163,13 @@ public class AppointmentScreenController {
            
             
             while (rs.next()) {
-                tStart = rs.getTimestamp("appointment.start").toLocalDateTime();
+                Timestamp tsStart = rs.getTimestamp("appointment.start");
+                ZonedDateTime newzdtStart = tsStart.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalStart = newzdtStart.withZoneSameInstant(newzid);
 
-                tEnd = rs.getTimestamp("appointment.end").toLocalDateTime();
+                Timestamp tsEnd = rs.getTimestamp("appointment.end");
+                ZonedDateTime newzdtEnd = tsEnd.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalEnd = newzdtEnd.withZoneSameInstant(newzid);
 
                 tTitle = rs.getString("appointment.title");
                 
@@ -132,7 +181,7 @@ public class AppointmentScreenController {
                 
                 //System.out.println(rs.getString("appointment.createdBy"));
                 
-                appointmentList.add(new Appointment(tStart, tEnd, tTitle, tType, tCustomer, tUser));
+                apptList.add(new Appointment(newLocalStart.format(shortTime), newLocalEnd.format(shortTime), tTitle, tType, tCustomer, tUser));
                 
                 
 
@@ -145,7 +194,7 @@ public class AppointmentScreenController {
             System.out.println("Something besides the SQL went wrong.");
         }
 
-        return appointmentList;
+        return apptList;
 
     }
     
