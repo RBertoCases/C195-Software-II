@@ -6,12 +6,10 @@
 package rcases.view;
 
 import java.io.IOException;
-import static java.lang.System.out;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +23,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
-import rcases.model.City;
 import rcases.model.Customer;
 
 /**
@@ -78,7 +75,7 @@ public class AppointmentScreenController {
         titleApptColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         typeApptColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         customerApptColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-        consultantApptColumn.setCellValueFactory(new PropertyValueFactory<>("appointment.createdBy"));
+        consultantApptColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
         
         ApptTableView.getItems().setAll(populateAppointmentList());
         
