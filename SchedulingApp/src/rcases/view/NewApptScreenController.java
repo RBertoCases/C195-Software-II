@@ -38,6 +38,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import rcases.DBConnection;
+import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;
 
@@ -86,6 +87,7 @@ public class NewApptScreenController implements Initializable {
 
 
     private Stage dialogStage;
+    private SchedulingApp mainApp;
     private boolean okClicked = false;
     private ZoneId zid = ZoneId.systemDefault();
     
@@ -115,6 +117,7 @@ public class NewApptScreenController implements Initializable {
     private void handleNewSave(ActionEvent event) {
         saveAppt();
         dialogStage.close();
+        mainApp.showAppointmentScreen();
     }
 
     @FXML
@@ -132,6 +135,7 @@ public class NewApptScreenController implements Initializable {
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
+        this.mainApp = mainApp;
         populateTypeList();
         customerNameApptColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         masterData = populateCustomerList();
