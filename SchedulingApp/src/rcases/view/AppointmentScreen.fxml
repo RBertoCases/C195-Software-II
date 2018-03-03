@@ -12,12 +12,13 @@
    <children>
       <TableView fx:id="ApptTableView" layoutY="77.0" prefHeight="317.0" prefWidth="600.0">
         <columns>
+            <TableColumn fx:id="idApptColumn" prefWidth="30.0" text="ID" />
           <TableColumn fx:id="startApptColumn" minWidth="20.0" prefWidth="100.0" text="Start" />
           <TableColumn fx:id="endApptColumn" minWidth="20.0" prefWidth="100.0" text="End" />
-            <TableColumn fx:id="titleApptColumn" minWidth="20.0" prefWidth="100.0" text="Title" />
-            <TableColumn fx:id="typeApptColumn" minWidth="20.0" prefWidth="100.0" text="Type" />
-            <TableColumn fx:id="customerApptColumn" minWidth="20.0" prefWidth="100.0" text="Customer" />
-            <TableColumn fx:id="consultantApptColumn" minWidth="20.0" prefWidth="100.0" text="Consultant" />
+            <TableColumn fx:id="titleApptColumn" minWidth="20.0" prefWidth="95.0" text="Title" />
+            <TableColumn fx:id="typeApptColumn" minWidth="20.0" prefWidth="95.0" text="Type" />
+            <TableColumn fx:id="customerApptColumn" minWidth="20.0" prefWidth="90.0" text="Customer" />
+            <TableColumn fx:id="consultantApptColumn" minWidth="20.0" prefWidth="90.0" text="Consultant" />
         </columns>
       </TableView>
       <ButtonBar layoutX="327.0" layoutY="23.0" prefHeight="40.0" prefWidth="261.0">

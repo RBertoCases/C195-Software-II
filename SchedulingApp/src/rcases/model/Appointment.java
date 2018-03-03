@@ -11,7 +11,7 @@ package rcases.model;
  */
 public class Appointment {
     
-    private int appointmentId;
+    private String appointmentId;
     private Customer customer;
     private String title;
     private String description;
@@ -22,33 +22,34 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(int appointmentId) {
+    public Appointment(String appointmentId) {
         this.appointmentId = appointmentId;
     }
 
-    public Appointment(int appointmentId, Customer customer, String title, String description, String start, String end) {
-        this.appointmentId = appointmentId;
-        this.customer = customer;
-        this.title = title;
-        this.description = description;
-        this.start = start;
-        this.end = end;
-    }
+    /*public Appointment(String appointmentId, Customer customer, String title, String description, String start, String end) {
+    this.appointmentId = appointmentId;
+    this.customer = customer;
+    this.title = title;
+    this.description = description;
+    this.start = start;
+    this.end = end;
+    }*/
     
-    public Appointment(String start, String end, String title, String description, Customer customer, String user) {
+    public Appointment(String appointmentId, String start, String end, String title, String description, Customer customer, String user) {
+        this.appointmentId = appointmentId;    
         this.start = start;
         this.end = end;
         this.title = title;
         this.description = description;
         this.customer = customer;
-        this.user = user;        
+        this.user = user;
     }
 
-    public int getAppointmentId() {
+    public String getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(int appointmentId) {
+    public void setAppointmentId(String appointmentId) {
         this.appointmentId = appointmentId;
     }
 
@@ -84,10 +85,16 @@ public class Appointment {
         this.end = end;
     }
     
-    /*@Override
+    @Override
     public String toString() {
-    return "model.Appointment[ appointmentId=" + appointmentId + " ]";
-    }*/
+    return "ID: " + this.appointmentId +
+            " Start: " + this.start +
+            " End: " + this.end + 
+            " Title: " + this.title +
+            " Type: " + this.description +
+            " Customer: " + this.customer.getCustomerName() +
+            " Consultant: " + this.user + ".\n" ;
+    }
 
     public Customer getCustomer() {
         return customer;

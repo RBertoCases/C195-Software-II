@@ -17,12 +17,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Optional;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -44,6 +47,9 @@ public class AppointmentScreenController {
     
     @FXML
     private TableView<Appointment> ApptTableView;
+    
+    @FXML
+    private TableColumn<Appointment, String> idApptColumn;
 
     @FXML
     private TableColumn<Appointment, ZonedDateTime> startApptColumn;
@@ -82,6 +88,7 @@ public class AppointmentScreenController {
         this.weekRadioButton.setToggleGroup(apptToggleGroup);
         this.monthRadioButton.setToggleGroup(apptToggleGroup);
         
+        idApptColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         startApptColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endApptColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         titleApptColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -100,9 +107,9 @@ public class AppointmentScreenController {
     void handleApptMonth(ActionEvent event) {
         
         LocalDate now = LocalDate.now();
-        System.out.println(now);
+        //System.out.println(now);
         LocalDate nowPlus1Month = now.plusMonths(1);
-        System.out.println(nowPlus1Month);
+        //System.out.println(nowPlus1Month);
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
@@ -118,9 +125,9 @@ public class AppointmentScreenController {
     void handleApptWeek(ActionEvent event) {
         
         LocalDate now = LocalDate.now();
-        System.out.println(now);
+        //System.out.println(now);
         LocalDate nowPlus7 = now.plusDays(7);
-        System.out.println(nowPlus7);
+        //System.out.println(nowPlus7);
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
@@ -133,6 +140,28 @@ public class AppointmentScreenController {
 
     @FXML
     void handleDeleteAppt(ActionEvent event) {
+        Appointment selectedAppointment = ApptTableView.getSelectionModel().getSelectedItem();
+        
+        if (selectedAppointment != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Are you sure you want to delete " + selectedAppointment.getTitle() + " scheduled for " + selectedAppointment.getStart() + "?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                //String selectedApptId = ApptTableView.getSelectionModel().getSelectedItem().getAppointmentId();
+                //System.out.print(selectedApptId);
+                deleteAppointment(selectedAppointment);
+                mainApp.showAppointmentScreen();
+            } else {
+                alert.close();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Customer selected for Deletion");
+            alert.setContentText("Please select a Customer in the Table to delete");
+            alert.showAndWait();
+        }
 
     }
 
@@ -144,6 +173,7 @@ public class AppointmentScreenController {
     @FXML
     void handleNewAppt(ActionEvent event) throws IOException{
         boolean okClicked = mainApp.showNewApptScreen();
+        mainApp.showAppointmentScreen();
     }
     
     private void populateAppointmentList() {
@@ -153,7 +183,7 @@ public class AppointmentScreenController {
             
             
         PreparedStatement statement = DBConnection.getConn().prepareStatement(
-        "SELECT appointment.customerId, appointment.title, appointment.description, "
+        "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
                 + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
                 + "FROM appointment, customer "
                 + "WHERE appointment.customerId = customer.customerId "
@@ -162,6 +192,8 @@ public class AppointmentScreenController {
            
             
             while (rs.next()) {
+                
+                String tAppointmentId = rs.getString("appointment.appointmentId");
                 Timestamp tsStart = rs.getTimestamp("appointment.start");
                 ZonedDateTime newzdtStart = tsStart.toLocalDateTime().atZone(ZoneId.of("UTC"));
         	ZonedDateTime newLocalStart = newzdtStart.withZoneSameInstant(newzid);
@@ -177,15 +209,12 @@ public class AppointmentScreenController {
                 Customer tCustomer = new Customer(rs.getString("appointment.customerId"), rs.getString("customer.customerName"));
                 
                 String tUser = rs.getString("appointment.createdBy");
-                
-                //System.out.println(rs.getString("appointment.createdBy"));
-                
-                apptList.add(new Appointment(newLocalStart.format(shortTime), newLocalEnd.format(shortTime), tTitle, tType, tCustomer, tUser));
-                
+                      
+                apptList.add(new Appointment(tAppointmentId, newLocalStart.format(shortTime), newLocalEnd.format(shortTime), tTitle, tType, tCustomer, tUser));
                 
 
             }
-          
+            
         } catch (SQLException sqe) {
             System.out.println("Check your SQL");
             sqe.printStackTrace();
@@ -193,6 +222,17 @@ public class AppointmentScreenController {
             System.out.println("Something besides the SQL went wrong.");
         }
 
+    }
+
+    private void deleteAppointment(Appointment appointment) {
+        try{           
+            PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE appointment.* FROM appointment WHERE appointment.appointmentId = ?");
+            pst.setString(1, appointment.getAppointmentId()); 
+            pst.executeUpdate();  
+                
+        } catch(SQLException e){
+            e.printStackTrace();
+        }       
     }
     
 }
