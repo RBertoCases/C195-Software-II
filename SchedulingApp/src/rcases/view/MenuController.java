@@ -29,12 +29,12 @@ public class MenuController {
 
     @FXML
     void handleScheduleReport(ActionEvent event) {
-    mainApp.showScheduleReportScreen();
+        mainApp.showScheduleReportScreen();
     }
     
     @FXML
     void handleAppointmentTypesByMonth(ActionEvent event) {
-    mainApp.showAppointmentTypesByMonthScreen();
+        mainApp.showAppointmentTypesByMonthScreen();
     }
     
     @FXML

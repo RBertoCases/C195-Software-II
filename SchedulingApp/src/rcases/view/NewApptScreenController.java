@@ -117,7 +117,6 @@ public class NewApptScreenController implements Initializable {
     private void handleNewSave(ActionEvent event) {
         saveAppt();
         dialogStage.close();
-        mainApp.showAppointmentScreen();
     }
 
     @FXML
@@ -225,9 +224,9 @@ public class NewApptScreenController implements Initializable {
                 pst.setTimestamp(7, startsqlts);
                 pst.setTimestamp(8, endsqlts);
                 //pst.setTimestamp(9, TIMESTAMP);
-                pst.setString(9, "test");
+                pst.setString(9, "rcases");
                 //pst.setString(11, LocalDateTime.now().toString());
-                pst.setString(10, "test");
+                pst.setString(10, "rcases");
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! New Appointment Save");
