@@ -90,7 +90,8 @@ public class AppointmentScreenController {
         consultantApptColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
         
        apptList = FXCollections.observableArrayList();
-       ApptTableView.getItems().setAll(populateAppointmentList());
+       populateAppointmentList();
+       ApptTableView.getItems().setAll(apptList);
         
         
     }
@@ -100,13 +101,14 @@ public class AppointmentScreenController {
         
         LocalDate now = LocalDate.now();
         System.out.println(now);
-        LocalDate nowPlus7 = now.plusMonths(1);
+        LocalDate nowPlus1Month = now.plusMonths(1);
+        System.out.println(nowPlus1Month);
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
 
-            return rowDate.equals(now) && rowDate.isBefore(nowPlus7);
+            return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus1Month);
         });
         ApptTableView.setItems(filteredData);
 
@@ -118,12 +120,13 @@ public class AppointmentScreenController {
         LocalDate now = LocalDate.now();
         System.out.println(now);
         LocalDate nowPlus7 = now.plusDays(7);
+        System.out.println(nowPlus7);
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
 
-            return rowDate.equals(now) && rowDate.isBefore(nowPlus7);
+            return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus7);
         });
         ApptTableView.setItems(filteredData);
     }
@@ -143,13 +146,8 @@ public class AppointmentScreenController {
         boolean okClicked = mainApp.showNewApptScreen();
     }
     
-    protected List<Appointment> populateAppointmentList() {
+    private void populateAppointmentList() {
       
-        String tTitle;
-        String tType;
-        Customer tCustomer;        
-        String tUser;        
-        
         //ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         try(
             
@@ -158,7 +156,8 @@ public class AppointmentScreenController {
         "SELECT appointment.customerId, appointment.title, appointment.description, "
                 + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
                 + "FROM appointment, customer "
-                + "WHERE appointment.customerId = customer.customerId;");
+                + "WHERE appointment.customerId = customer.customerId "
+                + "ORDER BY `start`");
             ResultSet rs = statement.executeQuery();){
            
             
@@ -171,13 +170,13 @@ public class AppointmentScreenController {
                 ZonedDateTime newzdtEnd = tsEnd.toLocalDateTime().atZone(ZoneId.of("UTC"));
         	ZonedDateTime newLocalEnd = newzdtEnd.withZoneSameInstant(newzid);
 
-                tTitle = rs.getString("appointment.title");
+                String tTitle = rs.getString("appointment.title");
                 
-                tType = rs.getString("appointment.description");
+                String tType = rs.getString("appointment.description");
                 
-                tCustomer = new Customer(rs.getString("appointment.customerId"), rs.getString("customer.customerName"));
+                Customer tCustomer = new Customer(rs.getString("appointment.customerId"), rs.getString("customer.customerName"));
                 
-                tUser = rs.getString("appointment.createdBy");
+                String tUser = rs.getString("appointment.createdBy");
                 
                 //System.out.println(rs.getString("appointment.createdBy"));
                 
@@ -193,8 +192,6 @@ public class AppointmentScreenController {
         } catch (Exception e) {
             System.out.println("Something besides the SQL went wrong.");
         }
-
-        return apptList;
 
     }
     

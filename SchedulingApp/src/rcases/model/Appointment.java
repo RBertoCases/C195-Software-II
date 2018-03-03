@@ -5,10 +5,6 @@
  */
 package rcases.model;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
-
 /**
  *
  * @author rcases
