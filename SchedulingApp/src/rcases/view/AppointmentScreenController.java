@@ -47,9 +47,6 @@ public class AppointmentScreenController {
     
     @FXML
     private TableView<Appointment> ApptTableView;
-    
-    @FXML
-    private TableColumn<Appointment, String> idApptColumn;
 
     @FXML
     private TableColumn<Appointment, ZonedDateTime> startApptColumn;
@@ -88,7 +85,6 @@ public class AppointmentScreenController {
         this.weekRadioButton.setToggleGroup(apptToggleGroup);
         this.monthRadioButton.setToggleGroup(apptToggleGroup);
         
-        idApptColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         startApptColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endApptColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         titleApptColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
