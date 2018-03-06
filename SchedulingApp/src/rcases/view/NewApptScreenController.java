@@ -88,7 +88,6 @@ public class NewApptScreenController {
     private SchedulingApp mainApp;
     private boolean okClicked = false;
     private final ZoneId zid = ZoneId.systemDefault();
-    private Appointment appt;
     private Appointment selectedAppt;
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
@@ -108,7 +107,13 @@ public class NewApptScreenController {
 
     @FXML
     private void handleNewSave(ActionEvent event) {
-        saveAppt();
+        
+        if (isOkClicked()) {
+            System.out.println(isOkClicked() + " before calling saveappt()");
+            updateAppt();            
+        } else {
+            saveAppt();
+        }
         dialogStage.close();
     }
 
@@ -198,8 +203,8 @@ public class NewApptScreenController {
         typeComboBox.setValue(appointment.getDescription());
         customerSelectTableView.getSelectionModel().select(appointment.getCustomer());
         datePicker.setValue(LocalDate.parse(appointment.getStart(), dateDTF));
-        startComboBox.getSelectionModel().select(appointment.getStart().substring(8));
-        endComboBox.getSelectionModel().select(appointment.getEnd().substring(8));
+        startComboBox.getSelectionModel().select(appointment.getStart().toLocalTime().format(shortTime));
+        endComboBox.getSelectionModel().select(appointment.getEnd().substring(7));
         
         
     }
@@ -249,6 +254,46 @@ public class NewApptScreenController {
         
         //INSERT INTO U04Esb.appointment (customerId, title, description, location, contact, url, `start`, `end`, createDate, createdBy, lastUpdate, lastUpdateBy) 
 	//VALUES (14, 'test14', 'test', ' ', '', ' ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'test', DEFAULT, 'test')
+    }
+    
+    private void updateAppt() {
+        
+        LocalDate localDate = datePicker.getValue();
+	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), shortTime);
+	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), shortTime);
+        
+        LocalDateTime startDT = LocalDateTime.of(localDate, startTime);
+        LocalDateTime endDT = LocalDateTime.of(localDate, endTime);
+
+        ZonedDateTime startUTC = startDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));            
+	
+	Timestamp startsqlts = Timestamp.valueOf(startUTC.toLocalDateTime()); //this value can be inserted into database
+        Timestamp endsqlts = Timestamp.valueOf(endUTC.toLocalDateTime()); //this value can be inserted into database        
+        
+        try {
+
+                PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE appointment "
+                        + "SET customerId = ?, title = ?, description = ?, start = ?, end = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                        + "WHERE appointmentId = ?");
+            
+                pst.setString(1, customerSelectTableView.getSelectionModel().getSelectedItem().getCustomerId());
+                pst.setString(2, titleField.getText());
+                pst.setString(3, typeComboBox.getValue());
+                pst.setTimestamp(4, startsqlts);
+                pst.setTimestamp(5, endsqlts);
+                pst.setString(6, "rcases");
+                pst.setString(7, "rcases");
+                pst.setString(8, selectedAppt.getAppointmentId());
+                int result = pst.executeUpdate();
+                if (result == 1) {//one row was affected; namely the one that was inserted!
+                    System.out.println("YAY! Update Appointment Save");
+                } else {
+                    System.out.println("BOO! Update Appointment Save");
+                }
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
     }
 
     private void populateTypeList() {
