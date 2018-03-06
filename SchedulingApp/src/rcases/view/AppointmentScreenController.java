@@ -16,9 +16,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.Optional;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -92,9 +90,9 @@ public class AppointmentScreenController {
         customerApptColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         consultantApptColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
         
-       apptList = FXCollections.observableArrayList();
-       populateAppointmentList();
-       ApptTableView.getItems().setAll(apptList);
+        apptList = FXCollections.observableArrayList();
+        populateAppointmentList();
+        ApptTableView.getItems().setAll(apptList);
         
         
     }
@@ -144,8 +142,7 @@ public class AppointmentScreenController {
             alert.setHeaderText("Are you sure you want to delete " + selectedAppointment.getTitle() + " scheduled for " + selectedAppointment.getStart() + "?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                //String selectedApptId = ApptTableView.getSelectionModel().getSelectedItem().getAppointmentId();
-                //System.out.print(selectedApptId);
+                
                 deleteAppointment(selectedAppointment);
                 mainApp.showAppointmentScreen();
             } else {
@@ -154,8 +151,8 @@ public class AppointmentScreenController {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Selection");
-            alert.setHeaderText("No Customer selected for Deletion");
-            alert.setContentText("Please select a Customer in the Table to delete");
+            alert.setHeaderText("No Appointment selected for Deletion");
+            alert.setContentText("Please select an Appointment in the Table to delete");
             alert.showAndWait();
         }
 
@@ -163,6 +160,19 @@ public class AppointmentScreenController {
 
     @FXML
     void handleEditAppt(ActionEvent event) {
+        Appointment selectedAppointment = ApptTableView.getSelectionModel().getSelectedItem();
+        
+        if (selectedAppointment != null) {
+            boolean okClicked = mainApp.showEditApptScreen(selectedAppointment);
+            mainApp.showAppointmentScreen();
+            
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Appointment selected");
+            alert.setContentText("Please select an Appointment in the Table");
+            alert.showAndWait();
+        }
 
     }
 

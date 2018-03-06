@@ -5,7 +5,6 @@
  */
 package rcases.view;
 
-import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,15 +16,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.ResolverStyle;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -47,7 +45,7 @@ import rcases.model.Customer;
  *
  * @author rcases
  */
-public class NewApptScreenController implements Initializable {
+public class NewApptScreenController {
 
     @FXML
     private Label apptLabel;
@@ -89,21 +87,16 @@ public class NewApptScreenController implements Initializable {
     private Stage dialogStage;
     private SchedulingApp mainApp;
     private boolean okClicked = false;
-    private ZoneId zid = ZoneId.systemDefault();
+    private final ZoneId zid = ZoneId.systemDefault();
+    private Appointment appt;
+    private Appointment selectedAppt;
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
-    private ObservableList<String> startTimes = FXCollections.observableArrayList();
-    private ObservableList<String> endTimes = FXCollections.observableArrayList();
-    private DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);    
+    private final ObservableList<String> startTimes = FXCollections.observableArrayList();
+    private final ObservableList<String> endTimes = FXCollections.observableArrayList();
+    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);    
     
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-    }
-    
+      
     /**
      * Returns true if the user clicked OK, false otherwise.
      * 
@@ -191,7 +184,24 @@ public class NewApptScreenController implements Initializable {
     }
 
     public void setAppointment(Appointment appointment) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(okClicked);
+        okClicked = true;
+        System.out.println(okClicked);
+        selectedAppt = appointment;
+        //String start = appointment.getStart();
+        DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+        //LocalDate startLD = LocalDate.parse(start, dateDTF);
+        
+        
+        apptLabel.setText("Edit Appointment");
+        titleField.setText(appointment.getTitle());
+        typeComboBox.setValue(appointment.getDescription());
+        customerSelectTableView.getSelectionModel().select(appointment.getCustomer());
+        datePicker.setValue(LocalDate.parse(appointment.getStart(), dateDTF));
+        startComboBox.getSelectionModel().select(appointment.getStart().substring(8));
+        endComboBox.getSelectionModel().select(appointment.getEnd().substring(8));
+        
+        
     }
 
     private void saveAppt() {

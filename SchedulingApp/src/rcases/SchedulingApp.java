@@ -185,15 +185,15 @@ public class SchedulingApp extends Application {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/EditApptScreen.fxml"));
-        AnchorPane partScreen = (AnchorPane) loader.load();
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/NewApptScreen.fxml"));
+        AnchorPane editApptScreen = (AnchorPane) loader.load();
 
         // Create the dialog Stage.
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Edit Appointment");
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(primaryStage);
-        Scene scene = new Scene(partScreen);
+        Scene scene = new Scene(editApptScreen);
         dialogStage.setScene(scene);
 
         // Set the person into the controller.
