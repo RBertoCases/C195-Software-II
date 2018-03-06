@@ -18,6 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
@@ -67,6 +68,7 @@ public class CustomerScreenController {
     
     private SchedulingApp mainApp;
     private boolean editClicked = false;
+    private Stage dialogStage;
     
     public CustomerScreenController() {
     }
@@ -133,17 +135,18 @@ public class CustomerScreenController {
    
     @FXML
     void handleSaveCustomer(ActionEvent event) {
-        saveCancelButtonBar.setDisable(true);
-        customerTable.setDisable(false);
-        if (editClicked == true) {
+        if (validateCustomer()){
+            saveCancelButtonBar.setDisable(true);
+            customerTable.setDisable(false);
+            if (editClicked == true) {
             updateCustomer();
             System.out.println(editClicked);
-        } else if (editClicked == false){
+            } else if (editClicked == false){
             System.out.println(editClicked);
             saveCustomer();
         }
         mainApp.showCustomerScreen();
-
+        } 
     }
     
     @FXML
@@ -352,9 +355,7 @@ public class CustomerScreenController {
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                //ps.setString(6, LocalDateTime.now().toString());
                 ps.setString(6, "rcases");
-                //ps.setString(8, LocalDateTime.now().toString());
                 ps.setString(7, "rcases");
                 boolean res = ps.execute();
                 int newAddressId = -1;
@@ -413,7 +414,6 @@ public class CustomerScreenController {
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                //ps.setString(6, LocalDateTime.now().toString());
                 ps.setString(6, "rcases");
                 ps.setString(7, customerIdField.getText());
                 
@@ -431,7 +431,6 @@ public class CustomerScreenController {
                 + "WHERE customer.customerId = ? AND customer.addressId = address.addressId AND address.cityId = city.cityId");
             
                 psc.setString(1, nameField.getText());
-                //psc.setString(2, LocalDateTime.now().toString());
                 psc.setString(2, "rcases");
                 psc.setString(3, customerIdField.getText());
                 int results = psc.executeUpdate();
@@ -443,6 +442,51 @@ public class CustomerScreenController {
             } catch (SQLException ex) {
             ex.printStackTrace();
             }
+    }
+
+    private boolean validateCustomer() {
+        String name = nameField.getText();
+        String address = addressField.getText();
+        City city = cityComboBox.getValue();
+        String country = countryField.getText();
+        String zip = postalCodeField.getText();
+        String phone = phoneField.getText();
+        
+        String errorMessage = "";
+        //first checks to see if inputs are null
+        if (name == null || name.length() == 0) {
+            errorMessage += "No valid Customer name!\n"; 
+        }
+        if (address == null || address.length() == 0) {
+            errorMessage += "No valid Address value!\n";  
+        } 
+        if (city == null) {
+            errorMessage += "No valid City selected!\n"; 
+        } 
+        if (country == null || country.length() == 0) {
+            errorMessage += "No valid County. Please Select City to Select Country.\n"; 
+        }         
+        if (zip == null || zip.length() == 0) {
+            errorMessage += "No valid Postal Code value!\n"; 
+        } 
+        if (phone == null || phone.length() == 0) {
+            errorMessage += "No valid Phone Number!\n"; 
+        }
+        
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Show the error message.
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(dialogStage);
+            alert.setTitle("Invalid Fields");
+            alert.setHeaderText("Please correct invalid Customer fields");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+
+            return false;
+        }
     }
 
 }

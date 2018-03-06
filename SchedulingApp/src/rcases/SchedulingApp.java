@@ -47,8 +47,8 @@ public class SchedulingApp extends Application {
         this.primaryStage.setTitle("Scheduling Application - RCases");
         //showLoginScreen();
         showMenu();
-        //showCustomerScreen();
-        showAppointmentScreen();
+        showCustomerScreen();
+        //showAppointmentScreen();
         
     }
     
