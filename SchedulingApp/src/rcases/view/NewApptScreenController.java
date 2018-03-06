@@ -93,7 +93,9 @@ public class NewApptScreenController {
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();
     private final ObservableList<String> endTimes = FXCollections.observableArrayList();
-    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);    
+    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+    private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    
     
       
     /**
@@ -193,18 +195,20 @@ public class NewApptScreenController {
         okClicked = true;
         System.out.println(okClicked);
         selectedAppt = appointment;
-        //String start = appointment.getStart();
-        DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-        //LocalDate startLD = LocalDate.parse(start, dateDTF);
         
+        String start = appointment.getStart();
+        
+        LocalDateTime startLDT = LocalDateTime.parse(start, dateDTF);
+        String end = appointment.getEnd();
+        LocalDateTime endLDT = LocalDateTime.parse(end, dateDTF);        
         
         apptLabel.setText("Edit Appointment");
         titleField.setText(appointment.getTitle());
         typeComboBox.setValue(appointment.getDescription());
         customerSelectTableView.getSelectionModel().select(appointment.getCustomer());
         datePicker.setValue(LocalDate.parse(appointment.getStart(), dateDTF));
-        startComboBox.getSelectionModel().select(appointment.getStart().toLocalTime().format(shortTime));
-        endComboBox.getSelectionModel().select(appointment.getEnd().substring(7));
+        startComboBox.getSelectionModel().select(startLDT.toLocalTime().format(shortTime));
+        endComboBox.getSelectionModel().select(endLDT.toLocalTime().format(shortTime));
         
         
     }
