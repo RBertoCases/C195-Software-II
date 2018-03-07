@@ -73,7 +73,7 @@ public class AppointmentScreenController {
     @FXML
     private ToggleGroup apptToggleGroup;
     
-    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     private ZoneId newzid = ZoneId.systemDefault();
     ObservableList<Appointment> apptList;
         
@@ -107,7 +107,7 @@ public class AppointmentScreenController {
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
-            LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
+            LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
             return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus1Month);
         });
@@ -125,7 +125,7 @@ public class AppointmentScreenController {
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
-            LocalDate rowDate = LocalDate.parse(row.getStart(), shortTime);
+            LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
             return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus7);
         });
@@ -216,7 +216,7 @@ public class AppointmentScreenController {
                 
                 String tUser = rs.getString("appointment.createdBy");
                       
-                apptList.add(new Appointment(tAppointmentId, newLocalStart.format(shortTime), newLocalEnd.format(shortTime), tTitle, tType, tCustomer, tUser));
+                apptList.add(new Appointment(tAppointmentId, newLocalStart.format(timeDTF), newLocalEnd.format(timeDTF), tTitle, tType, tCustomer, tUser));
                 
 
             }

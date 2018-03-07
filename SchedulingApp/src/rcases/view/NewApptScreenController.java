@@ -16,8 +16,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.time.format.ResolverStyle;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -89,12 +90,14 @@ public class NewApptScreenController {
     private boolean okClicked = false;
     private final ZoneId zid = ZoneId.systemDefault();
     private Appointment selectedAppt;
+    private final ZoneId newzid = ZoneId.systemDefault();
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();
     private final ObservableList<String> endTimes = FXCollections.observableArrayList();
-    private final DateTimeFormatter shortTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
     private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    ObservableList<Appointment> apptTimeList;
     
     
       
@@ -109,14 +112,16 @@ public class NewApptScreenController {
 
     @FXML
     private void handleNewSave(ActionEvent event) {
-        
-        if (isOkClicked()) {
-            System.out.println(isOkClicked() + " before calling saveappt()");
-            updateAppt();            
-        } else {
-            saveAppt();
+        if (validateAppointment()){
+            if (isOkClicked()) {
+                System.out.println(isOkClicked() + " before calling saveappt()");
+                updateAppt();            
+            } else {
+                saveAppt();
+            }
+            dialogStage.close();
         }
-        dialogStage.close();
+        
     }
 
     @FXML
@@ -174,8 +179,8 @@ public class NewApptScreenController {
         
 	LocalTime time = LocalTime.of(8, 0);
 	do {
-		startTimes.add(time.format(shortTime));
-		endTimes.add(time.format(shortTime));
+		startTimes.add(time.format(timeDTF));
+		endTimes.add(time.format(timeDTF));
 		time = time.plusMinutes(15);
 	} while(!time.equals(LocalTime.of(17, 15)));
 		startTimes.remove(startTimes.size() - 1);
@@ -185,8 +190,8 @@ public class NewApptScreenController {
 
         startComboBox.setItems(startTimes);
 	endComboBox.setItems(endTimes);
-	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(shortTime));
-	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(shortTime));
+	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
+	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
         
     }
 
@@ -207,8 +212,8 @@ public class NewApptScreenController {
         typeComboBox.setValue(appointment.getDescription());
         customerSelectTableView.getSelectionModel().select(appointment.getCustomer());
         datePicker.setValue(LocalDate.parse(appointment.getStart(), dateDTF));
-        startComboBox.getSelectionModel().select(startLDT.toLocalTime().format(shortTime));
-        endComboBox.getSelectionModel().select(endLDT.toLocalTime().format(shortTime));
+        startComboBox.getSelectionModel().select(startLDT.toLocalTime().format(timeDTF));
+        endComboBox.getSelectionModel().select(endLDT.toLocalTime().format(timeDTF));
         
         
     }
@@ -216,8 +221,8 @@ public class NewApptScreenController {
     private void saveAppt() {
   
         LocalDate localDate = datePicker.getValue();
-	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), shortTime);
-	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), shortTime);
+	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), timeDTF);
+	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), timeDTF);
         
         LocalDateTime startDT = LocalDateTime.of(localDate, startTime);
         LocalDateTime endDT = LocalDateTime.of(localDate, endTime);
@@ -263,8 +268,8 @@ public class NewApptScreenController {
     private void updateAppt() {
         
         LocalDate localDate = datePicker.getValue();
-	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), shortTime);
-	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), shortTime);
+	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), timeDTF);
+	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), timeDTF);
         
         LocalDateTime startDT = LocalDateTime.of(localDate, startTime);
         LocalDateTime endDT = LocalDateTime.of(localDate, endTime);
@@ -341,6 +346,89 @@ public class NewApptScreenController {
          
         return customerList;
 
+    }
+
+    private boolean validateAppointment() {
+        String title = titleField.getText();
+        String type = typeComboBox.getValue();
+        Customer customer = customerSelectTableView.getSelectionModel().getSelectedItem();
+        LocalDate localDate = datePicker.getValue();
+	LocalTime startTime = LocalTime.parse(startComboBox.getSelectionModel().getSelectedItem(), timeDTF);
+	LocalTime endTime = LocalTime.parse(endComboBox.getSelectionModel().getSelectedItem(), timeDTF);
+        
+        LocalDateTime startDT = LocalDateTime.of(localDate, startTime);
+        LocalDateTime endDT = LocalDateTime.of(localDate, endTime);
+
+        ZonedDateTime startUTC = startDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endDT.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));            
+	        
+        String errorMessage = "";
+        //first checks to see if inputs are null
+        if (title == null || title.length() == 0) {
+            errorMessage += "Please enter an Appointment title.\n"; 
+        }
+        if (type == null || type.length() == 0) {
+            errorMessage += "Please select an Appointment type.\n";  
+        } 
+        if (customer == null) {
+            errorMessage += "Please Select a Customer.\n"; 
+        } 
+        if (startUTC == null) {
+            errorMessage += "Please select a Start time"; 
+        }         
+        if (endUTC == null) {
+            errorMessage += "Please select an End time.\n"; 
+            } else if (endUTC.equals(startUTC) || endUTC.isBefore(startUTC)){
+                errorMessage += "End time must be after Start time.\n";
+            } else try {
+                if (hasApptConflict(startUTC, endUTC)){
+                    errorMessage += "Appointment schedule conflicts with existing appointment for this user. Please select a new time.\n";
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(NewApptScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Show the error message.
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(dialogStage);
+            alert.setTitle("Invalid Fields");
+            alert.setHeaderText("Please correct invalid Appointment fields");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+
+            return false;
+        }
+    }
+
+    private boolean hasApptConflict(ZonedDateTime newStart, ZonedDateTime newEnd) throws SQLException {
+        
+        
+        try{
+            
+            
+        PreparedStatement pst = DBConnection.getConn().prepareStatement(
+        "SELECT * FROM appointment "
+	+ "WHERE (? BETWEEN start AND end OR ? BETWEEN start AND end) "
+	+ "AND createdBy = ?");
+        pst.setTimestamp(1, Timestamp.valueOf(newStart.toLocalDateTime()));
+	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
+        pst.setString(3, "rcases");
+        ResultSet rs = pst.executeQuery();
+           
+        if(rs.next()) {
+            return true;
+	}
+            
+        } catch (SQLException sqe) {
+            System.out.println("Check your SQL");
+            sqe.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something besides the SQL went wrong.");
+        }
+        return false;
     }
     
 }

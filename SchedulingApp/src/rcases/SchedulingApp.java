@@ -47,9 +47,22 @@ public class SchedulingApp extends Application {
         this.primaryStage.setTitle("Scheduling Application - RCases");
         //showLoginScreen();
         showMenu();
-        showCustomerScreen();
-        //showAppointmentScreen();
+        //showCustomerScreen();
+        showAppointmentScreen();
         
+    }
+    
+    public static void main(String[] args) {
+        //Locale.setDefault(new Locale("fr", "FR"));
+        //System.out.println(Locale.getDefault()); 
+        DBConnection.init();
+        connection = DBConnection.getConn();
+        System.out.println(LocalDate.now());
+        System.out.println(LocalTime.now());
+        System.out.println(LocalDateTime.now());
+        System.out.println(ZonedDateTime.now());
+        launch(args);
+        DBConnection.closeConn();
     }
     
     /**
@@ -118,19 +131,6 @@ public class SchedulingApp extends Application {
     
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-    
-    public static void main(String[] args) {
-        //Locale.setDefault(new Locale("fr", "FR"));
-        //System.out.println(Locale.getDefault()); 
-        DBConnection.init();
-        connection = DBConnection.getConn();
-        System.out.println(LocalDate.now());
-        System.out.println(LocalTime.now());
-        System.out.println(LocalDateTime.now());
-        System.out.println(ZonedDateTime.now());
-        launch(args);
-        DBConnection.closeConn();
     }
 
     public void showAppointmentScreen() {

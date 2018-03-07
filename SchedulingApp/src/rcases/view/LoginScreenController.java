@@ -77,7 +77,7 @@ public class LoginScreenController {
         User selectedUser = new User();
         
         try{           
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("Select * from user where userName=? and password=?");
+            PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? and password=?");
             pst.setString(1, username); 
             pst.setString(2, password);
             ResultSet rs = pst.executeQuery();                        

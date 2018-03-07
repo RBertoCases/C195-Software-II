@@ -44,6 +44,12 @@ public class Appointment {
         this.customer = customer;
         this.user = user;
     }
+    
+    public Appointment(String start, String end, String user) {
+        this.start = start;
+        this.end = end;
+        this.user = user;
+    }
 
     public String getAppointmentId() {
         return appointmentId;
