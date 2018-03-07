@@ -455,24 +455,27 @@ public class CustomerScreenController {
         String errorMessage = "";
         //first checks to see if inputs are null
         if (name == null || name.length() == 0) {
-            errorMessage += "No valid Customer name!\n"; 
+            errorMessage += "Please enter the Customer's name.\n"; 
         }
         if (address == null || address.length() == 0) {
-            errorMessage += "No valid Address value!\n";  
+            errorMessage += "Please enter an address.\n";  
         } 
         if (city == null) {
-            errorMessage += "No valid City selected!\n"; 
+            errorMessage += "Please Select a City.\n"; 
         } 
         if (country == null || country.length() == 0) {
-            errorMessage += "No valid County. Please Select City to Select Country.\n"; 
+            errorMessage += "No valid Country. Country set by City.\n"; 
         }         
         if (zip == null || zip.length() == 0) {
-            errorMessage += "No valid Postal Code value!\n"; 
-        } 
-        if (phone == null || phone.length() == 0) {
-            errorMessage += "No valid Phone Number!\n"; 
+            errorMessage += "Please enter the Postal Code.\n"; 
+        } else if (zip.length() > 10 || zip.length() < 5){
+            errorMessage += "Please enter a valid Postal Code.\n";
         }
-        
+        if (phone == null || phone.length() == 0) {
+            errorMessage += "Please enter a Phone Number (including Area Code)."; 
+        } else if (phone.length() < 10 || phone.length() > 15 ){
+            errorMessage += "Please enter a valid phone number (including Area Code).\n";
+        }        
         if (errorMessage.length() == 0) {
             return true;
         } else {
