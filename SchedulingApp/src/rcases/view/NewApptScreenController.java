@@ -196,6 +196,7 @@ public class NewApptScreenController {
     }
 
     public void setAppointment(Appointment appointment) {
+        
         System.out.println(okClicked);
         okClicked = true;
         System.out.println(okClicked);
@@ -412,10 +413,11 @@ public class NewApptScreenController {
         PreparedStatement pst = DBConnection.getConn().prepareStatement(
         "SELECT * FROM appointment "
 	+ "WHERE (? BETWEEN start AND end OR ? BETWEEN start AND end) "
-	+ "AND createdBy = ?");
+	+ "AND createdBy = ? AND appointmentID != ?");
         pst.setTimestamp(1, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
         pst.setString(3, "rcases");
+        pst.setString(4, selectedAppt.getAppointmentId());
         ResultSet rs = pst.executeQuery();
            
         if(rs.next()) {
