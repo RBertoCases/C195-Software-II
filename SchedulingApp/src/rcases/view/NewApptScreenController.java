@@ -412,12 +412,14 @@ public class NewApptScreenController {
             
         PreparedStatement pst = DBConnection.getConn().prepareStatement(
         "SELECT * FROM appointment "
-	+ "WHERE (? BETWEEN start AND end OR ? BETWEEN start AND end) "
-	+ "AND createdBy = ? AND appointmentID != ?");
+	+ "WHERE (? BETWEEN start AND end OR ? BETWEEN start AND end OR ? < start AND ? > end) "
+	+ "AND (createdBy = ? AND appointmentID != ?)");
         pst.setTimestamp(1, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
-        pst.setString(3, "rcases");
-        pst.setString(4, selectedAppt.getAppointmentId());
+        pst.setTimestamp(3, Timestamp.valueOf(newStart.toLocalDateTime()));
+	pst.setTimestamp(4, Timestamp.valueOf(newEnd.toLocalDateTime()));
+        pst.setString(5, "rcases");
+        pst.setString(6, selectedAppt.getAppointmentId());
         ResultSet rs = pst.executeQuery();
            
         if(rs.next()) {
@@ -429,6 +431,7 @@ public class NewApptScreenController {
             sqe.printStackTrace();
         } catch (Exception e) {
             System.out.println("Something besides the SQL went wrong.");
+            e.printStackTrace();
         }
         return false;
     }
