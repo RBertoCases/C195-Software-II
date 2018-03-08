@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import rcases.model.Appointment;
+import rcases.model.User;
 import rcases.view.LoginScreenController;
 import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
@@ -45,10 +46,10 @@ public class SchedulingApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
-        //showLoginScreen();
-        showMenu();
+        showLoginScreen();
+        //showMenu(null);
         //showCustomerScreen();
-        showAppointmentScreen();
+        //showAppointmentScreen();
         
     }
     
@@ -67,8 +68,10 @@ public class SchedulingApp extends Application {
     
     /**
      * Initializes the root layout.
+     * @param currentUser
      */
-    public void showMenu() {
+    public void showMenu(User currentUser) {
+        
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -80,7 +83,7 @@ public class SchedulingApp extends Application {
             primaryStage.setScene(scene);
             // Give the controller access to the main app.
             MenuController controller = loader.getController();
-            controller.setMenu(this);
+            controller.setMenu(this, currentUser);
             
             primaryStage.show();
         } catch (IOException e) {

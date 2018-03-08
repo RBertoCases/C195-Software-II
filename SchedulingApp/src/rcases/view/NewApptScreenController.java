@@ -383,7 +383,7 @@ public class NewApptScreenController {
                 errorMessage += "End time must be after Start time.\n";
             } else try {
                 if (hasApptConflict(startUTC, endUTC)){
-                    errorMessage += "Appointment schedule conflicts with existing appointment for this user. Please select a new time.\n";
+                    errorMessage += "Appointment times conflict with an existing appointment of yours. Please select a new time.\n";
                 }
         } catch (SQLException ex) {
             Logger.getLogger(NewApptScreenController.class.getName()).log(Level.SEVERE, null, ex);

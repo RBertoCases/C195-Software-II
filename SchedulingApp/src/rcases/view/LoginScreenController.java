@@ -66,25 +66,25 @@ public class LoginScreenController {
                 errorMessage.setText("Incorrect Login Credentials");
                 return;
             }
-            mainApp.showMenu();
+            mainApp.showMenu(validateLogin);
             mainApp.showAppointmentScreen();
             //else
             //errorMessage.setText("Incorrect Login Credentials");
         }
     }
         
-    protected User validateLogin(String username,String password) {
-        User selectedUser = new User();
+    User validateLogin(String username,String password) {
+        User user = new User();
         
         try{           
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? and password=?");
+            PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
             pst.setString(1, username); 
             pst.setString(2, password);
             ResultSet rs = pst.executeQuery();                        
             if(rs.next()){
-                selectedUser.setUsername(rs.getString("userName"));
-                selectedUser.setPassword(rs.getString("password"));
-                selectedUser.setUserID(rs.getInt("userId"));
+                user.setUsername(rs.getString("userName"));
+                user.setPassword(rs.getString("password"));
+                user.setUserID(rs.getInt("userId"));
             } else {
                 return null;    
             }            
@@ -92,7 +92,7 @@ public class LoginScreenController {
         } catch(SQLException e){
             e.printStackTrace();
         }       
-        return selectedUser;
+        return user;
 }
     
     @FXML
