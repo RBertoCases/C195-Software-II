@@ -33,6 +33,7 @@ import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;
+import rcases.model.User;
 
 /**
  * FXML Controller class
@@ -73,12 +74,15 @@ public class AppointmentScreenController {
     @FXML
     private ToggleGroup apptToggleGroup;
     
+    private User currentUser;
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     private ZoneId newzid = ZoneId.systemDefault();
     ObservableList<Appointment> apptList;
         
-    public void setAppointmentScreen(SchedulingApp mainApp) {
+    public void setAppointmentScreen(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
+        this.currentUser = currentUser;
+        
         apptToggleGroup = new ToggleGroup();
         this.weekRadioButton.setToggleGroup(apptToggleGroup);
         this.monthRadioButton.setToggleGroup(apptToggleGroup);
@@ -93,6 +97,7 @@ public class AppointmentScreenController {
         apptList = FXCollections.observableArrayList();
         populateAppointmentList();
         ApptTableView.getItems().setAll(apptList);
+        System.out.println(currentUser.getUsername());
         
         
     }
@@ -144,7 +149,7 @@ public class AppointmentScreenController {
             if (result.get() == ButtonType.OK) {
                 
                 deleteAppointment(selectedAppointment);
-                mainApp.showAppointmentScreen();
+                mainApp.showAppointmentScreen(currentUser);
             } else {
                 alert.close();
             }
@@ -163,8 +168,8 @@ public class AppointmentScreenController {
         Appointment selectedAppointment = ApptTableView.getSelectionModel().getSelectedItem();
         
         if (selectedAppointment != null) {
-            boolean okClicked = mainApp.showEditApptScreen(selectedAppointment);
-            mainApp.showAppointmentScreen();
+            boolean okClicked = mainApp.showEditApptScreen(selectedAppointment, currentUser);
+            mainApp.showAppointmentScreen(currentUser);
             
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -178,8 +183,8 @@ public class AppointmentScreenController {
 
     @FXML
     void handleNewAppt(ActionEvent event) throws IOException{
-        boolean okClicked = mainApp.showNewApptScreen();
-        mainApp.showAppointmentScreen();
+        boolean okClicked = mainApp.showNewApptScreen(currentUser);
+        mainApp.showAppointmentScreen(currentUser);
     }
     
     private void populateAppointmentList() {

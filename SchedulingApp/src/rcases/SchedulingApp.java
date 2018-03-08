@@ -113,7 +113,7 @@ public class SchedulingApp extends Application {
     }
     
     
-    public void showCustomerScreen() {
+    public void showCustomerScreen(User currentUser) {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -125,7 +125,7 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             CustomerScreenController controller = loader.getController();
-            controller.setCustomerScreen(this);
+            controller.setCustomerScreen(this, currentUser);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,7 +136,7 @@ public class SchedulingApp extends Application {
         return primaryStage;
     }
 
-    public void showAppointmentScreen() {
+    public void showAppointmentScreen(User currentUser) {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -148,14 +148,14 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             AppointmentScreenController controller = loader.getController();
-            controller.setAppointmentScreen(this);
+            controller.setAppointmentScreen(this, currentUser);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
-    public boolean showNewApptScreen() {
+    public boolean showNewApptScreen(User currentUser) {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
@@ -172,7 +172,7 @@ public class SchedulingApp extends Application {
 
         // Set the person into the controller.
         NewApptScreenController controller = loader.getController();
-        controller.setDialogStage(dialogStage);
+        controller.setDialogStage(dialogStage, currentUser);
 
         // Show the dialog and wait until the user closes it
         dialogStage.showAndWait();
@@ -184,7 +184,7 @@ public class SchedulingApp extends Application {
         }
     }
     
-    public boolean showEditApptScreen(Appointment appointment) {
+    public boolean showEditApptScreen(Appointment appointment, User currentUser) {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
@@ -201,7 +201,7 @@ public class SchedulingApp extends Application {
 
         // Set the person into the controller.
         NewApptScreenController controller = loader.getController();
-        controller.setDialogStage(dialogStage);
+        controller.setDialogStage(dialogStage, currentUser);
         controller.setAppointment(appointment);
 
         // Show the dialog and wait until the user closes it

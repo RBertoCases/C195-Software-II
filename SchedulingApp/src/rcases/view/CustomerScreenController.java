@@ -24,6 +24,7 @@ import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.City;
 import rcases.model.Customer;
+import rcases.model.User;
 
 public class CustomerScreenController {
 
@@ -69,6 +70,7 @@ public class CustomerScreenController {
     private SchedulingApp mainApp;
     private boolean editClicked = false;
     private Stage dialogStage;
+    private User currentUser;
     
     public CustomerScreenController() {
     }
@@ -119,7 +121,7 @@ public class CustomerScreenController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 deleteCustomer(selectedCustomer);
-                mainApp.showCustomerScreen();
+                mainApp.showCustomerScreen(currentUser);
             } else {
                 alert.close();
             }
@@ -145,7 +147,7 @@ public class CustomerScreenController {
             System.out.println(editClicked);
             saveCustomer();
         }
-        mainApp.showCustomerScreen();
+        mainApp.showCustomerScreen(currentUser);
         } 
     }
     
@@ -162,8 +164,9 @@ public class CustomerScreenController {
             return object.getCityId();
         }
     
-    public void setCustomerScreen(SchedulingApp mainApp) {
+    public void setCustomerScreen(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
+        this.currentUser = currentUser;
         
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
@@ -355,8 +358,8 @@ public class CustomerScreenController {
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                ps.setString(6, "rcases");
-                ps.setString(7, "rcases");
+                ps.setString(6, currentUser.getUsername());
+                ps.setString(7, currentUser.getUsername());
                 boolean res = ps.execute();
                 int newAddressId = -1;
                 ResultSet rs = ps.getGeneratedKeys();
@@ -375,9 +378,9 @@ public class CustomerScreenController {
                 psc.setInt(2, newAddressId);
                 psc.setInt(3, 1);
                 //psc.setString(4, LocalDateTime.now().toString());
-                psc.setString(4, "rcases");
+                psc.setString(4, currentUser.getUsername());
                 //psc.setString(6, LocalDateTime.now().toString());
-                psc.setString(5, "rcases");
+                psc.setString(5, currentUser.getUsername());
                 int result = psc.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! Customer");
@@ -414,7 +417,7 @@ public class CustomerScreenController {
                 ps.setInt(3, getCityId(cityComboBox.getValue()));
                 ps.setString(4, postalCodeField.getText());
                 ps.setString(5, phoneField.getText());
-                ps.setString(6, "rcases");
+                ps.setString(6, currentUser.getUsername());
                 ps.setString(7, customerIdField.getText());
                 
                 int result = ps.executeUpdate();
@@ -431,7 +434,7 @@ public class CustomerScreenController {
                 + "WHERE customer.customerId = ? AND customer.addressId = address.addressId AND address.cityId = city.cityId");
             
                 psc.setString(1, nameField.getText());
-                psc.setString(2, "rcases");
+                psc.setString(2, currentUser.getUsername());
                 psc.setString(3, customerIdField.getText());
                 int results = psc.executeUpdate();
                 if (results == 1) {//one row was affected; namely the one that was inserted!

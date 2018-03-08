@@ -14,13 +14,13 @@ public class MenuController {
     private MenuItem logoutUser;
     
     private SchedulingApp mainApp;
-    private User user;
+    private User currentUser;
     
     public void setMenu(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
+        this.currentUser = currentUser;
         
-        String username = currentUser.getUsername();
-        logoutUser.setText("Logout: " + username);
+        logoutUser.setText("Logout: " + currentUser.getUsername());
     }
     
     public MenuController() {
@@ -29,12 +29,12 @@ public class MenuController {
 
     @FXML
     void handleMenuAppointments(ActionEvent event) {
-        mainApp.showAppointmentScreen();
+        mainApp.showAppointmentScreen(currentUser);
     }
 
     @FXML
     void handleMenuCustomers(ActionEvent event) {
-        mainApp.showCustomerScreen();
+        mainApp.showCustomerScreen(currentUser);
     }
     
     @FXML

@@ -40,6 +40,7 @@ import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;
+import rcases.model.User;
 
 /**
  * FXML Controller class
@@ -91,6 +92,7 @@ public class NewApptScreenController {
     private final ZoneId zid = ZoneId.systemDefault();
     private Appointment selectedAppt;
     private final ZoneId newzid = ZoneId.systemDefault();
+    private User currentUser;
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();
@@ -137,9 +139,10 @@ public class NewApptScreenController {
         }
     }
 
-    public void setDialogStage(Stage dialogStage) {
+    public void setDialogStage(Stage dialogStage, User currentUser) {
         this.dialogStage = dialogStage;
-        this.mainApp = mainApp;
+        this.currentUser = currentUser;
+        
         populateTypeList();
         customerNameApptColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         masterData = populateCustomerList();
@@ -192,6 +195,7 @@ public class NewApptScreenController {
 	endComboBox.setItems(endTimes);
 	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
 	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
+        System.out.println(currentUser.getUsername());
         
     }
 
@@ -249,9 +253,9 @@ public class NewApptScreenController {
                 pst.setTimestamp(7, startsqlts);
                 pst.setTimestamp(8, endsqlts);
                 //pst.setTimestamp(9, TIMESTAMP);
-                pst.setString(9, "rcases");
+                pst.setString(9, currentUser.getUsername());
                 //pst.setString(11, LocalDateTime.now().toString());
-                pst.setString(10, "rcases");
+                pst.setString(10, currentUser.getUsername());
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! New Appointment Save");
@@ -284,7 +288,7 @@ public class NewApptScreenController {
         try {
 
                 PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE appointment "
-                        + "SET customerId = ?, title = ?, description = ?, start = ?, end = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                        + "SET customerId = ?, title = ?, description = ?, start = ?, end = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
                         + "WHERE appointmentId = ?");
             
                 pst.setString(1, customerSelectTableView.getSelectionModel().getSelectedItem().getCustomerId());
@@ -292,9 +296,8 @@ public class NewApptScreenController {
                 pst.setString(3, typeComboBox.getValue());
                 pst.setTimestamp(4, startsqlts);
                 pst.setTimestamp(5, endsqlts);
-                pst.setString(6, "rcases");
-                pst.setString(7, "rcases");
-                pst.setString(8, selectedAppt.getAppointmentId());
+                pst.setString(6, currentUser.getUsername());
+                pst.setString(7, selectedAppt.getAppointmentId());
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!
                     System.out.println("YAY! Update Appointment Save");
@@ -424,7 +427,7 @@ public class NewApptScreenController {
 	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
         pst.setTimestamp(3, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(4, Timestamp.valueOf(newEnd.toLocalDateTime()));
-        pst.setString(5, "rcases");
+        pst.setString(5, currentUser.getUsername());
         pst.setString(6, apptID);
         ResultSet rs = pst.executeQuery();
            

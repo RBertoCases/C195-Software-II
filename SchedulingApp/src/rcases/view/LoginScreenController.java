@@ -61,13 +61,13 @@ public class LoginScreenController {
             errorMessage.setText("Username or Password is empty. Please fill up both fields");
         else{
             
-            User validateLogin = validateLogin(user,pass); //validateLogin(user,pass)
-            if (validateLogin == null) {
+            User validUser = validateLogin(user,pass); //validateLogin(user,pass)
+            if (validUser == null) {
                 errorMessage.setText("Incorrect Login Credentials");
                 return;
             }
-            mainApp.showMenu(validateLogin);
-            mainApp.showAppointmentScreen();
+            mainApp.showMenu(validUser);
+            mainApp.showAppointmentScreen(validUser);
             //else
             //errorMessage.setText("Incorrect Login Credentials");
         }
