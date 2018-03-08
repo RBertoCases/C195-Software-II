@@ -405,7 +405,13 @@ public class NewApptScreenController {
     }
 
     private boolean hasApptConflict(ZonedDateTime newStart, ZonedDateTime newEnd) throws SQLException {
-        
+        String apptID;
+        if (isOkClicked()) {
+            apptID = selectedAppt.getAppointmentId();
+        } else {
+            apptID = "0";
+        }
+        System.out.println("ApptID: " + apptID);
         
         try{
             
@@ -419,7 +425,7 @@ public class NewApptScreenController {
         pst.setTimestamp(3, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(4, Timestamp.valueOf(newEnd.toLocalDateTime()));
         pst.setString(5, "rcases");
-        pst.setString(6, selectedAppt.getAppointmentId());
+        pst.setString(6, apptID);
         ResultSet rs = pst.executeQuery();
            
         if(rs.next()) {
