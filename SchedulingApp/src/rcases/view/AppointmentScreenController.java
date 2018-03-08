@@ -145,14 +145,13 @@ public class AppointmentScreenController {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText("Are you sure you want to delete " + selectedAppointment.getTitle() + " scheduled for " + selectedAppointment.getStart() + "?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                
+            alert.showAndWait()
+            .filter(response -> response == ButtonType.OK)
+            .ifPresent(response -> {
                 deleteAppointment(selectedAppointment);
                 mainApp.showAppointmentScreen(currentUser);
-            } else {
-                alert.close();
-            }
+                }
+            );
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Selection");

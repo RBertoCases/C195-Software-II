@@ -131,12 +131,10 @@ public class NewApptScreenController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Cancel");
         alert.setHeaderText("Are you sure you want to Cancel?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            dialogStage.close();
-        } else {
-            alert.close();
-        }
+        alert.showAndWait()
+        .filter(response -> response == ButtonType.OK)
+        .ifPresent(response -> dialogStage.close());
+        
     }
 
     public void setDialogStage(Stage dialogStage, User currentUser) {

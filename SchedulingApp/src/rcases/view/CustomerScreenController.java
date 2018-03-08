@@ -118,13 +118,13 @@ public class CustomerScreenController {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText("Are you sure you want to delete " + selectedCustomer.getCustomerName() + "?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            alert.showAndWait()
+            .filter(response -> response == ButtonType.OK)
+            .ifPresent(response -> {
                 deleteCustomer(selectedCustomer);
                 mainApp.showCustomerScreen(currentUser);
-            } else {
-                alert.close();
-            }
+                }
+            );
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Selection");
@@ -153,11 +153,19 @@ public class CustomerScreenController {
     
     @FXML
     void handleCancelCustomer(ActionEvent event) {
-        saveCancelButtonBar.setDisable(true);
-        customerTable.setDisable(false);
-        clearCustomerDetails();
-        newEditDeleteButtonBar.setDisable(false);
-        editClicked = false;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Cancel");
+        alert.setHeaderText("Are you sure you want to Cancel?");
+        alert.showAndWait()
+        .filter(response -> response == ButtonType.OK)
+        .ifPresent(response -> {
+            saveCancelButtonBar.setDisable(true);
+            customerTable.setDisable(false);
+            clearCustomerDetails();
+            newEditDeleteButtonBar.setDisable(false);
+            editClicked = false;
+            }
+        );
     }
     
      public int getCityId(City object) {
