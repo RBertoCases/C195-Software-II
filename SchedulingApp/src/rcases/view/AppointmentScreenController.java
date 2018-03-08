@@ -76,8 +76,9 @@ public class AppointmentScreenController {
     
     private User currentUser;
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-    private ZoneId newzid = ZoneId.systemDefault();
+    private final ZoneId newzid = ZoneId.systemDefault();
     ObservableList<Appointment> apptList;
+    
         
     public void setAppointmentScreen(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
@@ -97,8 +98,8 @@ public class AppointmentScreenController {
         apptList = FXCollections.observableArrayList();
         populateAppointmentList();
         ApptTableView.getItems().setAll(apptList);
-        System.out.println(currentUser.getUsername());
         
+        //reminder();
         
     }
     
@@ -189,7 +190,7 @@ public class AppointmentScreenController {
     private void populateAppointmentList() {
       
         //ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-        try(
+        try{
             
             
         PreparedStatement statement = DBConnection.getConn().prepareStatement(
@@ -198,7 +199,7 @@ public class AppointmentScreenController {
                 + "FROM appointment, customer "
                 + "WHERE appointment.customerId = customer.customerId "
                 + "ORDER BY `start`");
-            ResultSet rs = statement.executeQuery();){
+            ResultSet rs = statement.executeQuery();
            
             
             while (rs.next()) {
@@ -244,5 +245,7 @@ public class AppointmentScreenController {
             e.printStackTrace();
         }       
     }
+
+    
     
 }

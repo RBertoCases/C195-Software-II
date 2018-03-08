@@ -58,10 +58,6 @@ public class SchedulingApp extends Application {
         //System.out.println(Locale.getDefault()); 
         DBConnection.init();
         connection = DBConnection.getConn();
-        System.out.println(LocalDate.now());
-        System.out.println(LocalTime.now());
-        System.out.println(LocalDateTime.now());
-        System.out.println(ZonedDateTime.now());
         launch(args);
         DBConnection.closeConn();
     }

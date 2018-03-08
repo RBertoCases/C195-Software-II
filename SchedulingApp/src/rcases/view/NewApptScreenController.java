@@ -16,7 +16,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -35,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
@@ -111,6 +111,12 @@ public class NewApptScreenController {
     public boolean isOkClicked() {
         return okClicked;
     }
+    
+    /*@FXML
+    void handleClick(MouseEvent event) {
+    customerSelectTableView.getSelectionModel().clearSelection();
+    }*/
+    
 
     @FXML
     private void handleNewSave(ActionEvent event) {
@@ -173,10 +179,15 @@ public class NewApptScreenController {
         sortedData.comparatorProperty().bind(customerSelectTableView.comparatorProperty());
 
         // 5. Add sorted (and filtered) data to the table.
+        //customerSelectTableView.getSelectionModel().clearSelection();
         customerSelectTableView.setItems(sortedData);
-        customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
+        // should I add button to add to field?
+        try{
+            customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)->customerField.setText(newValue.getCustomerName()));
-        
+        } catch (NullPointerException npe) {
+            System.out.println("nothing to see here.");
+        }
         
 	LocalTime time = LocalTime.of(8, 0);
 	do {

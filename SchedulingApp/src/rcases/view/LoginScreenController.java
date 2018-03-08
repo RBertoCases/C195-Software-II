@@ -6,13 +6,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
+import rcases.model.Appointment;
+import rcases.model.Customer;
 import rcases.model.User;
 
 public class LoginScreenController {
@@ -44,6 +54,10 @@ public class LoginScreenController {
     
     // Reference to the main application.
     private SchedulingApp mainApp;
+    private final ZoneId newzid = ZoneId.systemDefault();
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    User user = new User();
+    ObservableList<Appointment> reminderList;
 
     /**
      * The constructor.
@@ -54,27 +68,28 @@ public class LoginScreenController {
     
     @FXML
     void handleSignInAction(ActionEvent event) {
-        String user = usernameField.getText();   // Collecting the input
+        String userN = usernameField.getText();   // Collecting the input
         String pass = passwordField.getText(); // Collecting the input
         
-        if(user.length()==0 || pass.length()==0)  // Checking for empty field
+        if(userN.length()==0 || pass.length()==0)  // Checking for empty field
             errorMessage.setText("Username or Password is empty. Please fill up both fields");
         else{
             
-            User validUser = validateLogin(user,pass); //validateLogin(user,pass)
+            User validUser = validateLogin(userN,pass); //validateLogin(user,pass)
             if (validUser == null) {
                 errorMessage.setText("Incorrect Login Credentials");
                 return;
             }
+            populateReminderList();
+            reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
-            //else
-            //errorMessage.setText("Incorrect Login Credentials");
+            
         }
     }
         
     User validateLogin(String username,String password) {
-        User user = new User();
+        
         
         try{           
             PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
@@ -103,12 +118,92 @@ public class LoginScreenController {
     
     public void setLogin(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
+        reminderList = FXCollections.observableArrayList();
+        
         ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
         titleText.setText(rb.getString("title"));
         usernameText.setText(rb.getString("username"));
         passwordText.setText(rb.getString("password"));
         signinText.setText(rb.getString("signin"));
         cancelText.setText(rb.getString("cancel"));
-}
+    }
+    
+    /**
+     *
+     */
+    private void reminder() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now.minusMinutes(1));
+        LocalDateTime nowPlus15Min = now.plusMinutes(15);
+        System.out.println(nowPlus15Min);
+        
+        System.out.println(reminderList);
+        FilteredList<Appointment> filteredData = new FilteredList<>(reminderList);
+
+        filteredData.setPredicate(row -> {
+            LocalDateTime rowDate = LocalDateTime.parse(row.getStart(), timeDTF);
+            return rowDate.isAfter(now.minusMinutes(1)) && rowDate.isBefore(nowPlus15Min);
+            }
+        );
+        if (filteredData.isEmpty()) {
+            System.out.println("list is empty");
+        } else {
+            System.out.println(filteredData);
+        }
+        
+    }
+    
+    private void populateReminderList() {
+      
+       System.out.println(user.getUsername());
+        try{
+            
+            
+        PreparedStatement pst = DBConnection.getConn().prepareStatement(
+        "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
+                + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
+                + "FROM appointment, customer "
+                + "WHERE appointment.customerId = customer.customerId AND appointment.createdBy = ? "
+                + "ORDER BY `start`");
+            pst.setString(1, user.getUsername());
+            ResultSet rs = pst.executeQuery();
+           
+            
+            while (rs.next()) {
+                
+                String tAppointmentId = rs.getString("appointment.appointmentId");
+                Timestamp tsStart = rs.getTimestamp("appointment.start");
+                ZonedDateTime newzdtStart = tsStart.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalStart = newzdtStart.withZoneSameInstant(newzid);
+
+                Timestamp tsEnd = rs.getTimestamp("appointment.end");
+                ZonedDateTime newzdtEnd = tsEnd.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalEnd = newzdtEnd.withZoneSameInstant(newzid);
+
+                String tTitle = rs.getString("appointment.title");
+                
+                String tType = rs.getString("appointment.description");
+                
+                Customer tCustomer = new Customer(rs.getString("appointment.customerId"), rs.getString("customer.customerName"));
+                
+                String tUser = rs.getString("appointment.createdBy");
+                      
+                reminderList.add(new Appointment(tAppointmentId, newLocalStart.format(timeDTF), newLocalEnd.format(timeDTF), tTitle, tType, tCustomer, tUser));
+                
+
+            }
+            
+            
+        } catch (SQLException sqe) {
+            System.out.println("Check your SQL");
+            sqe.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something besides the SQL went wrong.");
+            e.printStackTrace();
+        }
+        
+        
+
+    }
 
 }
