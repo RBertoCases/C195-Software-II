@@ -182,13 +182,9 @@ public class NewApptScreenController {
         //customerSelectTableView.getSelectionModel().clearSelection();
         customerSelectTableView.setItems(sortedData);
         // should I add button to add to field?
-        try{
-            customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
+        customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)->customerField.setText(newValue.getCustomerName()));
-        } catch (NullPointerException npe) {
-            System.out.println("nothing to see here.");
-        }
-        
+                
 	LocalTime time = LocalTime.of(8, 0);
 	do {
 		startTimes.add(time.format(timeDTF));
