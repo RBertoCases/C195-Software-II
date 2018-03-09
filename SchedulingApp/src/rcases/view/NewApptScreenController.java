@@ -200,6 +200,7 @@ public class NewApptScreenController {
 	endComboBox.setItems(endTimes);
 	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
 	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
+        
         System.out.println(currentUser.getUsername());
         
     }
@@ -210,6 +211,7 @@ public class NewApptScreenController {
         okClicked = true;
         System.out.println(okClicked);
         selectedAppt = appointment;
+        System.out.println(appointment.toString());
         
         String start = appointment.getStart();
         

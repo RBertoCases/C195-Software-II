@@ -101,6 +101,12 @@ public class Appointment {
             " Customer: " + this.customer.getCustomerName() +
             " Consultant: " + this.user + ".\n" ;
     }
+    
+    /* @Override
+    public String toString() {
+    return "Your upcoming " + this.description + " appointment with " + this.customer.getCustomerName() +
+    " is currently set for " + this.start + ".";
+    }*/
 
     public Customer getCustomer() {
         return customer;

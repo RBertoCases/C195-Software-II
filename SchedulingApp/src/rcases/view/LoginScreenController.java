@@ -17,6 +17,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import rcases.DBConnection;
@@ -148,7 +149,15 @@ public class LoginScreenController {
         if (filteredData.isEmpty()) {
             System.out.println("list is empty");
         } else {
-            System.out.println(filteredData);
+            String type = filteredData.get(0).getDescription();
+            String customer =  filteredData.get(0).getCustomer().getCustomerName();
+            String start = filteredData.get(0).getStart();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointment Reminder");
+            alert.setHeaderText("Reminder: You have the following appointment set for the next 15 minutes.");
+            alert.setContentText("Your upcoming " + type + " appointment with " + customer +
+                " is currently set for " + start + ".");
+            alert.showAndWait();
         }
         
     }
