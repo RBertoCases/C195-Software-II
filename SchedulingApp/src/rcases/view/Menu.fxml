@@ -22,7 +22,7 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleScheduleReport" text="Schedule" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAppointmentTypesByMonth" text="Appointment Types By Month" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReport3" text="Report 3" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReport3" text="Customers by Location" />
             </items>
           </Menu>
         </menus>

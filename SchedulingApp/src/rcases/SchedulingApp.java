@@ -25,7 +25,7 @@ import rcases.view.LoginScreenController;
 import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
 import rcases.view.MenuController;
-import rcases.view.NewApptScreenController;
+import rcases.view.AppointmentEditScreenController;
 
 /**
  *
@@ -167,7 +167,7 @@ public class SchedulingApp extends Application {
         dialogStage.setScene(scene);
 
         // Set the person into the controller.
-        NewApptScreenController controller = loader.getController();
+        AppointmentEditScreenController controller = loader.getController();
         controller.setDialogStage(dialogStage, currentUser);
 
         // Show the dialog and wait until the user closes it
@@ -196,7 +196,7 @@ public class SchedulingApp extends Application {
         dialogStage.setScene(scene);
 
         // Set the person into the controller.
-        NewApptScreenController controller = loader.getController();
+        AppointmentEditScreenController controller = loader.getController();
         controller.setDialogStage(dialogStage, currentUser);
         controller.setAppointment(appointment);
 

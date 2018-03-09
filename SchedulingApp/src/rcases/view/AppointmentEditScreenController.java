@@ -47,7 +47,7 @@ import rcases.model.User;
  *
  * @author rcases
  */
-public class NewApptScreenController {
+public class AppointmentEditScreenController {
 
     @FXML
     private Label apptLabel;
@@ -396,7 +396,7 @@ public class NewApptScreenController {
                     errorMessage += "Appointment times conflict with an existing appointment of yours. Please select a new time.\n";
                 }
         } catch (SQLException ex) {
-            Logger.getLogger(NewApptScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AppointmentEditScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (errorMessage.length() == 0) {
             return true;
