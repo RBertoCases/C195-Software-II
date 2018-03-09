@@ -5,36 +5,116 @@
  */
 package rcases.view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
+import rcases.DBConnection;
 import rcases.SchedulingApp;
 
 /**
  * FXML Controller class
  *
- * @author rober
+ * @author rcases
  */
-public class CustReportScreenController implements Initializable {
+public class CustReportScreenController {
+    
+    @FXML
+    private PieChart pieChart;
+    
+    private SchedulingApp mainApp;
+    
+    private ObservableList<PieChart.Data> pieChartData;
+    
 
+    public CustReportScreenController() {
+        
+        }
+
+    public void setCustReportScreen(SchedulingApp mainApp) {
+        this.mainApp = mainApp;
+    }
+    
+    public static Map<String, Double> customerLocation() {
+		Map<String, Double> locationMap = new HashMap<>();
+
+		String sql = "SELECT city, COUNT(city) AS customerCount "
+				+ "FROM customer AS cu, address AS ad, city AS ci "
+				+ "WHERE cu.addressId = ad.addressId "
+				+ "AND ad.cityId = ci.cityId "
+				+ "GROUP BY city";
+
+		try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
+				+ "FROM customer AS cu, address AS ad, city AS ci "
+				+ "WHERE cu.addressId = ad.addressId "
+				+ "AND ad.cityId = ci.cityId "
+				+ "GROUP BY city"); 
+                    ResultSet rs = pst.executeQuery();
+                    
+
+			while (rs.next()) {
+				String city = rs.getString("city");
+				double count = rs.getInt("customerCount");
+				locationMap.put(city, count);
+			}
+
+		} catch (SQLException sqe) {
+                    System.out.println("Check your SQL");
+                    sqe.printStackTrace();
+                } catch (Exception e) {
+                    System.out.println("Something besides the SQL went wrong.");
+                    e.printStackTrace();
+                }
+		return locationMap;
+	}
+    
     /**
-     * Initializes the controller class.
+     *
+     * @throws InvocationTargetException
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    public void setData() throws InvocationTargetException {
+        Map<String, Double> locationMap = new HashMap<>();
 
-    public void setCustReportScreen(SchedulingApp aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+		String sql = "SELECT city, COUNT(city) AS customerCount "
+				+ "FROM customer AS cu, address AS ad, city AS ci "
+				+ "WHERE cu.addressId = ad.addressId "
+				+ "AND ad.cityId = ci.cityId "
+				+ "GROUP BY city";
 
-    public void setScheduleReportScreen(SchedulingApp aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+		try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
+				+ "FROM customer AS cu, address AS ad, city AS ci "
+				+ "WHERE cu.addressId = ad.addressId "
+				+ "AND ad.cityId = ci.cityId "
+				+ "GROUP BY city"); 
+                    ResultSet rs = pst.executeQuery();
+                    
 
-    public void setApptTypeReportScreen(SchedulingApp aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			while (rs.next()) {
+				String city = rs.getString("city");
+				double count = rs.getInt("customerCount");
+				locationMap.put(city, count);
+			}
+
+		} catch (SQLException sqe) {
+                    System.out.println("Check your SQL");
+                    sqe.printStackTrace();
+                } catch (Exception e) {
+                    System.out.println("Something besides the SQL went wrong.");
+                    e.printStackTrace();
+                }     
+                
+        System.out.println(locationMap);
+	pieChartData = FXCollections.observableArrayList();
+	locationMap.forEach((key, value) -> pieChartData.add(new PieChart.Data(key, value)));
+        System.out.println(pieChartData);
+        pieChart.setData(pieChartData);
+	
     }
     
 }

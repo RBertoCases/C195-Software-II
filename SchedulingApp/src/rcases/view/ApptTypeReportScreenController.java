@@ -5,9 +5,16 @@
  */
 package rcases.view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.text.DateFormatSymbols;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import rcases.SchedulingApp;
 
 /**
@@ -15,18 +22,41 @@ import rcases.SchedulingApp;
  *
  * @author rober
  */
-public class ApptTypeReportScreenController implements Initializable {
+public class ApptTypeReportScreenController {
+    
+    @FXML
+    private StackedBarChart<String, Integer> barChart;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    @FXML
+    private CategoryAxis xAxis;
 
-    public void setApptTypeReportScreen(SchedulingApp aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private final ObservableList<String> monthNames = FXCollections.observableArrayList();
+    private List<String> types;
+    private SchedulingApp mainApp;
+
+    public void setApptTypeReportScreen(SchedulingApp mainApp) {
+        this.mainApp = mainApp;
+        String[] months = DateFormatSymbols.getInstance(Locale.ENGLISH).getMonths();
+        // Convert it to a list and add it to our ObservableList of months.
+        monthNames.addAll(Arrays.asList(months));
+
+        // Assign the month names as categories for the horizontal axis.
+        xAxis.setCategories(monthNames);
+        
+        // Count the number of people having their birthday in a specific month.
+        /* int[] monthCounter = new int[12];
+        for (String t : types) {
+        int month = t.;
+        monthCounter[month]++;
+        }*/
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
+
+        // Create a XYChart.Data object for each month. Add it to the series.
+        /*for (int i = 0; i < monthCounter.length; i++) {
+        series.getData().add(new XYChart.Data<>(monthNames.get(i), monthCounter[i]));
+        }*/
+
+        barChart.getData().add(series);
     }
     
 }

@@ -24,6 +24,7 @@ import rcases.view.MenuController;
 import rcases.view.AppointmentEditScreenController;
 import rcases.view.ApptTypeReportScreenController;
 import rcases.view.CustReportScreenController;
+import static rcases.view.CustReportScreenController.customerLocation;
 import rcases.view.ScheduleReportController;
 
 /**
@@ -50,6 +51,7 @@ public class SchedulingApp extends Application {
         //showMenu(null);
         //showCustomerScreen();
         //showAppointmentScreen();
+        
         
     }
     
@@ -242,6 +244,7 @@ public class SchedulingApp extends Application {
             // Give the controller access to the main app.
             ApptTypeReportScreenController controller = loader.getController();
             controller.setApptTypeReportScreen(this);
+           
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -261,6 +264,7 @@ public class SchedulingApp extends Application {
             // Give the controller access to the main app.
             CustReportScreenController controller = loader.getController();
             controller.setCustReportScreen(this);
+            controller.setData();
 
         } catch (IOException e) {
             e.printStackTrace();

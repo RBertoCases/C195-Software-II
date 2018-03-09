@@ -1,11 +1,17 @@
 package rcases.view;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
+import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.User;
 
@@ -63,5 +69,7 @@ public class MenuController {
     void handleCustReport(ActionEvent event) {
         mainApp.showCustReportScreen();
     }
+    
+    
 
 }
