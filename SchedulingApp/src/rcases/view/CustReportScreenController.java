@@ -8,6 +8,7 @@ package rcases.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
+import rcases.SchedulingApp;
 
 /**
  * FXML Controller class
@@ -23,5 +24,17 @@ public class CustReportScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    public void setCustReportScreen(SchedulingApp aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setScheduleReportScreen(SchedulingApp aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setApptTypeReportScreen(SchedulingApp aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

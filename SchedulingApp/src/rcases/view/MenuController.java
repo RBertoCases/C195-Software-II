@@ -56,12 +56,12 @@ public class MenuController {
     
     @FXML
     void handleAppointmentTypesByMonth(ActionEvent event) {
-        mainApp.showAppointmentTypesByMonthScreen();
+        mainApp.showApptTypeReportScreen();
     }
     
     @FXML
-    void handleMenuReport3(ActionEvent event) {
-        Platform.exit();
+    void handleCustReport(ActionEvent event) {
+        mainApp.showCustReportScreen();
     }
 
 }

@@ -7,10 +7,6 @@ package rcases;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +22,9 @@ import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
 import rcases.view.MenuController;
 import rcases.view.AppointmentEditScreenController;
+import rcases.view.ApptTypeReportScreenController;
+import rcases.view.CustReportScreenController;
+import rcases.view.ScheduleReportController;
 
 /**
  *
@@ -38,6 +37,7 @@ public class SchedulingApp extends Application {
     private AnchorPane loginScreen;
     private AnchorPane customerScreen;
     private AnchorPane appointmentScreen;
+    private AnchorPane custReportScreen;
     Locale locale = Locale.getDefault();
     private static Connection connection;
 
@@ -211,11 +211,60 @@ public class SchedulingApp extends Application {
     }
 
     public void showScheduleReportScreen() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+       try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/ScheduleReportScreen.fxml"));
+            AnchorPane scheduleReportScreen = (AnchorPane) loader.load();
 
-    public void showAppointmentTypesByMonthScreen() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            // Set person overview into the center of root layout.
+            menu.setCenter(scheduleReportScreen);
+
+            // Give the controller access to the main app.
+            ScheduleReportController controller = loader.getController();
+            controller.setScheduleReportScreen(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+    }
+        
+    public void showApptTypeReportScreen() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/ApptTypeReportScreen.fxml"));
+            AnchorPane apptTypeReportScreen = (AnchorPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            menu.setCenter(apptTypeReportScreen);
+
+            // Give the controller access to the main app.
+            ApptTypeReportScreenController controller = loader.getController();
+            controller.setApptTypeReportScreen(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void showCustReportScreen() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/CustReportScreen.fxml"));
+            AnchorPane custReportScreen = (AnchorPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            menu.setCenter(custReportScreen);
+
+            // Give the controller access to the main app.
+            CustReportScreenController controller = loader.getController();
+            controller.setCustReportScreen(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 }
