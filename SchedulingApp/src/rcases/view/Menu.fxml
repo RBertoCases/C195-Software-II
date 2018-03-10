@@ -14,15 +14,10 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleMenuAppointments" text="Appointments" />
               <MenuItem mnemonicParsing="false" onAction="#handleMenuCustomers" text="Customers" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReports" text="Reports" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="logoutUser" mnemonicParsing="false" onAction="#handleMenuLogout" text="Logout" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Reports">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleScheduleReport" text="Schedule" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleAppointmentTypesByMonth" text="Appointment Types By Month" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleCustReport" text="Customers by Location" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMenuClose" text="Close" />
             </items>
           </Menu>
         </menus>

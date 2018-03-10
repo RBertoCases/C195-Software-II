@@ -6,12 +6,12 @@
 package rcases;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -23,9 +23,7 @@ import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
 import rcases.view.MenuController;
 import rcases.view.AppointmentEditScreenController;
-import rcases.view.ApptTypeReportScreenController;
-import rcases.view.CustReportScreenController;
-import rcases.view.ScheduleReportController;
+import rcases.view.ReportsController;
 
 /**
  *
@@ -39,6 +37,7 @@ public class SchedulingApp extends Application {
     private AnchorPane customerScreen;
     private AnchorPane appointmentScreen;
     private AnchorPane custReportScreen;
+    private TabPane tabPane;
     Locale locale = Locale.getDefault();
     private static Connection connection;
 
@@ -211,60 +210,20 @@ public class SchedulingApp extends Application {
         return false;
         }
     }
-
-    public void showScheduleReportScreen() {
-       try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/ScheduleReportScreen.fxml"));
-            AnchorPane scheduleReportScreen = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-            menu.setCenter(scheduleReportScreen);
-
-            // Give the controller access to the main app.
-            ScheduleReportController controller = loader.getController();
-            controller.setScheduleReportScreen(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } 
-    }
-        
-    public void showApptTypeReportScreen() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/ApptTypeReportScreen.fxml"));
-            AnchorPane apptTypeReportScreen = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-            menu.setCenter(apptTypeReportScreen);
-
-            // Give the controller access to the main app.
-            ApptTypeReportScreenController controller = loader.getController();
-            controller.setApptTypeReportScreen(this);
-           
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
-    public void showCustReportScreen() throws InvocationTargetException {
+    public void showReports() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/CustReportScreen.fxml"));
-            AnchorPane custReportScreen = (AnchorPane) loader.load();
+            loader.setLocation(SchedulingApp.class.getResource("/rcases/view/Reports.fxml"));
+            TabPane tabPane = (TabPane) loader.load();
 
             // Set person overview into the center of root layout.
-            menu.setCenter(custReportScreen);
+            menu.setCenter(tabPane);
 
             // Give the controller access to the main app.
-            CustReportScreenController controller = loader.getController();
-            controller.setCustReportScreen(this);
-            controller.setData();
+            ReportsController controller = loader.getController();
+            controller.setReports(this);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -40,9 +40,7 @@ import rcases.model.User;
  * @author rcases
  */
 public class AppointmentScreenController {
-    
-    private SchedulingApp mainApp;
-    
+     
     @FXML
     private TableView<Appointment> ApptTableView;
 
@@ -73,6 +71,7 @@ public class AppointmentScreenController {
     @FXML
     private ToggleGroup apptToggleGroup;
     
+    private SchedulingApp mainApp;
     private User currentUser;
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     private final ZoneId newzid = ZoneId.systemDefault();
@@ -96,7 +95,7 @@ public class AppointmentScreenController {
         
         apptList = FXCollections.observableArrayList();
         populateAppointmentList();
-        ApptTableView.getItems().setAll(apptList);
+        ApptTableView.getItems().setAll(apptList); //lower that case!
         
         //reminder();
         

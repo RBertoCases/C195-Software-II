@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,16 +26,16 @@ public class MenuController {
     private SchedulingApp mainApp;
     private User currentUser;
     
+    public MenuController() {
+        
+    }
+    
     public void setMenu(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
         this.currentUser = currentUser;
         
         logoutUser.setText("Logout: " + currentUser.getUsername());
-    }
-    
-    public MenuController() {
-    }
-    
+    }    
 
     @FXML
     void handleMenuAppointments(ActionEvent event) {
@@ -47,6 +48,12 @@ public class MenuController {
     }
     
     @FXML
+    void handleMenuReports(ActionEvent event) {
+        mainApp.showReports();
+
+    }
+    
+    @FXML
     void handleMenuLogout(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Logout");
@@ -55,22 +62,20 @@ public class MenuController {
             .filter(response -> response == ButtonType.OK)
             .ifPresent(response -> mainApp.showLoginScreen());
     }
-
-    @FXML
-    void handleScheduleReport(ActionEvent event) {
-        mainApp.showScheduleReportScreen();
-    }
     
     @FXML
-    void handleAppointmentTypesByMonth(ActionEvent event) {
-        mainApp.showApptTypeReportScreen();
-    }
-    
-    @FXML
-    void handleCustReport(ActionEvent event) throws InvocationTargetException {
-        mainApp.showCustReportScreen();
-    }
-    
-    
+    void handleMenuClose(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Close");
+            alert.setHeaderText("Are you sure you want close the program?");
+            alert.showAndWait()
+            .filter(response -> response == ButtonType.OK)
+            .ifPresent((ButtonType response) -> {
+                Platform.exit();
+                System.exit(0);
+                }
+            );
+            
+    }    
 
 }
