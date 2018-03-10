@@ -42,37 +42,31 @@ public class CustReportScreenController {
     }
     
     public static Map<String, Double> customerLocation() {
-		Map<String, Double> locationMap = new HashMap<>();
+        Map<String, Double> locationMap = new HashMap<>();
 
-		String sql = "SELECT city, COUNT(city) AS customerCount "
-				+ "FROM customer AS cu, address AS ad, city AS ci "
-				+ "WHERE cu.addressId = ad.addressId "
-				+ "AND ad.cityId = ci.cityId "
-				+ "GROUP BY city";
+        try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
+                + "FROM customer AS cu, address AS ad, city AS ci "
+                + "WHERE cu.addressId = ad.addressId "
+                + "AND ad.cityId = ci.cityId "
+                + "GROUP BY city"); 
+            ResultSet rs = pst.executeQuery();
 
-		try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
-				+ "FROM customer AS cu, address AS ad, city AS ci "
-				+ "WHERE cu.addressId = ad.addressId "
-				+ "AND ad.cityId = ci.cityId "
-				+ "GROUP BY city"); 
-                    ResultSet rs = pst.executeQuery();
-                    
 
-			while (rs.next()) {
-				String city = rs.getString("city");
-				double count = rs.getInt("customerCount");
-				locationMap.put(city, count);
-			}
+            while (rs.next()) {
+                String city = rs.getString("city");
+                double count = rs.getInt("customerCount");
+                locationMap.put(city, count);
+            }
 
-		} catch (SQLException sqe) {
-                    System.out.println("Check your SQL");
-                    sqe.printStackTrace();
-                } catch (Exception e) {
-                    System.out.println("Something besides the SQL went wrong.");
-                    e.printStackTrace();
-                }
-		return locationMap;
-	}
+        } catch (SQLException sqe) {
+            System.out.println("Check your SQL");
+            sqe.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something besides the SQL went wrong.");
+            e.printStackTrace();
+        }
+            return locationMap;
+    }
     
     /**
      *
@@ -81,33 +75,27 @@ public class CustReportScreenController {
     public void setData() throws InvocationTargetException {
         Map<String, Double> locationMap = new HashMap<>();
 
-		String sql = "SELECT city, COUNT(city) AS customerCount "
-				+ "FROM customer AS cu, address AS ad, city AS ci "
-				+ "WHERE cu.addressId = ad.addressId "
-				+ "AND ad.cityId = ci.cityId "
-				+ "GROUP BY city";
+            try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
+                + "FROM customer AS cu, address AS ad, city AS ci "
+                + "WHERE cu.addressId = ad.addressId "
+                + "AND ad.cityId = ci.cityId "
+                + "GROUP BY city"); 
+                ResultSet rs = pst.executeQuery();
 
-		try { PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT city, COUNT(city) AS customerCount "
-				+ "FROM customer AS cu, address AS ad, city AS ci "
-				+ "WHERE cu.addressId = ad.addressId "
-				+ "AND ad.cityId = ci.cityId "
-				+ "GROUP BY city"); 
-                    ResultSet rs = pst.executeQuery();
-                    
 
-			while (rs.next()) {
-				String city = rs.getString("city");
-				double count = rs.getInt("customerCount");
-				locationMap.put(city, count);
-			}
+                while (rs.next()) {
+                        String city = rs.getString("city");
+                        double count = rs.getInt("customerCount");
+                        locationMap.put(city, count);
+                }
 
-		} catch (SQLException sqe) {
-                    System.out.println("Check your SQL");
-                    sqe.printStackTrace();
-                } catch (Exception e) {
-                    System.out.println("Something besides the SQL went wrong.");
-                    e.printStackTrace();
-                }     
+            } catch (SQLException sqe) {
+                System.out.println("Check your SQL");
+                sqe.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("Something besides the SQL went wrong.");
+                e.printStackTrace();
+            }     
                 
         System.out.println(locationMap);
 	pieChartData = FXCollections.observableArrayList();

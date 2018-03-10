@@ -6,6 +6,7 @@
 package rcases;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.Locale;
 import javafx.application.Application;
@@ -24,7 +25,6 @@ import rcases.view.MenuController;
 import rcases.view.AppointmentEditScreenController;
 import rcases.view.ApptTypeReportScreenController;
 import rcases.view.CustReportScreenController;
-import static rcases.view.CustReportScreenController.customerLocation;
 import rcases.view.ScheduleReportController;
 
 /**
@@ -251,7 +251,7 @@ public class SchedulingApp extends Application {
         }
     }
     
-    public void showCustReportScreen() {
+    public void showCustReportScreen() throws InvocationTargetException {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();

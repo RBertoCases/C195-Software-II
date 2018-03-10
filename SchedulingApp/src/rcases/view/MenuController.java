@@ -1,5 +1,6 @@
 package rcases.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,7 +67,7 @@ public class MenuController {
     }
     
     @FXML
-    void handleCustReport(ActionEvent event) {
+    void handleCustReport(ActionEvent event) throws InvocationTargetException {
         mainApp.showCustReportScreen();
     }
     
