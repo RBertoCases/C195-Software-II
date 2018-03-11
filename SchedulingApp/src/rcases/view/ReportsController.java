@@ -9,28 +9,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import rcases.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
@@ -51,10 +45,22 @@ public class ReportsController {
     private Tab schedTab;
 
     @FXML
-    private TableView<?> schedTableView;
+    private TableView<Appointment> schedTableView;
 
     @FXML
-    private TableColumn<?, ?> consultantColumn;
+    private TableColumn<Appointment, ZonedDateTime> startSchedColumn;
+
+    @FXML
+    private TableColumn<Appointment, LocalDateTime> endSchedColumn;
+    
+    @FXML
+    private TableColumn<Appointment, String> titleSchedColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> typeSchedColumn;
+
+    @FXML
+    private TableColumn<Appointment, Customer> customerSchedColumn;
 
     @FXML
     private Tab apptTab;
@@ -91,7 +97,10 @@ public class ReportsController {
     
     private SchedulingApp mainApp;
     private ObservableList<AppointmentReport> apptList;
+    private ObservableList<Appointment> schedule;
     private ObservableList<PieChart.Data> pieChartData;
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    private final ZoneId newzid = ZoneId.systemDefault();
     
     public ReportsController() {
         
@@ -100,9 +109,15 @@ public class ReportsController {
     public void setReports(SchedulingApp mainApp) {
         this.mainApp = mainApp;
         tabPane.getSelectionModel().select(apptTab);
-        populateApptList();
+        populateApptTypeList();
         populateCustPie();
+        populateSchedule();
         
+        startSchedColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        endSchedColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        titleSchedColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        typeSchedColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        customerSchedColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         
         monthColumn.setCellValueFactory(new PropertyValueFactory<>("Month"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("Type"));
@@ -111,7 +126,7 @@ public class ReportsController {
     
     
     
-    private void populateApptList() {
+    private void populateApptTypeList() {
         apptList = FXCollections.observableArrayList();
         
         try{
@@ -144,7 +159,7 @@ public class ReportsController {
         } catch (Exception e) {
             System.out.println("Something besides the SQL went wrong.");
         }
-        System.out.println(apptList);
+        //System.out.println(apptList);
         apptTableView.getItems().setAll(apptList);
     }
     
@@ -174,11 +189,60 @@ public class ReportsController {
                 e.printStackTrace();
             }     
                 
-        System.out.println(locationMap);
+        //System.out.println(locationMap);
 	pieChartData = FXCollections.observableArrayList();
 	locationMap.forEach((key, value) -> pieChartData.add(new PieChart.Data(key, value)));
-        System.out.println(pieChartData);
+        //System.out.println(pieChartData);
         pieChart.setData(pieChartData);
+    }
+    
+    private void populateSchedule() {
+      
+        schedule = FXCollections.observableArrayList();
+        
+        try{
+            
+            
+        PreparedStatement statement = DBConnection.getConn().prepareStatement(
+        "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
+                + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
+                + "FROM appointment, customer "
+                + "WHERE appointment.customerId = customer.customerId AND appointment.`start` >= CURRENT_DATE AND appointment.createdBy = \"test\""
+                + "ORDER BY `start`");
+            ResultSet rs = statement.executeQuery();
+           
+            
+            while (rs.next()) {
+                
+                String tAppointmentId = rs.getString("appointment.appointmentId");
+                Timestamp tsStart = rs.getTimestamp("appointment.start");
+                ZonedDateTime newzdtStart = tsStart.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalStart = newzdtStart.withZoneSameInstant(newzid);
+
+                Timestamp tsEnd = rs.getTimestamp("appointment.end");
+                ZonedDateTime newzdtEnd = tsEnd.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        	ZonedDateTime newLocalEnd = newzdtEnd.withZoneSameInstant(newzid);
+
+                String tTitle = rs.getString("appointment.title");
+                
+                String tType = rs.getString("appointment.description");
+                
+                Customer tCustomer = new Customer(rs.getString("appointment.customerId"), rs.getString("customer.customerName"));
+                
+                String tUser = rs.getString("appointment.createdBy");
+                      
+                schedule.add(new Appointment(tAppointmentId, newLocalStart.format(timeDTF), newLocalEnd.format(timeDTF), tTitle, tType, tCustomer, tUser));
+                
+
+            }
+            
+        } catch (SQLException sqe) {
+            System.out.println("Check your SQL");
+            sqe.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Something besides the SQL went wrong.");
+        }
+        schedTableView.getItems().setAll(schedule);
     }
 
     

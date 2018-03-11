@@ -9,15 +9,17 @@
 
 <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rcases.view.ReportsController">
   <tabs>
-    <Tab fx:id="schedTab" text="Schedule by Consultant">
+    <Tab fx:id="schedTab" text="Your Schedule">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TableView fx:id="schedTableView" layoutX="178.0" layoutY="86.0" prefHeight="371.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="consultantColumn" prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                        <TableColumn prefWidth="75.0" text="Column X" />
+                      <TableColumn fx:id="startSchedColumn" prefWidth="120.0" text="Start" />
+                      <TableColumn fx:id="endSchedColumn" prefWidth="120.0" text="End" />
+                        <TableColumn fx:id="titleSchedColumn" prefWidth="120.0" text="Title" />
+                        <TableColumn fx:id="typeSchedColumn" minWidth="75.0" prefWidth="120.0" text="Type" />
+                        <TableColumn fx:id="customerSchedColumn" prefWidth="120.0" text="Customer" />
                     </columns>
                   </TableView>
                </children>
