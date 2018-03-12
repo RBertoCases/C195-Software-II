@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -45,7 +47,14 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <PieChart fx:id="pieChart" prefHeight="371.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <BarChart fx:id="barChart" layoutX="44.0" layoutY="-29.0" legendVisible="false" prefHeight="371.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                      <CategoryAxis label="Location" side="BOTTOM" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" label="Customers" minorTickLength="0.0" side="LEFT" tickLabelRotation="-93.5" tickUnit="1.0" />
+                    </yAxis>
+                  </BarChart>
                </children>
             </AnchorPane>
         </content>

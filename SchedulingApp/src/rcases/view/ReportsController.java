@@ -19,7 +19,12 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -82,7 +87,13 @@ public class ReportsController {
     private Tab custTab;
     
     @FXML
-    private PieChart pieChart;
+    private BarChart barChart;
+    
+    @FXML
+    private CategoryAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
 
     /*@FXML
     private TableView<?> custTableView;
@@ -112,13 +123,11 @@ public class ReportsController {
         this.mainApp = mainApp;
         this.currentUser = currentUser;
         
-        tabPane.getSelectionModel().select(schedTab);
+        tabPane.getSelectionModel().select(custTab);
         
         populateApptTypeList();
         populateCustPie();
-        populateSchedule();
-        
-        
+        populateSchedule();      
         
         startSchedColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endSchedColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -129,6 +138,8 @@ public class ReportsController {
         monthColumn.setCellValueFactory(new PropertyValueFactory<>("Month"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("Type"));
         typeAmount.setCellValueFactory(new PropertyValueFactory<>("Amount"));
+        
+        
     }
     
     
@@ -171,7 +182,9 @@ public class ReportsController {
     }
     
     private void populateCustPie() {
-        Map<String, Double> locationMap = new HashMap<>();
+        //Map<String, Integer> locationMap = new HashMap<>();
+        ObservableList<XYChart.Data<String, Integer>> data = FXCollections.observableArrayList();
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
 
             try { PreparedStatement pst = DBConnection.getConn().prepareStatement(
                   "SELECT city.city, COUNT(city) "
@@ -184,8 +197,8 @@ public class ReportsController {
 
                 while (rs.next()) {
                         String city = rs.getString("city");
-                        double count = rs.getInt("COUNT(city)");
-                        locationMap.put(city, count);
+                        Integer count = rs.getInt("COUNT(city)");
+                        data.add(new Data<String, Integer>(city, count));
                 }
 
             } catch (SQLException sqe) {
@@ -197,10 +210,12 @@ public class ReportsController {
             }     
                 
         //System.out.println(locationMap);
-	pieChartData = FXCollections.observableArrayList();
-	locationMap.forEach((key, value) -> pieChartData.add(new PieChart.Data(key, value)));
+	//pieChartData = FXCollections.observableArrayList();
+	//locationMap.forEach((key, value) -> pieChartData.add(new PieChart.Data(key, value)));
         //System.out.println(pieChartData);
-        pieChart.setData(pieChartData);
+        //pieChart.setData(pieChartData);
+        series.getData().addAll(data);
+        barChart.getData().add(series);
     }
     
     private void populateSchedule() {

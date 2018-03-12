@@ -85,6 +85,7 @@ public class LoginScreenController {
             reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
+            //mainApp.showReports(validUser);
             
         }
     }
