@@ -49,25 +49,25 @@ public class SchedulingApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Scheduling Application - RCases");
         showLoginScreen();
-        //showMenu(null);
-        //showCustomerScreen();
-        //showAppointmentScreen();
-        
-        
     }
-    
+   
+    /**
+     * calls inti() for database and logger
+     * runs args then calls closeConn() to close database connections
+     * @param args 
+     */
     public static void main(String[] args) {
         //Locale.setDefault(new Locale("fr", "FR"));
         //System.out.println(Locale.getDefault()); 
         DBConnection.init();
-        LoggerUtil.init();
         connection = DBConnection.getConn();
+        LoggerUtil.init();
         launch(args);
         DBConnection.closeConn();
     }
     
     /**
-     * Initializes the root layout.
+     * Initializes the root menu.
      * @param currentUser
      */
     public void showMenu(User currentUser) {
@@ -91,6 +91,9 @@ public class SchedulingApp extends Application {
         }
     }
     
+    /**
+     * Calls login screen
+     */
     public void showLoginScreen() {
         try {
             // Load Login Screen.
@@ -112,7 +115,10 @@ public class SchedulingApp extends Application {
         }
     }
     
-    
+    /**
+     * Calls Customer Screen and pass currentUser
+     * @param currentUser 
+     */
     public void showCustomerScreen(User currentUser) {
         try {
             // Load person overview.
@@ -132,10 +138,10 @@ public class SchedulingApp extends Application {
         }
     }
     
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
+    /**
+     * Calls Appointment Screen and passes in currentUser
+     * @param currentUser 
+     */
     public void showAppointmentScreen(User currentUser) {
         try {
             // Load person overview.
@@ -155,6 +161,12 @@ public class SchedulingApp extends Application {
         }
     }
     
+    /**
+     * Calls New Appointment Screen, passes currentUser,
+     * and returns false, so subsequent save is done as new Appointment
+     * @param currentUser
+     * @return 
+     */
     public boolean showNewApptScreen(User currentUser) {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
