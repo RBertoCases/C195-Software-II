@@ -22,7 +22,7 @@ public class LoggerUtil {
  
  public static void init(){
     try {
-    handler = new FileHandler("userLog.txt", false);
+    handler = new FileHandler("SchedulingApp-Userlog.%u.%g.txt", 1024 * 1024, 10, true);
     } catch (SecurityException | IOException e) {
         e.printStackTrace();
         }

@@ -89,7 +89,7 @@ public class LoginScreenController {
             reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
-            LOGGER.log(Level.INFO, "User: {0}", validUser.getUsername());
+            LOGGER.log(Level.INFO, "{0} logged in", validUser.getUsername());
             
             
         }
