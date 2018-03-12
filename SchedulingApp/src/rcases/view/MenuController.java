@@ -49,7 +49,7 @@ public class MenuController {
     
     @FXML
     void handleMenuReports(ActionEvent event) {
-        mainApp.showReports();
+        mainApp.showReports(currentUser);
 
     }
     

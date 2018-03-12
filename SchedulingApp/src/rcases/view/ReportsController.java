@@ -30,6 +30,7 @@ import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.AppointmentReport;
 import rcases.model.Customer;
+import rcases.model.User;
 
 /**
  * FXML Controller class
@@ -101,17 +102,23 @@ public class ReportsController {
     private ObservableList<PieChart.Data> pieChartData;
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     private final ZoneId newzid = ZoneId.systemDefault();
+    private User currentUser;
     
     public ReportsController() {
         
     }
     
-    public void setReports(SchedulingApp mainApp) {
+    public void setReports(SchedulingApp mainApp, User currentUser) {
         this.mainApp = mainApp;
-        tabPane.getSelectionModel().select(apptTab);
+        this.currentUser = currentUser;
+        
+        tabPane.getSelectionModel().select(schedTab);
+        
         populateApptTypeList();
         populateCustPie();
         populateSchedule();
+        
+        
         
         startSchedColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endSchedColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -200,16 +207,18 @@ public class ReportsController {
       
         schedule = FXCollections.observableArrayList();
         
+        
         try{
             
             
-        PreparedStatement statement = DBConnection.getConn().prepareStatement(
+        PreparedStatement pst = DBConnection.getConn().prepareStatement(
         "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
                 + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
                 + "FROM appointment, customer "
-                + "WHERE appointment.customerId = customer.customerId AND appointment.`start` >= CURRENT_DATE AND appointment.createdBy = \"test\""
+                + "WHERE appointment.customerId = customer.customerId AND appointment.`start` >= CURRENT_DATE AND appointment.createdBy = ?"
                 + "ORDER BY `start`");
-            ResultSet rs = statement.executeQuery();
+            pst.setString(1, currentUser.getUsername());
+            ResultSet rs = pst.executeQuery();
            
             
             while (rs.next()) {

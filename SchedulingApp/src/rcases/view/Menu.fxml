@@ -12,14 +12,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleMenuAppointments" text="Appointments" />
-              <MenuItem mnemonicParsing="false" onAction="#handleMenuCustomers" text="Customers" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReports" text="Reports" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="logoutUser" mnemonicParsing="false" onAction="#handleMenuLogout" text="Logout" />
                   <MenuItem mnemonicParsing="false" onAction="#handleMenuClose" text="Close" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleMenuAppointments" text="Appointments" />
+              <MenuItem mnemonicParsing="false" onAction="#handleMenuCustomers" text="Customers" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMenuReports" text="Reports" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

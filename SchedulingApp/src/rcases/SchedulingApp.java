@@ -211,7 +211,7 @@ public class SchedulingApp extends Application {
         }
     }
     
-    public void showReports() {
+    public void showReports(User currentUser) {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -223,7 +223,7 @@ public class SchedulingApp extends Application {
 
             // Give the controller access to the main app.
             ReportsController controller = loader.getController();
-            controller.setReports(this);
+            controller.setReports(this, currentUser);
 
         } catch (IOException e) {
             e.printStackTrace();
