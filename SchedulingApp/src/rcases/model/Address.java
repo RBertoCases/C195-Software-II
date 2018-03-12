@@ -6,8 +6,6 @@
  */
 package rcases.model;
 
-import java.util.Date;
-
 /**
  *
  * @author rcases

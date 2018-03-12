@@ -9,13 +9,13 @@ package rcases.model;
  *
  * @author rcases
  */
+
+//Class created to have object to place in list for Appointment Types by Month Report
 public class AppointmentReport {
     
     private String month;
     private String amount;
-    private String type;
-
-    
+    private String type;    
 
     /**
      *
@@ -53,6 +53,7 @@ public class AppointmentReport {
         this.amount = amount;
     }
     
+    //for troubleshooting during development
     @Override
     public String toString() {
     return "Month: " + this.month +

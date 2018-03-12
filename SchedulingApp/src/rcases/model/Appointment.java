@@ -25,15 +25,6 @@ public class Appointment {
     public Appointment(String appointmentId) {
         this.appointmentId = appointmentId;
     }
-
-    /*public Appointment(String appointmentId, Customer customer, String title, String description, String start, String end) {
-    this.appointmentId = appointmentId;
-    this.customer = customer;
-    this.title = title;
-    this.description = description;
-    this.start = start;
-    this.end = end;
-    }*/
     
     public Appointment(String appointmentId, String start, String end, String title, String description, Customer customer, String user) {
         this.appointmentId = appointmentId;    
@@ -91,22 +82,18 @@ public class Appointment {
         this.end = end;
     }
     
+    
+    //toString Override only used in troubleshooting during development
     @Override
     public String toString() {
-    return "ID: " + this.appointmentId +
-            " Start: " + this.start +
-            " End: " + this.end + 
-            " Title: " + this.title +
-            " Type: " + this.description +
-            " Customer: " + this.customer.getCustomerName() +
-            " Consultant: " + this.user + ".\n" ;
+        return "ID: " + this.appointmentId +
+                " Start: " + this.start +
+                " End: " + this.end +
+                " Title: " + this.title +
+                " Type: " + this.description +
+                " Customer: " + this.customer.getCustomerName() +
+                " Consultant: " + this.user + ".\n" ;
     }
-    
-    /* @Override
-    public String toString() {
-    return "Your upcoming " + this.description + " appointment with " + this.customer.getCustomerName() +
-    " is currently set for " + this.start + ".";
-    }*/
 
     public Customer getCustomer() {
         return customer;
