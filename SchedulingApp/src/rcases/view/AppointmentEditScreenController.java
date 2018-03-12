@@ -384,7 +384,7 @@ public class AppointmentEditScreenController {
                 errorMessage += "End time must be after Start time.\n";
             } else try {
                 if (hasApptConflict(startUTC, endUTC)){
-                    errorMessage += "Appointment times conflict with an existing appointment of yours. Please select a new time.\n";
+                    errorMessage += "Appointment times conflict with Consultant's existing appointments. Please select a new time.\n";
                 }
         } catch (SQLException ex) {
             Logger.getLogger(AppointmentEditScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -425,7 +425,7 @@ public class AppointmentEditScreenController {
 	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
         pst.setTimestamp(3, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(4, Timestamp.valueOf(newEnd.toLocalDateTime()));
-        pst.setString(5, currentUser.getUsername());
+        pst.setString(5, selectedAppt.getUser());
         pst.setString(6, apptID);
         ResultSet rs = pst.executeQuery();
            
