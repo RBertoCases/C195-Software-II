@@ -35,7 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import rcases.DBConnection;
+import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;

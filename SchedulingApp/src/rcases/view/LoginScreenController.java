@@ -20,7 +20,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import rcases.DBConnection;
+import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;
@@ -85,7 +85,6 @@ public class LoginScreenController {
             reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
-            //mainApp.showReports(validUser);
             
         }
     }

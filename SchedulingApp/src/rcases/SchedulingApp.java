@@ -5,6 +5,7 @@
  */
 package rcases;
 
+import rcases.util.DBConnection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Locale;

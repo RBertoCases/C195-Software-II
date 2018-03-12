@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
-import rcases.DBConnection;
+import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.User;
 

@@ -20,7 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import rcases.DBConnection;
+import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.City;
 import rcases.model.Customer;

@@ -28,7 +28,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import rcases.DBConnection;
+import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.AppointmentReport;
