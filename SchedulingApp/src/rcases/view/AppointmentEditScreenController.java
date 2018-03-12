@@ -53,9 +53,6 @@ public class AppointmentEditScreenController {
 
     @FXML
     private TextField titleField;
-    
-    @FXML
-    private TextField customerField;
 
     @FXML
     private ComboBox<String> startComboBox;
@@ -180,9 +177,6 @@ public class AppointmentEditScreenController {
         // 5. Add sorted (and filtered) data to the table.
         //customerSelectTableView.getSelectionModel().clearSelection();
         customerSelectTableView.setItems(sortedData);
-        // should I add button to add to field?
-        customerSelectTableView.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue)->customerField.setText(newValue.getCustomerName()));
                 
 	LocalTime time = LocalTime.of(8, 0);
 	do {
@@ -271,9 +265,7 @@ public class AppointmentEditScreenController {
             } catch (SQLException ex) {
             ex.printStackTrace();
             }
-        
-        //INSERT INTO U04Esb.appointment (customerId, title, description, location, contact, url, `start`, `end`, createDate, createdBy, lastUpdate, lastUpdateBy) 
-	//VALUES (14, 'test14', 'test', ' ', '', ' ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'test', DEFAULT, 'test')
+
     }
     
     private void updateAppt() {
