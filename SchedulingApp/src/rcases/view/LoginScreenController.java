@@ -58,6 +58,7 @@ public class LoginScreenController {
     
     // Reference to the main application.
     private SchedulingApp mainApp;
+    ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
     private final ZoneId newzid = ZoneId.systemDefault();
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     User user = new User();
@@ -77,12 +78,12 @@ public class LoginScreenController {
         String pass = passwordField.getText(); // Collecting the input
         
         if(userN.length()==0 || pass.length()==0)  // Checking for empty field
-            errorMessage.setText("Username or Password is empty. Please fill up both fields");
+            errorMessage.setText(rb.getString("empty"));
         else{
             
             User validUser = validateLogin(userN,pass); //validateLogin(user,pass)
             if (validUser == null) {
-                errorMessage.setText("Incorrect Login Credentials");
+                errorMessage.setText(rb.getString("incorrect"));
                 return;
             }
             populateReminderList();
@@ -127,7 +128,6 @@ public class LoginScreenController {
 	this.mainApp = mainApp;
         reminderList = FXCollections.observableArrayList();
         
-        ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
         titleText.setText(rb.getString("title"));
         usernameText.setText(rb.getString("username"));
         passwordText.setText(rb.getString("password"));
@@ -153,7 +153,7 @@ public class LoginScreenController {
             }
         );
         if (filteredData.isEmpty()) {
-            System.out.println("list is empty");
+            System.out.println("No reminders");
         } else {
             String type = filteredData.get(0).getDescription();
             String customer =  filteredData.get(0).getCustomer().getCustomerName();

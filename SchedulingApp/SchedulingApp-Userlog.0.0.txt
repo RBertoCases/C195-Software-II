@@ -1,2 +1,4 @@
 Mar 12, 2018 1:07:01 PM rcases.view.LoginScreenController handleSignInAction
 INFO: User: test logged in
+Mar 12, 2018 2:07:15 PM rcases.view.LoginScreenController handleSignInAction
+INFO: test logged in
