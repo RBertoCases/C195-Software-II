@@ -13,7 +13,14 @@ import java.util.logging.SimpleFormatter;
 
 /**
  *
- * @author rober
+ * @author rcases
+ * Handles initialization of Logger class and gets called in main method
+ * FileHandler is set to create a log file in in the base of the project folder
+ * If the file already exists, it will append logs to the that file unless
+ * it is being used by another process, has reached the set size limit.
+ * In which case, it will create a new file to write to.
+ * There is a file count limit of 10. After 10th file,
+ * Logger will rotate back to first file and overwrite.
  */
 public class LoggerUtil {
     

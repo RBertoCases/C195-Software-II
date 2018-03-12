@@ -13,16 +13,23 @@ import java.sql.DriverManager;
  * @author rcases
  */
 public class DBConnection {
-    /* If I made this static, then I would not need to create an object in the main(..) */
+    
     private static Connection connDB;
     
     public DBConnection(){}
-    /* If the Connection variable turns static, so will this method */
+    
+    /**
+     * Opens connection to database based on following info:
+     * Server name: 52.206.157.109
+     * Database name: U04Esb
+     * Username: U04Esb
+     * Password: 53688216525
+     */
     public static void init(){
         System.out.println("Connecting to the database");
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            /* Replace the X's with the information for your database instance */
+            
             connDB = DriverManager.getConnection("jdbc:mysql://52.206.157.109:3306/U04Esb", "U04Esb", "53688216525");;
         }catch (ClassNotFoundException ce){
             System.out.println("Cannot find the right class.  Did you remember to add the mysql library to your Run Configuration?");
@@ -32,11 +39,13 @@ public class DBConnection {
 }
     }
     
+    //Returns Connection
     public static Connection getConn(){
     
         return connDB;
     }
     
+    //Closes connections
     public static void closeConn(){
         try{
             connDB.close();
