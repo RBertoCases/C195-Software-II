@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import rcases.model.Appointment;
 import rcases.model.User;
+import rcases.util.LoggerUtil;
 import rcases.view.LoginScreenController;
 import rcases.view.CustomerScreenController;
 import rcases.view.AppointmentScreenController;
@@ -59,6 +60,7 @@ public class SchedulingApp extends Application {
         //Locale.setDefault(new Locale("fr", "FR"));
         //System.out.println(Locale.getDefault()); 
         DBConnection.init();
+        LoggerUtil.init();
         connection = DBConnection.getConn();
         launch(args);
         DBConnection.closeConn();

@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +27,7 @@ import rcases.SchedulingApp;
 import rcases.model.Appointment;
 import rcases.model.Customer;
 import rcases.model.User;
+import rcases.util.LoggerUtil;
 
 public class LoginScreenController {
     
@@ -59,6 +62,7 @@ public class LoginScreenController {
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     User user = new User();
     ObservableList<Appointment> reminderList;
+    private final static Logger LOGGER = Logger.getLogger(LoggerUtil.class.getName());
 
     /**
      * The constructor.
@@ -85,6 +89,8 @@ public class LoginScreenController {
             reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
+            LOGGER.log(Level.INFO, "User: {0}", validUser.getUsername());
+            
             
         }
     }
