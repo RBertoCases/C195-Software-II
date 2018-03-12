@@ -14,8 +14,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -94,18 +92,6 @@ public class ReportsController {
 
     @FXML
     private NumberAxis yAxis;
-
-    /*@FXML
-    private TableView<?> custTableView;
-    
-    @FXML
-    private TableColumn<?, ?> locationColumn;
-    
-    @FXML
-    private TableColumn<?, ?> custColumn;
-    
-    @FXML
-    private TableColumn<?, ?> custAmountColumn;*/
     
     private SchedulingApp mainApp;
     private ObservableList<AppointmentReport> apptList;
@@ -123,10 +109,10 @@ public class ReportsController {
         this.mainApp = mainApp;
         this.currentUser = currentUser;
         
-        tabPane.getSelectionModel().select(custTab);
+        //tabPane.getSelectionModel().selectFirst();
         
         populateApptTypeList();
-        populateCustPie();
+        populateCustBarChart();
         populateSchedule();      
         
         startSchedColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
@@ -181,8 +167,8 @@ public class ReportsController {
         apptTableView.getItems().setAll(apptList);
     }
     
-    private void populateCustPie() {
-        //Map<String, Integer> locationMap = new HashMap<>();
+    private void populateCustBarChart() {
+        
         ObservableList<XYChart.Data<String, Integer>> data = FXCollections.observableArrayList();
         XYChart.Series<String, Integer> series = new XYChart.Series<>();
 
@@ -198,7 +184,7 @@ public class ReportsController {
                 while (rs.next()) {
                         String city = rs.getString("city");
                         Integer count = rs.getInt("COUNT(city)");
-                        data.add(new Data<String, Integer>(city, count));
+                        data.add(new Data<>(city, count));
                 }
 
             } catch (SQLException sqe) {
@@ -209,11 +195,6 @@ public class ReportsController {
                 e.printStackTrace();
             }     
                 
-        //System.out.println(locationMap);
-	//pieChartData = FXCollections.observableArrayList();
-	//locationMap.forEach((key, value) -> pieChartData.add(new PieChart.Data(key, value)));
-        //System.out.println(pieChartData);
-        //pieChart.setData(pieChartData);
         series.getData().addAll(data);
         barChart.getData().add(series);
     }
