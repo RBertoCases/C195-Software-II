@@ -117,7 +117,7 @@ public class AppointmentScreenController {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
-            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus1Month);
+            return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus1Month);
         });
         apptTableView.setItems(filteredData);
 
@@ -139,7 +139,7 @@ public class AppointmentScreenController {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
-            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus7);
+            return rowDate.isEqual(now.minusDays(1)) && rowDate.isBefore(nowPlus7);
         });
         apptTableView.setItems(filteredData);
     }
