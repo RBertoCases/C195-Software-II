@@ -87,7 +87,6 @@ public class AppointmentEditScreenController {
     private boolean okClicked = false;
     private final ZoneId zid = ZoneId.systemDefault();
     private Appointment selectedAppt;
-    private final ZoneId newzid = ZoneId.systemDefault();
     private User currentUser;
     
     private ObservableList<Customer> masterData = FXCollections.observableArrayList();
@@ -196,8 +195,6 @@ public class AppointmentEditScreenController {
 	startComboBox.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
 	endComboBox.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
         
-        System.out.println(currentUser.getUsername());
-        
     }
     
     /**
@@ -207,11 +204,9 @@ public class AppointmentEditScreenController {
      */
     public void setAppointment(Appointment appointment) {
         
-        System.out.println(okClicked);
+        
         okClicked = true;
-        System.out.println(okClicked);
         selectedAppt = appointment;
-        System.out.println(appointment.toString());
         
         String start = appointment.getStart();
         
@@ -262,9 +257,7 @@ public class AppointmentEditScreenController {
                 pst.setString(6, "");
                 pst.setTimestamp(7, startsqlts);
                 pst.setTimestamp(8, endsqlts);
-                //pst.setTimestamp(9, TIMESTAMP);
                 pst.setString(9, currentUser.getUsername());
-                //pst.setString(11, LocalDateTime.now().toString());
                 pst.setString(10, currentUser.getUsername());
                 int result = pst.executeUpdate();
                 if (result == 1) {//one row was affected; namely the one that was inserted!

@@ -342,7 +342,7 @@ public class CustomerScreenController {
     System.out.println("Something besides the SQL went wrong.");
     }
     
-    System.out.println(cities);
+    //System.out.println(cities);
     cityComboBox.setItems(cities);
     
     }
@@ -387,7 +387,7 @@ public class CustomerScreenController {
                 
                 if(rs.next()){
                     newAddressId = rs.getInt(1);
-                    System.out.println("Generated AddressId: "+ newAddressId);
+                    //System.out.println("Generated AddressId: "+ newAddressId);
                 }
             
             

@@ -131,9 +131,7 @@ public class AppointmentScreenController {
     void handleApptWeek(ActionEvent event) {
         
         LocalDate now = LocalDate.now();
-        //System.out.println(now);
         LocalDate nowPlus7 = now.plusDays(7);
-        //System.out.println(nowPlus7);
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 

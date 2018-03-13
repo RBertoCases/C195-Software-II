@@ -158,16 +158,13 @@ public class LoginScreenController {
      */
     private void reminder() {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now.minusMinutes(1));
         LocalDateTime nowPlus15Min = now.plusMinutes(15);
-        System.out.println(nowPlus15Min);
         
-        System.out.println(reminderList);
         FilteredList<Appointment> filteredData = new FilteredList<>(reminderList);
 
         filteredData.setPredicate(row -> {
             LocalDateTime rowDate = LocalDateTime.parse(row.getStart(), timeDTF);
-            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus15Min);
+            return rowDate.isAfter(now.minusMinutes(1)) && rowDate.isBefore(nowPlus15Min);
             }
         );
         if (filteredData.isEmpty()) {
