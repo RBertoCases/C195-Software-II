@@ -278,7 +278,8 @@ public class CustomerScreenController {
         PreparedStatement statement = DBConnection.getConn().prepareStatement(
         "SELECT customer.customerId, customer.customerName, address.address, address.address2, address.postalCode, city.cityId, city.city, country.country, address.phone " +
         "FROM customer, address, city, country " +
-        "WHERE customer.addressId = address.addressId AND address.cityId = city.cityId AND city.countryId = country.countryId");
+        "WHERE customer.addressId = address.addressId AND address.cityId = city.cityId AND city.countryId = country.countryId " +
+        "ORDER BY customer.customerName");
             ResultSet rs = statement.executeQuery();){
            
             
@@ -329,8 +330,6 @@ public class CustomerScreenController {
     ResultSet rs = statement.executeQuery();){
     
     while (rs.next()) {
-        //tCityId = rs.getInt("city.cityId");     //.add(new City(tCity));
-        //tCityName = rs.getString("city.city");
         cities.add(new City(rs.getInt("city.cityId"),rs.getString("city.city")));
     }
     
@@ -403,11 +402,7 @@ public class CustomerScreenController {
                 //psc.setString(6, LocalDateTime.now().toString());
                 psc.setString(5, currentUser.getUsername());
                 int result = psc.executeUpdate();
-                if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Customer");
-                } else {
-                    System.out.println("BOO! Customer");
-                }
+               
             } catch (SQLException ex) {
             ex.printStackTrace();
             }
@@ -448,12 +443,7 @@ public class CustomerScreenController {
                 ps.setString(7, customerIdField.getText());
                 
                 int result = ps.executeUpdate();
-                if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Address Update");
-                } else {
-                    System.out.println("BOO! Address Update");
-                }
-                
+                             
             
             
                 PreparedStatement psc = DBConnection.getConn().prepareStatement("UPDATE customer, address, city "
@@ -464,11 +454,7 @@ public class CustomerScreenController {
                 psc.setString(2, currentUser.getUsername());
                 psc.setString(3, customerIdField.getText());
                 int results = psc.executeUpdate();
-                if (results == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Customer Update");
-                } else {
-                    System.out.println("BOO! Customer Update");
-                }
+                
             } catch (SQLException ex) {
             ex.printStackTrace();
             }

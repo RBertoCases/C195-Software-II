@@ -24,3 +24,11 @@ Mar 13, 2018 6:04:05 AM rcases.view.LoginScreenController handleSignInAction
 INFO: rcases logged in
 Mar 13, 2018 7:04:56 AM rcases.view.LoginScreenController handleSignInAction
 INFO: rcases logged in
+Mar 13, 2018 7:19:51 AM rcases.view.LoginScreenController handleSignInAction
+INFO: rcases logged in
+Mar 13, 2018 7:27:58 AM rcases.view.LoginScreenController handleSignInAction
+INFO: rcases logged in
+Mar 13, 2018 7:31:30 AM rcases.view.LoginScreenController handleSignInAction
+INFO: test logged in
+Mar 13, 2018 7:46:09 AM rcases.view.LoginScreenController handleSignInAction
+INFO: tphan logged in
