@@ -11,5 +11,7 @@ Database name: U04Esb
 Username: U04Esb
 Password: 53688216525
 
+mysql-connector-java-5.1.45-bin.jar can be found in /SchedulingApp/resources
+
 
 
