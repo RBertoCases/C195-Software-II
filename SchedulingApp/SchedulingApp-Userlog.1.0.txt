@@ -1,0 +1,2 @@
+Mar 12, 2018 4:51:13 PM rcases.view.LoginScreenController handleSignInAction
+INFO: rcases logged in

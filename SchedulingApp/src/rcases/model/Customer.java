@@ -76,6 +76,10 @@ public class Customer {
     public void setCity(City city) {
         this.city = city;
     }
+    
+    public int getCityId(City object) {
+            return object.getCityId();
+        }
 
     public String getCountry() {
         return country;

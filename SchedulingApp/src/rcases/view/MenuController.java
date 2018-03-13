@@ -1,19 +1,11 @@
 package rcases.view;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
-import rcases.util.DBConnection;
 import rcases.SchedulingApp;
 import rcases.model.User;
 
@@ -30,6 +22,11 @@ public class MenuController {
         
     }
     
+    /**
+     * Initializes Menu
+     * @param mainApp
+     * @param currentUser 
+     */
     public void setMenu(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
         this.currentUser = currentUser;
@@ -74,8 +71,7 @@ public class MenuController {
                 Platform.exit();
                 System.exit(0);
                 }
-            );
-            
+            );     
     }    
 
 }

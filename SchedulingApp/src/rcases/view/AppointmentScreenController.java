@@ -42,7 +42,7 @@ import rcases.model.User;
 public class AppointmentScreenController {
      
     @FXML
-    private TableView<Appointment> ApptTableView;
+    private TableView<Appointment> apptTableView;
 
     @FXML
     private TableColumn<Appointment, ZonedDateTime> startApptColumn;
@@ -77,7 +77,11 @@ public class AppointmentScreenController {
     private final ZoneId newzid = ZoneId.systemDefault();
     ObservableList<Appointment> apptList;
     
-        
+    /**
+     * Initializes Appointment Screen 
+     * @param mainApp
+     * @param currentUser 
+     */    
     public void setAppointmentScreen(SchedulingApp mainApp, User currentUser) {
 	this.mainApp = mainApp;
         this.currentUser = currentUser;
@@ -95,30 +99,34 @@ public class AppointmentScreenController {
         
         apptList = FXCollections.observableArrayList();
         populateAppointmentList();
-        ApptTableView.getItems().setAll(apptList); //lower that case!
-        
-        //reminder();
-        
+        apptTableView.getItems().setAll(apptList);        
     }
     
+    /**
+     * Filters to show appointments from current date to a month out
+     * @param event 
+     */
     @FXML
     void handleApptMonth(ActionEvent event) {
         
         LocalDate now = LocalDate.now();
-        //System.out.println(now);
         LocalDate nowPlus1Month = now.plusMonths(1);
-        //System.out.println(nowPlus1Month);
+        
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
-            return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus1Month);
+            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus1Month);
         });
-        ApptTableView.setItems(filteredData);
+        apptTableView.setItems(filteredData);
 
     }
-
+    
+    /**
+     * Filters to show appointments from current date to a week out
+     * @param event 
+     */
     @FXML
     void handleApptWeek(ActionEvent event) {
         
@@ -131,14 +139,15 @@ public class AppointmentScreenController {
 
             LocalDate rowDate = LocalDate.parse(row.getStart(), timeDTF);
 
-            return rowDate.isAfter(now.minusDays(1)) && rowDate.isBefore(nowPlus7);
+            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus7);
         });
-        ApptTableView.setItems(filteredData);
+        apptTableView.setItems(filteredData);
     }
-
+    
+    
     @FXML
     void handleDeleteAppt(ActionEvent event) {
-        Appointment selectedAppointment = ApptTableView.getSelectionModel().getSelectedItem();
+        Appointment selectedAppointment = apptTableView.getSelectionModel().getSelectedItem();
         
         if (selectedAppointment != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -163,7 +172,7 @@ public class AppointmentScreenController {
 
     @FXML
     void handleEditAppt(ActionEvent event) {
-        Appointment selectedAppointment = ApptTableView.getSelectionModel().getSelectedItem();
+        Appointment selectedAppointment = apptTableView.getSelectionModel().getSelectedItem();
         
         if (selectedAppointment != null) {
             boolean okClicked = mainApp.showEditApptScreen(selectedAppointment, currentUser);
@@ -187,9 +196,7 @@ public class AppointmentScreenController {
     
     private void populateAppointmentList() {
       
-        //ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-        try{
-            
+        try{            
             
         PreparedStatement statement = DBConnection.getConn().prepareStatement(
         "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
@@ -232,7 +239,7 @@ public class AppointmentScreenController {
         }
 
     }
-
+    
     private void deleteAppointment(Appointment appointment) {
         try{           
             PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE appointment.* FROM appointment WHERE appointment.appointmentId = ?");

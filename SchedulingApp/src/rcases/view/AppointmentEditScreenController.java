@@ -98,27 +98,21 @@ public class AppointmentEditScreenController {
     ObservableList<Appointment> apptTimeList;
     
     
+    
       
     /**
      * Returns true if the user clicked OK, false otherwise.
-     * 
+     * Which allows application to decide whether to insert or update a record
      * @return
      */
     public boolean isOkClicked() {
         return okClicked;
-    }
-    
-    /*@FXML
-    void handleClick(MouseEvent event) {
-    customerSelectTableView.getSelectionModel().clearSelection();
-    }*/
-    
+    }    
 
     @FXML
-    private void handleNewSave(ActionEvent event) {
+    private void handleSave(ActionEvent event) {
         if (validateAppointment()){
             if (isOkClicked()) {
-                System.out.println(isOkClicked() + " before calling saveappt()");
                 updateAppt();            
             } else {
                 saveAppt();
@@ -138,7 +132,12 @@ public class AppointmentEditScreenController {
         .ifPresent(response -> dialogStage.close());
         
     }
-
+    
+    /**
+     * Initializes AppointmentEditScreen
+     * @param dialogStage
+     * @param currentUser 
+     */
     public void setDialogStage(Stage dialogStage, User currentUser) {
         this.dialogStage = dialogStage;
         this.currentUser = currentUser;
@@ -147,10 +146,10 @@ public class AppointmentEditScreenController {
         customerNameApptColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         masterData = populateCustomerList();
         
-        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Customer> filteredData = new FilteredList<>(masterData, p -> true);
 
-        // 2. Set the filter Predicate whenever the filter changes.
+        // Set the filter Predicate whenever the filter changes.
         customerSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(customer -> {
                 // If filter text is empty, display all persons.
@@ -168,16 +167,19 @@ public class AppointmentEditScreenController {
             });
         });
 
-        // 3. Wrap the FilteredList in a SortedList. 
+        // Wrap the FilteredList in a SortedList. 
         SortedList<Customer> sortedData = new SortedList<>(filteredData);
 
-        // 4. Bind the SortedList comparator to the TableView comparator.
+        // Bind the SortedList comparator to the TableView comparator.
         sortedData.comparatorProperty().bind(customerSelectTableView.comparatorProperty());
 
-        // 5. Add sorted (and filtered) data to the table.
-        //customerSelectTableView.getSelectionModel().clearSelection();
+        // Add sorted (and filtered) data to the table.
         customerSelectTableView.setItems(sortedData);
-                
+        
+        /**
+         * Sets time based on assumption of Business Hours being 8am - 5pm
+         * So does not allow time selection outside of Business Hours
+         */
 	LocalTime time = LocalTime.of(8, 0);
 	do {
 		startTimes.add(time.format(timeDTF));
@@ -197,7 +199,12 @@ public class AppointmentEditScreenController {
         System.out.println(currentUser.getUsername());
         
     }
-
+    
+    /**
+     * Sets appointment details from selected Appointment in Appointment Screen
+     * into Appointment Edit Screen
+     * @param appointment 
+     */
     public void setAppointment(Appointment appointment) {
         
         System.out.println(okClicked);
@@ -222,7 +229,10 @@ public class AppointmentEditScreenController {
         
         
     }
-
+    
+    /**
+     * Inserts new appointment record
+     */
     private void saveAppt() {
   
         LocalDate localDate = datePicker.getValue();
@@ -268,6 +278,9 @@ public class AppointmentEditScreenController {
 
     }
     
+    /**
+     * Updates edited Appointment record in database
+     */
     private void updateAppt() {
         
         LocalDate localDate = datePicker.getValue();
@@ -306,13 +319,20 @@ public class AppointmentEditScreenController {
             ex.printStackTrace();
             }
     }
-
+    
+    /**
+     * Populates type list with predefined types
+     */
     private void populateTypeList() {
         ObservableList<String> typeList = FXCollections.observableArrayList();
         typeList.addAll("Consultation", "New Account", "Follow Up", "Close Account");
         typeComboBox.setItems(typeList);
     }
     
+    /**
+     * populates List of Customer Names
+     * @return customerList
+     */
     protected ObservableList<Customer> populateCustomerList() {
       
         String tCustomerId;
@@ -350,6 +370,10 @@ public class AppointmentEditScreenController {
 
     }
 
+    /**
+     * Validates Appointment information before inserting or updating records
+     * @return true if valid, false if there is an error in fields
+     */
     private boolean validateAppointment() {
         String title = titleField.getText();
         String type = typeComboBox.getValue();
@@ -380,9 +404,11 @@ public class AppointmentEditScreenController {
         }         
         if (endUTC == null) {
             errorMessage += "Please select an End time.\n"; 
+            //checks to make sure Start and End times are not the same
             } else if (endUTC.equals(startUTC) || endUTC.isBefore(startUTC)){
                 errorMessage += "End time must be after Start time.\n";
             } else try {
+                //checks user's existing appointments for time conflicts
                 if (hasApptConflict(startUTC, endUTC)){
                     errorMessage += "Appointment times conflict with Consultant's existing appointments. Please select a new time.\n";
                 }
@@ -404,13 +430,25 @@ public class AppointmentEditScreenController {
             return false;
         }
     }
-
+    
+    /**
+     * SELECT statement searches database against proposed times
+     * @param newStart
+     * @param newEnd
+     * @return true if result set contains any matching appointments
+     * @throws SQLException 
+     */
     private boolean hasApptConflict(ZonedDateTime newStart, ZonedDateTime newEnd) throws SQLException {
         String apptID;
+        String consultant;
         if (isOkClicked()) {
+            //edited appointment
             apptID = selectedAppt.getAppointmentId();
+            consultant = selectedAppt.getUser();
         } else {
+            //new appointment
             apptID = "0";
+            consultant = currentUser.getUsername();
         }
         System.out.println("ApptID: " + apptID);
         
@@ -425,7 +463,7 @@ public class AppointmentEditScreenController {
 	pst.setTimestamp(2, Timestamp.valueOf(newEnd.toLocalDateTime()));
         pst.setTimestamp(3, Timestamp.valueOf(newStart.toLocalDateTime()));
 	pst.setTimestamp(4, Timestamp.valueOf(newEnd.toLocalDateTime()));
-        pst.setString(5, selectedAppt.getUser());
+        pst.setString(5, consultant);
         pst.setString(6, apptID);
         ResultSet rs = pst.executeQuery();
            

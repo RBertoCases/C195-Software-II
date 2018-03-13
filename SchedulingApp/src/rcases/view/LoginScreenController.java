@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import rcases.util.DBConnection;
 import rcases.SchedulingApp;
@@ -81,7 +82,7 @@ public class LoginScreenController {
             errorMessage.setText(rb.getString("empty"));
         else{
             
-            User validUser = validateLogin(userN,pass); //validateLogin(user,pass)
+            User validUser = validateLogin(userN,pass); 
             if (validUser == null) {
                 errorMessage.setText(rb.getString("incorrect"));
                 return;
@@ -90,15 +91,20 @@ public class LoginScreenController {
             reminder();
             mainApp.showMenu(validUser);
             mainApp.showAppointmentScreen(validUser);
+            //logs successful logins
             LOGGER.log(Level.INFO, "{0} logged in", validUser.getUsername());
             
             
         }
     }
-        
+    
+    /**
+     * Searches for matching username and password in database
+     * @param username
+     * @param password
+     * @return user if match found
+     */
     User validateLogin(String username,String password) {
-        
-        
         try{           
             PreparedStatement pst = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
             pst.setString(1, username); 
@@ -120,10 +126,22 @@ public class LoginScreenController {
     
     @FXML
     void handleCancelAction(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Cancel");
+            alert.setHeaderText("Are you sure you want close the program?");
+            alert.showAndWait()
+            .filter(response -> response == ButtonType.OK)
+            .ifPresent((ButtonType response) -> {
+                Platform.exit();
+                System.exit(0);
+                }
+            );
     }
     
+    /**
+     * Initializes LoginScreen
+     * @param mainApp 
+     */
     public void setLogin(SchedulingApp mainApp) {
 	this.mainApp = mainApp;
         reminderList = FXCollections.observableArrayList();
@@ -136,7 +154,7 @@ public class LoginScreenController {
     }
     
     /**
-     *
+     * Filters reminder list and launches alert if filteredData is not empty
      */
     private void reminder() {
         LocalDateTime now = LocalDateTime.now();
@@ -149,7 +167,7 @@ public class LoginScreenController {
 
         filteredData.setPredicate(row -> {
             LocalDateTime rowDate = LocalDateTime.parse(row.getStart(), timeDTF);
-            return rowDate.isAfter(now.minusMinutes(1)) && rowDate.isBefore(nowPlus15Min);
+            return rowDate.isEqual(now) && rowDate.isBefore(nowPlus15Min);
             }
         );
         if (filteredData.isEmpty()) {
@@ -169,11 +187,8 @@ public class LoginScreenController {
     }
     
     private void populateReminderList() {
-      
-       System.out.println(user.getUsername());
-        try{
-            
-            
+        System.out.println(user.getUsername());
+        try{           
         PreparedStatement pst = DBConnection.getConn().prepareStatement(
         "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
                 + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
@@ -203,11 +218,9 @@ public class LoginScreenController {
                 
                 String tUser = rs.getString("appointment.createdBy");
                       
-                reminderList.add(new Appointment(tAppointmentId, newLocalStart.format(timeDTF), newLocalEnd.format(timeDTF), tTitle, tType, tCustomer, tUser));
-                
+                reminderList.add(new Appointment(tAppointmentId, newLocalStart.format(timeDTF), newLocalEnd.format(timeDTF), tTitle, tType, tCustomer, tUser));   
 
-            }
-            
+            }   
             
         } catch (SQLException sqe) {
             System.out.println("Check your SQL");
@@ -216,9 +229,6 @@ public class LoginScreenController {
             System.out.println("Something besides the SQL went wrong.");
             e.printStackTrace();
         }
-        
-        
-
     }
 
 }

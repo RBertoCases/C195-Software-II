@@ -171,7 +171,7 @@ public class SchedulingApp extends Application {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/NewApptScreen.fxml"));
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/AppointmentEditScreen.fxml"));
         AnchorPane newApptScreen = (AnchorPane) loader.load();
 
         // Create the dialog Stage.
@@ -200,7 +200,7 @@ public class SchedulingApp extends Application {
     try {
         // Load the fxml file and create a new stage for the popup dialog.
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/NewApptScreen.fxml"));
+        loader.setLocation(SchedulingApp.class.getResource("/rcases/view/AppointmentEditScreen.fxml"));
         AnchorPane editApptScreen = (AnchorPane) loader.load();
 
         // Create the dialog Stage.

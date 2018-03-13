@@ -109,8 +109,7 @@ public class ReportsController {
         this.mainApp = mainApp;
         this.currentUser = currentUser;
         
-        //tabPane.getSelectionModel().selectFirst();
-        
+        //methods called to populate data on each tab        
         populateApptTypeList();
         populateCustBarChart();
         populateSchedule();      
@@ -163,7 +162,7 @@ public class ReportsController {
         } catch (Exception e) {
             System.out.println("Something besides the SQL went wrong.");
         }
-        //System.out.println(apptList);
+        
         apptTableView.getItems().setAll(apptList);
     }
     
@@ -193,8 +192,7 @@ public class ReportsController {
             } catch (Exception e) {
                 System.out.println("Something besides the SQL went wrong.");
                 e.printStackTrace();
-            }     
-                
+            }             
         series.getData().addAll(data);
         barChart.getData().add(series);
     }
@@ -203,9 +201,7 @@ public class ReportsController {
       
         schedule = FXCollections.observableArrayList();
         
-        
         try{
-            
             
         PreparedStatement pst = DBConnection.getConn().prepareStatement(
         "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, "
